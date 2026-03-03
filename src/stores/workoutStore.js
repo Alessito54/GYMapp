@@ -17,17 +17,23 @@ export const useWorkoutStore = create(
       activeSession: null,
       exerciseLibrary: [],
 
+      // Helper to clean data for Firebase (removes undefined)
+      _clean: (obj) => {
+        if (!obj) return obj;
+        return JSON.parse(JSON.stringify(obj));
+      },
+
       // Sync Global Config (Folders, Routines, Library)
       saveGlobalToFirebase: async (userId) => {
         if (!userId) return;
         const { folders, routines, exerciseLibrary } = get();
         try {
-          await setDoc(doc(db, 'users', userId, 'data', 'workout_config'), {
+          await setDoc(doc(db, 'users', userId, 'data', 'workout_config'), get()._clean({
             folders,
             routines,
             exerciseLibrary: exerciseLibrary || [],
             lastSynced: new Date().toISOString()
-          });
+          }));
         } catch (e) {
           console.error('Error saving workout config:', e);
         }
@@ -37,10 +43,10 @@ export const useWorkoutStore = create(
       saveSessionToFirebase: async (userId, session) => {
         if (!userId || !session) return;
         try {
-          await setDoc(doc(db, 'users', userId, 'sessions', session.id), {
+          await setDoc(doc(db, 'users', userId, 'sessions', session.id), get()._clean({
             ...session,
             lastUpdated: new Date().toISOString()
-          });
+          }));
         } catch (e) {
           console.error('Error saving session:', e);
         }

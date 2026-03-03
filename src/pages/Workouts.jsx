@@ -125,13 +125,17 @@ export default function Workouts() {
     exerciseLibrary
   } = useWorkoutStore();
 
-  if (activeSession) {
+  const handleCompleteWorkout = async (sessionUserId, feedback = {}) => {
+    await completeSession(sessionUserId || userId, feedback);
+  };
+
+  if (activeSession && activeSession.id && activeSession.exercises) {
     return (
       <ActiveSessionView
         session={activeSession}
         userId={userId}
         onUpdateExercise={updateSessionExercise}
-        onComplete={completeSession}
+        onComplete={handleCompleteWorkout}
         onCancel={cancelSession}
       />
     );
@@ -462,7 +466,6 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
   const [showFinishModal, setShowFinishModal] = useState(false);
   const [showRestTimer, setShowRestTimer] = useState(false);
   const [restTimeLeft, setRestTimeLeft] = useState(0);
-  const currentExercise = session.exercises[currentExerciseIndex];
 
   useEffect(() => {
     let timer;
@@ -475,6 +478,19 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
     }
     return () => clearInterval(timer);
   }, [showRestTimer, restTimeLeft]);
+
+  if (!session?.exercises || !session.exercises[currentExerciseIndex]) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center bg-slate-950">
+        <IoAlertCircleOutline className="w-16 h-16 text-rose-500 mb-4" />
+        <h2 className="text-xl font-bold text-white mb-2">Error de sesión</h2>
+        <p className="text-slate-400 mb-6">No se pudieron cargar los ejercicios del entrenamiento.</p>
+        <Button onClick={onCancel} variant="danger">Cancelar entrenamiento</Button>
+      </div>
+    );
+  }
+
+  const currentExercise = session.exercises[currentExerciseIndex];
 
   const handleSetComplete = (setIndex) => {
     onUpdateExercise(currentExerciseIndex, setIndex, { completed: true }, userId);
@@ -577,9 +593,10 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
                   <div className="space-y-2">
                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 px-1">Repeticiones</p>
                     <input
-                      type="number"
+                      type="text"
+                      inputMode="decimal"
                       value={set.reps || currentExercise.reps}
-                      onChange={(e) => handleSetUpdate(setIndex, 'reps', parseInt(e.target.value) || 0)}
+                      onChange={(e) => handleSetUpdate(setIndex, 'reps', e.target.value)}
                       className="w-full bg-slate-900 border border-slate-700 rounded-2xl px-4 py-3 text-white font-black text-center focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
                     />
                   </div>

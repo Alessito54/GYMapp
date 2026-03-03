@@ -277,7 +277,7 @@ export default function Profile() {
       )}
 
       {/* Menu Options */}
-      <h2 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] px-1 -mb-4">Gestion</h2>
+      <h2 className="text-sm font-black text-slate-400 dark:text-slate-300 uppercase tracking-[0.2em] px-1 -mb-4">Gestion</h2>
       <Card className="border-none shadow-xl shadow-slate-200/50 dark:shadow-black/20 overflow-hidden divide-y divide-slate-100 dark:divide-slate-800">
         <button
           onClick={() => setIsEditing(true)}
@@ -285,14 +285,14 @@ export default function Profile() {
         >
           <div className="flex items-center gap-5">
             <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <IoSettingsOutline className="w-6 h-6 text-slate-600" />
+              <IoSettingsOutline className="w-6 h-6 text-slate-600 dark:text-slate-200" />
             </div>
             <div className="text-left">
               <span className="block font-black text-slate-900 dark:text-white tracking-tight">Preferencias</span>
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Información personal y metas</span>
+              <span className="text-[10px] text-slate-500 dark:text-slate-300 font-bold uppercase tracking-widest">Información personal y metas</span>
             </div>
           </div>
-          <IoChevronForward className="w-6 h-6 text-slate-300 group-hover:text-indigo-500 group-hover:translate-x-1 transition-all" />
+          <IoChevronForward className="w-6 h-6 text-slate-400 dark:text-slate-300 group-hover:text-indigo-500 dark:group-hover:text-indigo-300 group-hover:translate-x-1 transition-all" />
         </button>
 
         <button
@@ -301,14 +301,14 @@ export default function Profile() {
         >
           <div className="flex items-center gap-5">
             <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <IoLogOutOutline className="w-6 h-6 text-rose-500" />
+              <IoLogOutOutline className="w-6 h-6 text-rose-600 dark:text-rose-300" />
             </div>
             <div className="text-left">
-              <span className="block font-black text-rose-500 tracking-tight">Cerrar Sesión</span>
-              <span className="text-[10px] text-rose-400/60 font-bold uppercase tracking-widest">Salir de tu cuenta</span>
+              <span className="block font-black text-rose-600 dark:text-rose-300 tracking-tight">Cerrar Sesión</span>
+              <span className="text-[10px] text-rose-500/80 dark:text-rose-200/80 font-bold uppercase tracking-widest">Salir de tu cuenta</span>
             </div>
           </div>
-          <IoChevronForward className="w-6 h-6 text-rose-300 group-hover:translate-x-1 transition-all" />
+          <IoChevronForward className="w-6 h-6 text-rose-400 dark:text-rose-300 group-hover:translate-x-1 transition-all" />
         </button>
       </Card>
 
@@ -319,12 +319,12 @@ export default function Profile() {
         size="sm"
       >
         <div className="space-y-6">
-          <div className="p-6 bg-rose-50 dark:bg-rose-950/20 rounded-[2rem] text-center">
-            <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-3xl shadow-xl flex items-center justify-center mx-auto mb-4 border border-rose-100 dark:border-rose-900/50">
-              <IoLogOutOutline className="w-8 h-8 text-rose-500" />
+          <div className="p-6 bg-rose-50 dark:bg-rose-900/30 rounded-[2rem] text-center border border-rose-100 dark:border-rose-800/40">
+            <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-3xl shadow-xl flex items-center justify-center mx-auto mb-4 border border-rose-200 dark:border-rose-700/40">
+              <IoLogOutOutline className="w-8 h-8 text-rose-600 dark:text-rose-300" />
             </div>
             <p className="text-xl font-black text-slate-900 dark:text-white mb-2">¿Deseas salir?</p>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Tu progreso se mantiene sincronizado en la nube.</p>
+            <p className="text-sm text-slate-600 dark:text-slate-200">Tu progreso se mantiene sincronizado en la nube.</p>
           </div>
 
           <div className="flex gap-4">

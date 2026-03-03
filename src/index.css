@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --color-primary: #4F46E5;
@@ -16,7 +17,7 @@
   /* Slate 50 for subtle contrast */
   --color-light-border: #e2e8f0;
   /* Slate 200 */
-  
+
   /* Dark mode theme colors */
   --color-dark-text: #f8fafc;
   --color-dark-text-muted: #94a3b8;
@@ -51,10 +52,6 @@
   .dark body {
     background-color: var(--color-dark-bg);
     color: #f8fafc;
-  }
-
-  .dark {
-    color-scheme: dark;
   }
 
   #root {

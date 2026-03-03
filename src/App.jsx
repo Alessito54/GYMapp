@@ -23,7 +23,7 @@ function PrivateRoute({ children }) {
 
 function DataLoader({ children }) {
   const { user } = useAuthStore();
-  const { darkMode, loadUserData, initDarkMode } = useUserStore();
+  const { darkMode, loadUserData } = useUserStore();
   const loadWorkoutData = useWorkoutStore((state) => state.loadFromFirebase);
   const loadNutritionData = useNutritionStore((state) => state.loadFromFirebase);
   const loadWaterData = useWaterStore((state) => state.loadFromFirebase);
@@ -33,8 +33,10 @@ function DataLoader({ children }) {
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
+      document.documentElement.style.colorScheme = 'dark';
     } else {
       document.documentElement.classList.remove('dark');
+      document.documentElement.style.colorScheme = 'light';
     }
   }, [darkMode]);
 

@@ -14,16 +14,25 @@ export const useUserStore = create(
         notifications: { push: true, email: false },
       },
 
+      // Helper to clean data for Firebase (removes undefined)
+      _clean: (obj) => {
+        if (!obj) return obj;
+        const clean = JSON.parse(JSON.stringify(obj));
+        return clean;
+      },
+
       setDarkMode: async (enabled, userId) => {
         set({ darkMode: enabled });
         if (enabled) {
           document.documentElement.classList.add('dark');
+          document.documentElement.style.colorScheme = 'dark';
         } else {
           document.documentElement.classList.remove('dark');
+          document.documentElement.style.colorScheme = 'light';
         }
         if (userId) {
           try {
-            await setDoc(doc(db, 'users', userId), { darkMode: enabled }, { merge: true });
+            await setDoc(doc(db, 'users', userId), get()._clean({ darkMode: enabled }), { merge: true });
           } catch (e) {
             console.error('Error saving dark mode:', e);
           }
@@ -35,12 +44,14 @@ export const useUserStore = create(
         set({ darkMode: newValue });
         if (newValue) {
           document.documentElement.classList.add('dark');
+          document.documentElement.style.colorScheme = 'dark';
         } else {
           document.documentElement.classList.remove('dark');
+          document.documentElement.style.colorScheme = 'light';
         }
         if (userId) {
           try {
-            await setDoc(doc(db, 'users', userId), { darkMode: newValue }, { merge: true });
+            await setDoc(doc(db, 'users', userId), get()._clean({ darkMode: newValue }), { merge: true });
           } catch (e) {
             console.error('Error toggling dark mode:', e);
           }
@@ -51,7 +62,7 @@ export const useUserStore = create(
         set({ profile });
         if (userId) {
           try {
-            await setDoc(doc(db, 'users', userId), { profile }, { merge: true });
+            await setDoc(doc(db, 'users', userId), get()._clean({ profile }), { merge: true });
           } catch (e) {
             console.error('Error saving profile:', e);
           }
@@ -64,9 +75,9 @@ export const useUserStore = create(
         }));
         if (userId) {
           try {
-            await updateDoc(doc(db, 'users', userId), {
+            await updateDoc(doc(db, 'users', userId), get()._clean({
               'profile': { ...get().profile, ...updates }
-            });
+            }));
           } catch (e) {
             console.error('Error updating profile:', e);
           }
@@ -79,9 +90,9 @@ export const useUserStore = create(
         }));
         if (userId) {
           try {
-            await updateDoc(doc(db, 'users', userId), {
+            await updateDoc(doc(db, 'users', userId), get()._clean({
               'settings': { ...get().settings, ...updates }
-            });
+            }));
           } catch (e) {
             console.error('Error updating settings:', e);
           }
@@ -101,8 +112,10 @@ export const useUserStore = create(
             });
             if (data.darkMode) {
               document.documentElement.classList.add('dark');
+              document.documentElement.style.colorScheme = 'dark';
             } else {
               document.documentElement.classList.remove('dark');
+              document.documentElement.style.colorScheme = 'light';
             }
           }
         } catch (e) {
@@ -178,8 +191,10 @@ export const useUserStore = create(
         // Apply dark mode class after rehydrating from localStorage
         if (state?.darkMode) {
           document.documentElement.classList.add('dark');
+          document.documentElement.style.colorScheme = 'dark';
         } else {
           document.documentElement.classList.remove('dark');
+          document.documentElement.style.colorScheme = 'light';
         }
       },
     }
