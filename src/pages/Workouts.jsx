@@ -675,7 +675,7 @@ export default function Workouts() {
         userId={userId}
         onUpdateExercise={updateSessionExercise}
         onComplete={handleCompleteWorkout}
-        onCancel={cancelSession}
+        onCancel={() => cancelSession(userId)}
       />
     );
   }
@@ -799,17 +799,17 @@ export default function Workouts() {
     const routines = getRoutinesByFolder(selectedFolder.id);
 
     return (
-      <div className="px-5 py-8 space-y-8 animate-fadeIn">
+      <div className="px-4 sm:px-5 py-6 sm:py-8 space-y-6 sm:space-y-8 animate-fadeIn">
         <header className="flex items-center justify-between px-1">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0">
             <button
               onClick={() => setView('folders')}
-              className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 active:scale-95 transition-all"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 active:scale-95 transition-all flex-shrink-0"
             >
               <IoChevronForward className="w-5 h-5 transform rotate-180" />
             </button>
             <div>
-              <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">{selectedFolder.name}</h1>
+              <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight truncate">{selectedFolder.name}</h1>
               <p className="text-blue-600 dark:text-blue-400 text-[10px] font-bold uppercase tracking-widest mt-0.5">
                 {routines.length} {routines.length === 1 ? 'Rutina' : 'Rutinas'} • {selectedFolder.goal?.replace('_', ' ') || 'GENERAL'}
               </p>
@@ -940,23 +940,23 @@ export default function Workouts() {
 
   // Folders view (default)
   return (
-    <div className="px-5 py-8 space-y-8 animate-fadeIn">
+    <div className="px-4 sm:px-5 py-6 sm:py-8 space-y-6 sm:space-y-8 animate-fadeIn">
       <header className="px-1 flex items-start justify-between">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Mis <span className="text-gradient">Metas</span></h1>
-          <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Organiza tu progreso por objetivos</p>
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">Mis <span className="text-gradient">Metas</span></h1>
+          <p className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-1">Organiza tu progreso por objetivos</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <button
             onClick={() => setIsAIPlanModalOpen(true)}
-            className="p-3 rounded-2xl bg-gradient-to-r from-violet-500 to-purple-600 text-white shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 hover:scale-105 transition-all"
+            className="p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-violet-500 to-purple-600 text-white shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 hover:scale-105 transition-all"
             title="Crear plan con IA"
           >
-            <IoSparkles className="w-6 h-6" />
+            <IoSparkles className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
           <button
             onClick={() => setIsLibraryManagementOpen(true)}
-            className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/30 dark:hover:text-blue-400 transition-all"
+            className="p-2.5 sm:p-3 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/30 dark:hover:text-blue-400 transition-all"
             title="Gestionar biblioteca de ejercicios"
           >
             <IoLibraryOutline className="w-6 h-6" />
@@ -1102,8 +1102,27 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
   const [showRestTimer, setShowRestTimer] = useState(false);
   const [restTimeLeft, setRestTimeLeft] = useState(0);
   const [savedIndices, setSavedIndices] = useState(new Set());
+  const [sessionElapsed, setSessionElapsed] = useState(0);
   const { saveExerciseToLibrary } = useWorkoutStore();
   const librarySaved = savedIndices.has(currentExerciseIndex);
+
+  // Session duration timer
+  useEffect(() => {
+    if (!session?.startTime) return;
+    const startTime = new Date(session.startTime).getTime();
+    const tick = () => setSessionElapsed(Math.floor((Date.now() - startTime) / 1000));
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [session?.startTime]);
+
+  const formatTime = (seconds) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    if (h > 0) return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
 
   useEffect(() => {
     let timer;
@@ -1147,21 +1166,27 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 px-5 py-10 animate-fadeIn">
-      <header className="flex items-start justify-between mb-10 px-1">
-        <div>
-          <h1 className="text-3xl font-black tracking-tighter text-white">{session.routineName}</h1>
-          <p className="text-blue-400 text-xs font-bold flex items-center gap-1.5 uppercase tracking-widest mt-1">
-            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
-            Entrenamiento en Curso
-          </p>
+    <div className="min-h-[80vh] bg-slate-950 text-slate-100 px-4 sm:px-5 py-6 sm:py-10 animate-fadeIn rounded-t-3xl -mt-1">
+      <header className="flex items-start justify-between mb-6 sm:mb-10 px-1">
+        <div className="min-w-0 flex-1">
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-white truncate">{session.routineName}</h1>
+          <div className="flex items-center gap-3 mt-1">
+            <p className="text-blue-400 text-xs font-bold flex items-center gap-1.5 uppercase tracking-widest">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
+              En Curso
+            </p>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-500/10 rounded-full ring-1 ring-blue-500/20">
+              <IoTimeOutline className="w-3.5 h-3.5 text-blue-400" />
+              <span className="text-xs font-mono font-bold text-blue-300 tabular-nums">{formatTime(sessionElapsed)}</span>
+            </div>
+          </div>
         </div>
-        <button onClick={() => setShowCancelModal(true)} className="w-12 h-12 flex items-center justify-center bg-slate-900 rounded-2xl border border-slate-800 active:scale-95 transition-all">
-          <IoClose className="w-7 h-7 text-slate-400" />
+        <button onClick={() => setShowCancelModal(true)} className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-slate-900 rounded-2xl border border-slate-800 active:scale-95 transition-all flex-shrink-0 ml-3">
+          <IoClose className="w-6 h-6 sm:w-7 sm:h-7 text-slate-400" />
         </button>
       </header>
 
-      <div className="flex gap-1.5 mb-10 px-1">
+      <div className="flex gap-1.5 mb-6 sm:mb-10 px-1">
         {session.exercises.map((_, idx) => (
           <div
             key={idx}
@@ -1175,30 +1200,30 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
         ))}
       </div>
 
-      <Card className="bg-slate-900 border-slate-800 shadow-2xl relative overflow-hidden active-scale-98 transition-transform">
+      <Card className="bg-slate-900 border-slate-800 shadow-2xl relative overflow-hidden active-scale-98 transition-transform mb-4">
         <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl -mr-16 -mt-16" />
 
-        <Card.Body className="p-8">
-          <div className="mb-8">
-            <div className="flex items-start justify-between gap-3 mb-2">
-              <h2 className="text-4xl font-black text-white leading-tight">{currentExercise.name}</h2>
+        <Card.Body className="p-4 sm:p-8">
+          <div className="mb-6 sm:mb-8">
+            <div className="flex items-start justify-between gap-2 mb-2">
+              <h2 className="text-2xl sm:text-4xl font-black text-white leading-tight">{currentExercise.name}</h2>
               <button
                 onClick={async () => {
                   await saveExerciseToLibrary({ name: currentExercise.name, muscleGroup: currentExercise.muscleGroup, unit: currentExercise.unit, restSeconds: currentExercise.restSeconds }, userId);
                   setSavedIndices(prev => new Set(prev).add(currentExerciseIndex));
                 }}
                 disabled={librarySaved}
-                className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${librarySaved ? 'bg-emerald-900/40 text-emerald-400 border border-emerald-500/30' : 'bg-slate-800 text-slate-400 hover:bg-blue-900/40 hover:text-blue-400 border border-slate-700'}`}
+                className={`flex-shrink-0 flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all ${librarySaved ? 'bg-emerald-900/40 text-emerald-400 border border-emerald-500/30' : 'bg-slate-800 text-slate-400 hover:bg-blue-900/40 hover:text-blue-400 border border-slate-700'}`}
               >
-                <IoBookmarkOutline className="w-4 h-4" />
+                <IoBookmarkOutline className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 {librarySaved ? 'Guardado' : 'Biblioteca'}
               </button>
             </div>
-            <div className="flex items-center gap-3 flex-wrap">
-              <span className="px-3 py-1 bg-blue-500/10 text-blue-400 text-[10px] font-black uppercase tracking-widest rounded-full ring-1 ring-blue-500/20">
+            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+              <span className="px-2.5 sm:px-3 py-1 bg-blue-500/10 text-blue-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest rounded-full ring-1 ring-blue-500/20">
                 {currentExercise.sets.length} Series
               </span>
-              <span className="px-3 py-1 bg-slate-800 text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-full">
+              <span className="px-2.5 sm:px-3 py-1 bg-slate-800 text-slate-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest rounded-full">
                 Meta: {currentExercise.reps} Reps
               </span>
               {currentExercise.seriesType && currentExercise.seriesType !== 'simple' && (() => {
@@ -1212,40 +1237,40 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {currentExercise.sets.map((set, setIndex) => (
-              <div key={setIndex} className={`p-6 rounded-[2rem] transition-all duration-300 border ${set.completed ? 'bg-emerald-950/20 border-emerald-500/30' : 'bg-slate-800/50 border-slate-700/50'}`}>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Serie {setIndex + 1}</span>
+              <div key={setIndex} className={`p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] transition-all duration-300 border ${set.completed ? 'bg-emerald-950/20 border-emerald-500/30' : 'bg-slate-800/50 border-slate-700/50'}`}>
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                  <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-slate-500">Serie {setIndex + 1}</span>
                   {set.completed ? (
                     <div className="bg-emerald-500 rounded-full p-1 shadow-[0_0_12px_rgba(16,185,129,0.5)]">
-                      <IoCheckmarkCircle className="w-7 h-7 text-white" />
+                      <IoCheckmarkCircle className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                     </div>
                   ) : (
                     <button
                       onClick={() => handleSetComplete(setIndex)}
-                      className="text-xs font-black uppercase tracking-widest text-blue-400 hover:text-blue-300 transition-colors"
+                      className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-blue-400 hover:text-blue-300 transition-colors"
                     >
                       Completar
                     </button>
                   )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 px-1">Carga</p>
-                    <div className="flex gap-2">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-500 px-1">Carga</p>
+                    <div className="flex gap-1.5 sm:gap-2">
                       <input
                         type="number"
                         value={set.weight}
                         onChange={(e) => handleSetUpdate(setIndex, 'weight', parseFloat(e.target.value) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 rounded-2xl px-4 py-3 text-white font-black text-center focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                        className="w-full bg-slate-900 border border-slate-700 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-white font-black text-center text-sm sm:text-base focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                         disabled={set.unit === 'barra'}
                       />
                       <select
                         value={set.unit}
                         onChange={(e) => handleSetUpdate(setIndex, 'unit', e.target.value)}
-                        className="bg-slate-900 border border-slate-700 rounded-2xl px-2 py-3 text-blue-400 font-bold text-center text-xs focus:ring-2 focus:ring-blue-500 outline-none"
+                        className="bg-slate-900 border border-slate-700 rounded-xl sm:rounded-2xl px-1.5 sm:px-2 py-2.5 sm:py-3 text-blue-400 font-bold text-center text-[10px] sm:text-xs focus:ring-2 focus:ring-blue-500 outline-none"
                       >
                         <option value="kg">kg</option>
                         <option value="lbs">lbs</option>
@@ -1253,14 +1278,14 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
                       </select>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 px-1">Repeticiones</p>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-500 px-1">Repeticiones</p>
                     <input
                       type="text"
                       inputMode="decimal"
                       value={set.reps || currentExercise.reps}
                       onChange={(e) => handleSetUpdate(setIndex, 'reps', e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-2xl px-4 py-3 text-white font-black text-center focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-white font-black text-center text-sm sm:text-base focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -1270,23 +1295,23 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
         </Card.Body>
       </Card>
 
-      <div className="fixed bottom-0 left-0 right-0 p-8 pb-safe bg-gradient-to-t from-slate-950 via-slate-950 to-transparent">
-        <div className="max-w-lg mx-auto flex gap-4">
+      <div className="sticky bottom-[5.5rem] sm:bottom-[6.5rem] left-0 right-0 p-4 sm:p-8 pb-safe bg-gradient-to-t from-slate-950 via-slate-950 to-transparent -mx-4 sm:-mx-5">
+        <div className="max-w-lg mx-auto flex gap-3 sm:gap-4">
           <Button
             variant="ghost"
             onClick={() => setCurrentExerciseIndex(Math.max(0, currentExerciseIndex - 1))}
             disabled={currentExerciseIndex === 0}
-            className="flex-1 h-16 border-2 border-slate-800 text-slate-400"
+            className="flex-1 h-14 sm:h-16 border-2 border-slate-800 text-slate-400 text-sm sm:text-base"
           >
             Anterior
           </Button>
           {currentExerciseIndex < session.exercises.length - 1 ? (
-            <Button onClick={() => setCurrentExerciseIndex(currentExerciseIndex + 1)} className="flex-[2] h-16 bg-blue-600 hover:bg-blue-500 text-white font-black">
-              Siguiente Ejercicio
+            <Button onClick={() => setCurrentExerciseIndex(currentExerciseIndex + 1)} className="flex-[2] h-14 sm:h-16 bg-blue-600 hover:bg-blue-500 text-white font-black text-sm sm:text-base">
+              Siguiente
             </Button>
           ) : (
-            <Button onClick={() => setShowFinishModal(true)} variant="success" className="flex-[2] h-16 premium-gradient">
-              Finalizar Rutina
+            <Button onClick={() => setShowFinishModal(true)} variant="success" className="flex-[2] h-14 sm:h-16 premium-gradient text-sm sm:text-base">
+              Finalizar
             </Button>
           )}
         </div>
@@ -1307,6 +1332,11 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
           <div className="flex items-center gap-3 p-3 bg-green-50 rounded-2xl text-green-700">
             <IoCheckmarkCircle className="w-6 h-6" />
             <p className="font-semibold">Excelente trabajo!</p>
+          </div>
+          <div className="flex items-center justify-center gap-2 p-3 bg-blue-50 rounded-2xl text-blue-700">
+            <IoTimeOutline className="w-5 h-5" />
+            <p className="font-bold text-lg tabular-nums">{formatTime(sessionElapsed)}</p>
+            <p className="text-sm text-blue-500">de entrenamiento</p>
           </div>
           <div className="flex gap-3">
             <Button variant="outline" className="flex-1" onClick={() => setShowFinishModal(false)}>Seguir</Button>

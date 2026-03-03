@@ -348,18 +348,18 @@ export default function Profile() {
 
   // Profile view
   return (
-    <div className="px-5 py-8 space-y-8 animate-fadeIn">
+    <div className="px-4 sm:px-5 py-6 sm:py-8 space-y-6 sm:space-y-8 animate-fadeIn">
       {/* Header */}
-      <header className="flex items-center gap-6 pt-2 px-1">
+      <header className="flex items-center gap-4 sm:gap-6 pt-2 px-1">
         <div className="relative group">
           <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-[2rem] blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-          <div className="relative w-24 h-24 rounded-[2rem] bg-blue-600 flex items-center justify-center shadow-xl">
-            <IoPersonCircleOutline className="w-14 h-14 text-white" />
+          <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl sm:rounded-[2rem] bg-blue-600 flex items-center justify-center shadow-xl">
+            <IoPersonCircleOutline className="w-12 h-12 sm:w-14 sm:h-14 text-white" />
           </div>
         </div>
-        <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{profile.name}</h1>
-          <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">{user?.email || 'Miembro Fit'}</p>
+        <div className="min-w-0">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight truncate">{profile.name}</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-1 truncate">{user?.email || 'Miembro Fit'}</p>
         </div>
       </header>
 
@@ -367,26 +367,26 @@ export default function Profile() {
       <Card className="border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-slate-200/50 dark:shadow-black/20 overflow-hidden relative z-10">
         <Card.Body className="p-0">
           <div className="grid grid-cols-3 divide-x divide-slate-100 dark:divide-slate-800">
-            <div className="p-5 text-center group">
-              <div className="w-11 h-11 rounded-2xl bg-orange-50 dark:bg-orange-900/30 text-orange-500 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
-                <IoFlameOutline className="w-5 h-5" />
+            <div className="p-4 sm:p-5 text-center group">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-orange-50 dark:bg-orange-900/30 text-orange-500 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                <IoFlameOutline className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <p className="text-2xl font-black text-slate-900 dark:text-white">{thisWeekWorkouts}</p>
-              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Esta semana</p>
+              <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">{thisWeekWorkouts}</p>
+              <p className="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-widest">Esta semana</p>
             </div>
             <div className="p-5 text-center group">
               <div className="w-11 h-11 rounded-2xl bg-purple-50 dark:bg-purple-900/30 text-purple-500 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
                 <IoTrophyOutline className="w-5 h-5" />
               </div>
-              <p className="text-2xl font-black text-slate-900 dark:text-white">{totalWorkouts}</p>
-              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total sesiones</p>
+              <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">{totalWorkouts}</p>
+              <p className="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-widest">Total sesiones</p>
             </div>
-            <div className="p-5 text-center group">
-              <div className="w-11 h-11 rounded-2xl bg-cyan-50 dark:bg-cyan-900/30 text-cyan-500 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
-                <IoBarbell className="w-5 h-5" />
+            <div className="p-4 sm:p-5 text-center group">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-cyan-50 dark:bg-cyan-900/30 text-cyan-500 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                <IoBarbell className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <p className="text-2xl font-black text-slate-900 dark:text-white">{totalRoutines}</p>
-              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Rutinas creadas</p>
+              <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">{totalRoutines}</p>
+              <p className="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-widest">Rutinas creadas</p>
             </div>
           </div>
         </Card.Body>
@@ -395,7 +395,7 @@ export default function Profile() {
       {/* Weight Goal Progress */}
       {profile.goal !== 'MAINTENANCE' && profile.targetWeight && profile.targetWeight !== profile.weight && (
         <Card className="border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-slate-200/50 dark:shadow-black/20 overflow-hidden relative z-10">
-          <Card.Body className="p-6">
+          <Card.Body className="p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 {profile.goal === 'WEIGHT_LOSS' ? (

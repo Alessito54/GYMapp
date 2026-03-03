@@ -73,12 +73,12 @@ export default function Water() {
   const percentText = `${Math.round(today.progress * 100)}%`;
 
   return (
-    <div className="px-5 py-8 space-y-6 animate-fadeIn">
+    <div className="px-4 sm:px-5 py-6 sm:py-8 space-y-5 sm:space-y-6 animate-fadeIn">
 
       {/* Header */}
       <header className="flex items-center justify-between px-1">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
             Mi <span className="text-gradient">Hidratación</span>
           </h1>
           <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">

@@ -24,7 +24,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 transition-opacity"
@@ -35,12 +35,12 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
       <div
         className={`
           relative w-full ${sizes[size]}
-          bg-white dark:bg-slate-800 rounded-t-[2.5rem] sm:rounded-[2.5rem]
+          bg-white dark:bg-slate-800 rounded-[2.5rem]
           shadow-2xl shadow-blue-500/10
-          max-h-[90vh] overflow-hidden
-          animate-slide-up sm:animate-scale-in
+          max-h-[85vh] overflow-hidden
+          animate-scale-in
           transition-all duration-300
-          border-t sm:border border-slate-200/50 dark:border-slate-700/50
+          border border-slate-200/50 dark:border-slate-700/50
         `}
       >
         {/* Header */}

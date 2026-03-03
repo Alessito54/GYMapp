@@ -135,10 +135,10 @@ export default function Nutrition() {
   };
 
   return (
-    <div className="px-5 py-8 space-y-8 animate-fadeIn pb-24">
+    <div className="px-4 sm:px-5 py-6 sm:py-8 space-y-6 sm:space-y-8 animate-fadeIn pb-24">
       {/* Header */}
       <header className="px-1">
-        <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Mi <span className="text-gradient">Nutricion</span></h1>
+        <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">Mi <span className="text-gradient">Nutricion</span></h1>
         <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Registra tu combustible diario</p>
       </header>
 
@@ -150,7 +150,7 @@ export default function Nutrition() {
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl -ml-24 -mb-24" />
           
           {/* Main stats row */}
-          <div className="relative z-10 p-8 flex items-center justify-between gap-6">
+          <div className="relative z-10 p-5 sm:p-8 flex items-center justify-between gap-4 sm:gap-6">
             {/* Progress Ring */}
             <div className="flex-shrink-0">
               <ProgressRing 
@@ -171,7 +171,7 @@ export default function Nutrition() {
             <div className="flex-1 space-y-4">
               <div>
                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">Objetivo Diario</p>
-                <p className="text-3xl font-black text-white tracking-tighter">{targetCalories} <span className="text-lg text-slate-500">kcal</span></p>
+                <p className="text-2xl sm:text-3xl font-black text-white tracking-tighter">{targetCalories} <span className="text-base sm:text-lg text-slate-500">kcal</span></p>
               </div>
               <div className="flex items-center gap-2">
                 <IoTrendingUpOutline className={`w-5 h-5 ${caloriesRemaining > 0 ? 'text-emerald-400' : 'text-rose-400'}`} />

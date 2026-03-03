@@ -35,23 +35,23 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="px-5 py-8 space-y-8 animate-fadeIn">
+    <div className="px-4 sm:px-5 py-6 sm:py-8 space-y-6 sm:space-y-8 animate-fadeIn">
       {/* Header */}
       <header className="flex items-end justify-between px-1">
         <div>
-          <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">{greeting()}</p>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+          <p className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-1">{greeting()}</p>
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
             Hola, <span className="text-gradient">{profile?.name || 'Atleta'}</span>
           </h1>
         </div>
-        <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
-          <IoSparkles className="w-6 h-6 text-blue-500 animate-pulse" />
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+          <IoSparkles className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500 animate-pulse" />
         </div>
       </header>
 
       {/* Today's Summary Card */}
       <Card className="overflow-hidden border-none shadow-2xl shadow-blue-500/15 active-scale-98 transition-transform cursor-default">
-        <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-600 p-7 relative overflow-hidden">
+        <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-600 p-5 sm:p-7 relative overflow-hidden">
           {/* Decorative background circle */}
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
 
@@ -61,7 +61,7 @@ export default function Dashboard() {
           </div>
 
           <div className="flex items-baseline gap-2">
-            <p className="text-white text-5xl font-black tracking-tighter">
+            <p className="text-white text-4xl sm:text-5xl font-black tracking-tighter">
               {nutritionSummary.totals.calories}
             </p>
             <span className="text-white/60 text-lg font-medium">kcal</span>
@@ -81,8 +81,8 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <Card.Body className="p-6 bg-white dark:bg-slate-800/50 backdrop-blur-sm">
-          <div className="grid grid-cols-3 gap-4">
+        <Card.Body className="p-4 sm:p-6 bg-white dark:bg-slate-800/50 backdrop-blur-sm">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
             <QuickStat
               label="Proteina"
               value={`${nutritionSummary.totals.protein}g`}
@@ -106,9 +106,9 @@ export default function Dashboard() {
       </Card>
 
       {/* Quick Actions Grid */}
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-2 gap-3 sm:gap-5">
         <Link to="/water" className="active-scale-95 transition-all">
-          <Card className="p-5 border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-blue-500/5 dark:shadow-blue-900/10 h-full group">
+          <Card className="p-4 sm:p-5 border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-blue-500/5 dark:shadow-blue-900/10 h-full group">
             <div className="flex items-center justify-between mb-5">
               <div className="w-12 h-12 bg-sky-100 dark:bg-sky-900/40 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ring-1 ring-sky-500/20">
                 <IoWaterOutline className="w-6 h-6 text-sky-600 dark:text-sky-400" />
@@ -132,7 +132,7 @@ export default function Dashboard() {
         </Link>
 
         <Link to="/workouts" className="active-scale-95 transition-all">
-          <Card className="p-5 border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-blue-500/5 dark:shadow-blue-900/10 h-full group">
+          <Card className="p-4 sm:p-5 border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-blue-500/5 dark:shadow-blue-900/10 h-full group">
             <div className="flex items-center justify-between mb-5">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/40 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ring-1 ring-blue-500/20">
                 <IoBarbell className="w-6 h-6 text-blue-600 dark:text-blue-400" />
@@ -157,11 +157,11 @@ export default function Dashboard() {
       </div>
 
       {/* Activity Calendar */}
-      <Card className="p-6 border-slate-200/60 dark:border-slate-700/60 bg-white dark:bg-slate-900/60">
+      <Card className="p-4 sm:p-6 border-slate-200/60 dark:border-slate-700/60 bg-white dark:bg-slate-900/60">
         <header className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <IoCalendarOutline className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-            <h2 className="text-lg font-black text-slate-800 dark:text-white tracking-tight">Calendario de Actividad</h2>
+            <h2 className="text-base sm:text-lg font-black text-slate-800 dark:text-white tracking-tight">Calendario de Actividad</h2>
           </div>
         </header>
         <ActivityCalendar sessions={sessions} />
@@ -242,9 +242,9 @@ export default function Dashboard() {
 
 function QuickStat({ label, value, color, textColor }) {
   return (
-    <div className={`p-4 ${color} rounded-[2rem] text-center border border-slate-200/30 dark:border-white/5 shadow-sm dark:shadow-none`}>
-      <p className={`text-xl font-black ${textColor} leading-tight`}>{value}</p>
-      <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-1">{label}</p>
+    <div className={`p-3 sm:p-4 ${color} rounded-2xl sm:rounded-[2rem] text-center border border-slate-200/30 dark:border-white/5 shadow-sm dark:shadow-none`}>
+      <p className={`text-lg sm:text-xl font-black ${textColor} leading-tight`}>{value}</p>
+      <p className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-1">{label}</p>
     </div>
   );
 }

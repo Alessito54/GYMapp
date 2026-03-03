@@ -217,8 +217,18 @@ export const useWorkoutStore = create(
         if (userId) await get().saveGlobalToFirebase(userId);
       },
 
-      cancelSession: () => {
+      cancelSession: async (userId) => {
+        const session = get().activeSession;
         set({ activeSession: null });
+        // Delete the active session from Firebase so it doesn't reload
+        if (userId && session?.id) {
+          try {
+            const { deleteDoc } = await import('firebase/firestore');
+            await deleteDoc(doc(db, 'users', userId, 'sessions', session.id));
+          } catch (e) {
+            console.error('Error deleting cancelled session:', e);
+          }
+        }
       },
 
       getRecentSessions: (limit = 10) => {
