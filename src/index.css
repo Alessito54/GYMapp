@@ -19,7 +19,7 @@
   /* Amber 500 */
   --color-danger: #ef4444;
   /* Red 500 */
-  
+
   /* Light mode */
   --color-light-bg: #f8fafc;
   /* Slate 50 - softer than pure white */
@@ -27,7 +27,7 @@
   --color-light-border: #e2e8f0;
   /* Slate 200 */
   --color-gray: #64748b;
-  
+
   /* Dark mode */
   --color-dark-bg: #0f172a;
   /* Slate 900 */
@@ -209,6 +209,20 @@
 
 .animate-pulse-glow {
   animation: pulse-glow 2s infinite;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
 }
 
 /* Interactive Utilities */

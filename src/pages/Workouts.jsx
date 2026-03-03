@@ -40,10 +40,10 @@ const EQUIPMENT = [
 ];
 
 const SERIES_TYPES = [
-  { value: 'simple',   label: 'Simple',   short: '1x',  color: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400' },
-  { value: 'biserie',  label: 'Bi-serie', short: '2x',  color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' },
-  { value: 'triserie', label: 'Tri-serie',short: '3x',  color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' },
-  { value: 'drop',     label: 'Drop set', short: 'Drop',color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' },
+  { value: 'simple', label: 'Simple', short: '1x', color: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400' },
+  { value: 'biserie', label: 'Bi-serie', short: '2x', color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' },
+  { value: 'triserie', label: 'Tri-serie', short: '3x', color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' },
+  { value: 'drop', label: 'Drop set', short: 'Drop', color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' },
   { value: 'circuito', label: 'Circuito', short: 'Cir', color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' },
 ];
 
@@ -194,11 +194,10 @@ function LibraryManagementModal({ isOpen, onClose, library, onUpdate, onDelete, 
                 <button
                   key={mg}
                   onClick={() => setEditingExercise({ ...editingExercise, muscleGroup: mg })}
-                  className={`p-3 rounded-xl text-xs font-black uppercase tracking-wide transition-all ${
-                    editingExercise.muscleGroup === mg
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
-                      : 'bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
-                  }`}
+                  className={`p-3 rounded-xl text-xs font-black uppercase tracking-wide transition-all ${editingExercise.muscleGroup === mg
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
+                    : 'bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                    }`}
                 >
                   {mg}
                 </button>
@@ -215,11 +214,10 @@ function LibraryManagementModal({ isOpen, onClose, library, onUpdate, onDelete, 
                 <button
                   key={unit}
                   onClick={() => setEditingExercise({ ...editingExercise, unit })}
-                  className={`p-3 rounded-xl text-xs font-black uppercase tracking-wide transition-all ${
-                    editingExercise.unit === unit
-                      ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/30'
-                      : 'bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
-                  }`}
+                  className={`p-3 rounded-xl text-xs font-black uppercase tracking-wide transition-all ${editingExercise.unit === unit
+                    ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/30'
+                    : 'bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                    }`}
                 >
                   {unit}
                 </button>
@@ -396,7 +394,7 @@ function AICompletePlanModal({ isOpen, onClose, onCreatePlan, userId }) {
   const [step, setStep] = useState(1);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState(null);
-  
+
   const [formData, setFormData] = useState({
     goals: '',
     weeks: 8,
@@ -487,11 +485,10 @@ function AICompletePlanModal({ isOpen, onClose, onCreatePlan, userId }) {
                 <button
                   key={opt.value}
                   onClick={() => setFormData({ ...formData, experience: opt.value })}
-                  className={`p-4 rounded-2xl text-center transition-all ${
-                    formData.experience === opt.value
-                      ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/30'
-                      : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
-                  }`}
+                  className={`p-4 rounded-2xl text-center transition-all ${formData.experience === opt.value
+                    ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/30'
+                    : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                    }`}
                 >
                   <p className="text-xs font-black uppercase tracking-wide">{opt.label}</p>
                   <p className={`text-[9px] mt-1 ${formData.experience === opt.value ? 'text-violet-200' : 'text-slate-400'}`}>{opt.desc}</p>
@@ -509,11 +506,10 @@ function AICompletePlanModal({ isOpen, onClose, onCreatePlan, userId }) {
                 <button
                   key={d}
                   onClick={() => setFormData({ ...formData, daysPerWeek: d })}
-                  className={`flex-1 py-4 rounded-2xl text-lg font-black transition-all ${
-                    formData.daysPerWeek === d
-                      ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/30'
-                      : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
-                  }`}
+                  className={`flex-1 py-4 rounded-2xl text-lg font-black transition-all ${formData.daysPerWeek === d
+                    ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/30'
+                    : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                    }`}
                 >
                   {d}
                 </button>
@@ -530,11 +526,10 @@ function AICompletePlanModal({ isOpen, onClose, onCreatePlan, userId }) {
                 <button
                   key={w}
                   onClick={() => setFormData({ ...formData, weeks: w })}
-                  className={`flex-1 py-3 rounded-2xl text-center transition-all ${
-                    formData.weeks === w
-                      ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/30'
-                      : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
-                  }`}
+                  className={`flex-1 py-3 rounded-2xl text-center transition-all ${formData.weeks === w
+                    ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/30'
+                    : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                    }`}
                 >
                   <p className="text-sm font-black">{w}</p>
                   <p className={`text-[9px] ${formData.weeks === w ? 'text-violet-200' : 'text-slate-400'}`}>semanas</p>
@@ -745,17 +740,17 @@ export default function Workouts() {
       goal: plan.goal || 'MUSCLE_GAIN',
       createdAt: new Date().toISOString()
     };
-    
+
     // Add folder
     await addFolder(newFolder, planUserId);
-    
+
     // Add each routine to the folder
     for (const routine of plan.routines) {
       if (!routine.name || !routine.exercises?.length) {
         console.warn('[handleCreateAIPlan] Skipping invalid routine:', routine);
         continue;
       }
-      
+
       const newRoutine = {
         ...routine,
         folderId: newFolder.id,
@@ -1378,12 +1373,17 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
 
 function AddRoutineModal({ isOpen, onClose, folderId, onSave }) {
   const { user } = useAuthStore();
-  const { exerciseLibrary } = useWorkoutStore();
+  const { exerciseLibrary, saveExerciseToLibrary } = useWorkoutStore();
   const [name, setName] = useState('');
-  const [exercises, setExercises] = useState([{ name: '', sets: 3, reps: '10-12', weight: 0, unit: 'kg', muscleGroup: 'Pecho' }]);
+  const [exercises, setExercises] = useState([{ id: Date.now(), name: '', sets: 3, reps: '10-12', weight: 0, unit: 'kg', muscleGroup: 'Pecho', restSeconds: 60, seriesType: 'simple' }]);
   const [showLibrary, setShowLibrary] = useState(false);
+  const [expandedIndex, setExpandedIndex] = useState(0);
 
-  const handleAddExercise = () => setExercises([...exercises, { name: '', sets: 3, reps: '10-12', weight: 0, unit: 'kg', muscleGroup: 'Pecho' }]);
+  const handleAddExercise = () => {
+    const newExercise = { id: Date.now(), name: '', sets: 3, reps: '10-12', weight: 0, unit: 'kg', muscleGroup: 'Pecho', restSeconds: 60, seriesType: 'simple' };
+    setExercises([...exercises, newExercise]);
+    setExpandedIndex(exercises.length);
+  };
 
   const handleUpdateExercise = (index, field, value) => {
     const updated = [...exercises];
@@ -1393,26 +1393,37 @@ function AddRoutineModal({ isOpen, onClose, folderId, onSave }) {
 
   const handleSelectFromLibrary = (exercise) => {
     const newExercise = {
+      id: Date.now(),
       name: exercise.name,
       sets: exercise.sets || 3,
       reps: exercise.reps || '10-12',
       weight: exercise.weight || 0,
       unit: exercise.unit || 'kg',
       muscleGroup: exercise.muscleGroup || 'Pecho',
-      restSeconds: exercise.restSeconds || 60
+      restSeconds: exercise.restSeconds || 60,
+      seriesType: exercise.seriesType || 'simple'
     };
-    setExercises([...exercises.filter(e => e.name !== ''), newExercise]);
+
+    // Replace empty exercise if it's the only one and has no name
+    if (exercises.length === 1 && !exercises[0].name) {
+      setExercises([newExercise]);
+      setExpandedIndex(0);
+    } else {
+      setExercises([...exercises, newExercise]);
+      setExpandedIndex(exercises.length);
+    }
     setShowLibrary(false);
   };
 
-  const handleRemoveExercise = (index) => setExercises(exercises.filter((_, i) => i !== index));
-
-  const { saveExerciseToLibrary } = useWorkoutStore();
+  const handleRemoveExercise = (index) => {
+    setExercises(exercises.filter((_, i) => i !== index));
+    if (expandedIndex === index) setExpandedIndex(null);
+    else if (expandedIndex > index) setExpandedIndex(expandedIndex - 1);
+  };
 
   const handleSave = async () => {
     if (!name.trim() || exercises.some(e => !e.name.trim())) return;
 
-    // Save unique exercises to library
     for (const exercise of exercises) {
       if (exercise.name.trim()) {
         await saveExerciseToLibrary({
@@ -1426,87 +1437,227 @@ function AddRoutineModal({ isOpen, onClose, folderId, onSave }) {
 
     onSave({ folderId, name, exercises: exercises.map((e, i) => ({ ...e, order: i })) }, user?.uid);
     setName('');
-    setExercises([{ name: '', sets: 3, reps: '10-12', weight: 0, unit: 'kg', muscleGroup: 'Pecho' }]);
+    setExercises([{ id: Date.now(), name: '', sets: 3, reps: '10-12', weight: 0, unit: 'kg', muscleGroup: 'Pecho', restSeconds: 60, seriesType: 'simple' }]);
+    setExpandedIndex(0);
     onClose();
   };
 
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} title="Nueva rutina" size="lg">
-        <div className="space-y-4">
-          <Input label="Nombre de la rutina" placeholder="Ej: Push Day" value={name} onChange={(e) => setName(e.target.value)} />
+        <div className="space-y-6 pb-20">
+          <div className="px-1">
+            <Input
+              label="Nombre de la rutina"
+              placeholder="Ej: Push Day, Pierna..."
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="text-lg font-black"
+            />
+          </div>
+
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 px-1">Ejercicios</label>
+            <div className="flex items-center justify-between mb-4 px-1">
+              <div className="flex items-center gap-2">
+                <label className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">Ejercicios</label>
+                <Badge variant="secondary" className="px-2 py-0.5 text-[10px]">{exercises.length}</Badge>
+              </div>
               <button
                 onClick={() => setShowLibrary(true)}
-                className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                className="px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/20 text-[10px] font-black uppercase text-blue-600 dark:text-blue-400 flex items-center gap-1.5 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-all"
               >
-                <IoLibraryOutline className="w-4 h-4" />
+                <IoLibraryOutline className="w-3.5 h-3.5" />
                 Biblioteca
               </button>
             </div>
-            <div className="space-y-4 max-h-[35vh] overflow-y-auto pr-1">
-              {exercises.map((exercise, index) => (
-                <div key={index} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
-                  <div className="flex items-center gap-3">
-                    <Input
-                      placeholder="Nombre"
-                      value={exercise.name}
-                      onChange={(e) => handleUpdateExercise(index, 'name', e.target.value)}
-                      className="flex-1"
-                    />
-                    <select
-                      value={exercise.muscleGroup}
-                      onChange={(e) => handleUpdateExercise(index, 'muscleGroup', e.target.value)}
-                      className="px-3 py-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm h-[56px] focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
+
+            <div className="space-y-3">
+              {exercises.map((exercise, index) => {
+                const isExpanded = expandedIndex === index;
+                return (
+                  <div
+                    key={exercise.id || index}
+                    className={`group transition-all duration-300 rounded-[2rem] border overflow-hidden ${isExpanded
+                      ? 'bg-white dark:bg-slate-900 border-blue-200 dark:border-blue-800 shadow-xl shadow-blue-500/5 ring-1 ring-blue-500/10'
+                      : 'bg-slate-50/50 dark:bg-slate-900/30 border-slate-100 dark:border-slate-800/50 hover:border-slate-200 dark:hover:border-slate-700'
+                      }`}
+                  >
+                    {/* Collapsed Header / Toggle */}
+                    <div
+                      onClick={() => setExpandedIndex(isExpanded ? null : index)}
+                      className="p-4 flex items-center gap-3 cursor-pointer select-none"
                     >
-                      {MUSCLE_GROUPS.map(mg => <option key={mg} value={mg}>{mg}</option>)}
-                    </select>
-                    {exercises.length > 1 && (
-                      <button onClick={() => handleRemoveExercise(index)} className="p-2.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition-colors">
-                        <IoTrashOutline className="w-5 h-5" />
-                      </button>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black transition-all ${isExpanded ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'
+                        }`}>
+                        {index + 1}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        {isExpanded ? (
+                          <input
+                            autoFocus
+                            placeholder="Nombre del ejercicio..."
+                            value={exercise.name}
+                            onClick={(e) => e.stopPropagation()}
+                            onChange={(e) => handleUpdateExercise(index, 'name', e.target.value)}
+                            className="w-full bg-transparent font-black text-slate-900 dark:text-white focus:outline-none text-base"
+                          />
+                        ) : (
+                          <div className="flex flex-col">
+                            <span className={`font-black truncate ${exercise.name ? 'text-slate-800 dark:text-white' : 'text-slate-400'}`}>
+                              {exercise.name || 'Nuevo Ejercicio'}
+                            </span>
+                            <div className="flex items-center gap-2 mt-0.5">
+                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{exercise.muscleGroup || 'Pecho'}</span>
+                              <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700"></span>
+                              <span className="text-[10px] font-bold text-blue-500 uppercase">{exercise.sets}x{exercise.reps}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {!isExpanded && exercises.length > 1 && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleRemoveExercise(index); }}
+                            className="p-2 text-slate-300 hover:text-rose-500 transition-colors"
+                          >
+                            <IoTrashOutline className="w-5 h-5" />
+                          </button>
+                        )}
+                        <IoChevronForward className={`w-5 h-5 text-slate-300 transition-transform duration-300 ${isExpanded ? 'rotate-90 text-blue-500' : ''}`} />
+                      </div>
+                    </div>
+
+                    {/* Expanded Content */}
+                    {isExpanded && (
+                      <div className="px-4 pb-5 space-y-5 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">Músculo</label>
+                            <select
+                              value={exercise.muscleGroup}
+                              onChange={(e) => handleUpdateExercise(index, 'muscleGroup', e.target.value)}
+                              className="w-full px-4 py-3 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white text-sm font-bold focus:ring-2 focus:ring-blue-500 transition-all outline-none appearance-none"
+                            >
+                              {MUSCLE_GROUPS.map(mg => <option key={mg} value={mg}>{mg}</option>)}
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">Unidad</label>
+                            <div className="flex gap-1 p-1 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800">
+                              {['kg', 'lbs', '—'].map(u => (
+                                <button
+                                  key={u}
+                                  onClick={() => handleUpdateExercise(index, 'unit', u === '—' ? 'barra' : u)}
+                                  className={`flex-1 py-2 rounded-xl text-[10px] font-black transition-all ${(exercise.unit === u || (u === '—' && exercise.unit === 'barra'))
+                                    ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-sm'
+                                    : 'text-slate-400 hover:text-slate-600'
+                                    }`}
+                                >
+                                  {u}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-3">
+                          <div className="space-y-2">
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Series</label>
+                            <input
+                              type="number"
+                              value={exercise.sets}
+                              onChange={(e) => handleUpdateExercise(index, 'sets', parseInt(e.target.value) || 0)}
+                              className="w-full px-4 py-3 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white text-center font-black focus:ring-2 focus:ring-blue-500 outline-none"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Reps</label>
+                            <input
+                              placeholder="10-12"
+                              value={exercise.reps}
+                              onChange={(e) => handleUpdateExercise(index, 'reps', e.target.value)}
+                              className="w-full px-4 py-3 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white text-center font-black focus:ring-2 focus:ring-blue-500 outline-none"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Peso</label>
+                            <input
+                              type="number"
+                              value={exercise.weight}
+                              onChange={(e) => handleUpdateExercise(index, 'weight', parseFloat(e.target.value) || 0)}
+                              className="w-full px-4 py-3 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white text-center font-black focus:ring-2 focus:ring-blue-500 outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-3">
+                          <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Tipo de serie</label>
+                          <div className="flex flex-wrap gap-2">
+                            {SERIES_TYPES.map(st => (
+                              <button
+                                key={st.value}
+                                type="button"
+                                onClick={() => handleUpdateExercise(index, 'seriesType', st.value)}
+                                className={`px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-wide transition-all border ${(exercise.seriesType || 'simple') === st.value
+                                  ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20'
+                                  : 'bg-slate-50 dark:bg-slate-950 border-slate-100 dark:border-slate-800 text-slate-500 hover:border-slate-200'
+                                  }`}
+                              >
+                                {st.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="pt-2 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <IoTimeOutline className="w-4 h-4 text-slate-400" />
+                            <span className="text-[10px] font-black text-slate-400 uppercase">Descanso:</span>
+                            <input
+                              type="number"
+                              value={exercise.restSeconds || 60}
+                              onChange={(e) => handleUpdateExercise(index, 'restSeconds', parseInt(e.target.value) || 0)}
+                              className="w-12 bg-transparent font-black text-slate-900 dark:text-white focus:outline-none border-b border-dashed border-slate-300"
+                            />
+                            <span className="text-[10px] font-black text-slate-400">s</span>
+                          </div>
+                          {exercises.length > 1 && (
+                            <button
+                              onClick={() => handleRemoveExercise(index)}
+                              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20 text-[10px] font-black uppercase transition-colors"
+                            >
+                              <IoTrashOutline className="w-4 h-4" />
+                              Eliminar
+                            </button>
+                          )}
+                        </div>
+                      </div>
                     )}
                   </div>
-
-                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                    <Input label="Series" type="number" value={exercise.sets} onChange={(e) => handleUpdateExercise(index, 'sets', parseInt(e.target.value) || 0)} />
-                    <Input label="Reps" placeholder="10-12" value={exercise.reps} onChange={(e) => handleUpdateExercise(index, 'reps', e.target.value)} />
-                    <Input label="Peso" type="number" value={exercise.weight} onChange={(e) => handleUpdateExercise(index, 'weight', parseFloat(e.target.value) || 0)} />
-                    <Input label="Desc. (s)" type="number" value={exercise.restSeconds || 60} onChange={(e) => handleUpdateExercise(index, 'restSeconds', parseInt(e.target.value) || 0)} />
-                    <div className="pt-7">
-                      <select
-                        value={exercise.unit || 'kg'}
-                        onChange={(e) => handleUpdateExercise(index, 'unit', e.target.value)}
-                        className="w-full px-2 py-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm h-[56px] focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
-                      >
-                        <option value="kg">kg</option>
-                        <option value="lbs">lbs</option>
-                        <option value="barra">—</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 self-center">Tipo:</span>
-                    {SERIES_TYPES.map(st => (
-                      <button key={st.value} type="button" onClick={() => handleUpdateExercise(index, 'seriesType', st.value)}
-                        className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wide transition-all ${(exercise.seriesType || 'simple') === st.value ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'}`}>
-                        {st.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
-            <Button variant="ghost" onClick={handleAddExercise} className="w-full mt-3 h-12 border-dashed border-2 border-slate-200 dark:border-slate-800 text-sm">
-              <IoAddOutline className="w-5 h-5 mr-1" />
-              Agregar ejercicio
-            </Button>
+
+            <button
+              onClick={handleAddExercise}
+              className="w-full mt-4 py-4 rounded-[2rem] border-2 border-dashed border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-600 hover:border-blue-300 hover:text-blue-500 dark:hover:border-blue-900/50 transition-all flex items-center justify-center gap-2 group"
+            >
+              <div className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 group-hover:bg-blue-50 flex items-center justify-center transition-colors">
+                <IoAddOutline className="w-4 h-4" />
+              </div>
+              <span className="text-sm font-black uppercase tracking-wider">Agregar ejercicio</span>
+            </button>
           </div>
-          <div className="sticky bottom-0 bg-white dark:bg-slate-800 pt-3 -mx-6 px-6 -mb-6 pb-6 border-t border-slate-100 dark:border-slate-700/50">
-            <Button onClick={handleSave} className="w-full h-14 premium-gradient" disabled={!name.trim() || exercises.every(e => !e.name.trim())}>Guardar rutina</Button>
-          </div>
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0 p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-t border-slate-100 dark:border-slate-700/50 z-10">
+          <Button
+            onClick={handleSave}
+            className="w-full h-14 premium-gradient shadow-xl shadow-blue-600/20"
+            disabled={!name.trim() || exercises.every(e => !e.name.trim())}
+          >
+            Guardar rutina
+          </Button>
         </div>
       </Modal>
 
@@ -1526,8 +1677,13 @@ function EditRoutineModal({ isOpen, onClose, routine, onSave }) {
   const [name, setName] = useState(routine.name);
   const [exercises, setExercises] = useState(routine.exercises || []);
   const [showLibrary, setShowLibrary] = useState(false);
+  const [expandedIndex, setExpandedIndex] = useState(null);
 
-  const handleAddExercise = () => setExercises([...exercises, { name: '', sets: 3, reps: '10-12', weight: 0, unit: 'kg', muscleGroup: 'Pecho', restSeconds: 60 }]);
+  const handleAddExercise = () => {
+    const newExercise = { id: Date.now(), name: '', sets: 3, reps: '10-12', weight: 0, unit: 'kg', muscleGroup: 'Pecho', restSeconds: 60, seriesType: 'simple' };
+    setExercises([...exercises, newExercise]);
+    setExpandedIndex(exercises.length);
+  };
 
   const handleUpdateExercise = (index, field, value) => {
     const updated = [...exercises];
@@ -1537,24 +1693,30 @@ function EditRoutineModal({ isOpen, onClose, routine, onSave }) {
 
   const handleSelectFromLibrary = (exercise) => {
     const newExercise = {
+      id: Date.now(),
       name: exercise.name,
       sets: exercise.sets || 3,
       reps: exercise.reps || '10-12',
       weight: exercise.weight || 0,
       unit: exercise.unit || 'kg',
       muscleGroup: exercise.muscleGroup || 'Pecho',
-      restSeconds: exercise.restSeconds || 60
+      restSeconds: exercise.restSeconds || 60,
+      seriesType: exercise.seriesType || 'simple'
     };
     setExercises([...exercises.filter(e => e.name !== ''), newExercise]);
+    setExpandedIndex(exercises.length);
     setShowLibrary(false);
   };
 
-  const handleRemoveExercise = (index) => setExercises(exercises.filter((_, i) => i !== index));
+  const handleRemoveExercise = (index) => {
+    setExercises(exercises.filter((_, i) => i !== index));
+    if (expandedIndex === index) setExpandedIndex(null);
+    else if (expandedIndex > index) setExpandedIndex(expandedIndex - 1);
+  };
 
   const handleSave = async () => {
     if (!name.trim() || exercises.some(e => !e.name.trim())) return;
 
-    // Save unique exercises to library
     for (const exercise of exercises) {
       if (exercise.name.trim()) {
         await saveExerciseToLibrary({
@@ -1573,80 +1735,219 @@ function EditRoutineModal({ isOpen, onClose, routine, onSave }) {
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} title="Editar rutina" size="lg">
-        <div className="space-y-4">
-          <Input label="Nombre de la rutina" placeholder="Ej: Push Day" value={name} onChange={(e) => setName(e.target.value)} />
+        <div className="space-y-6 pb-20">
+          <div className="px-1">
+            <Input
+              label="Nombre de la rutina"
+              placeholder="Ej: Push Day, Pierna..."
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="text-lg font-black"
+            />
+          </div>
+
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 px-1">Ejercicios</label>
+            <div className="flex items-center justify-between mb-4 px-1">
+              <div className="flex items-center gap-2">
+                <label className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">Ejercicios</label>
+                <Badge variant="secondary" className="px-2 py-0.5 text-[10px]">{exercises.length}</Badge>
+              </div>
               <button
                 onClick={() => setShowLibrary(true)}
-                className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                className="px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/20 text-[10px] font-black uppercase text-blue-600 dark:text-blue-400 flex items-center gap-1.5 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-all"
               >
-                <IoLibraryOutline className="w-4 h-4" />
+                <IoLibraryOutline className="w-3.5 h-3.5" />
                 Biblioteca
               </button>
             </div>
-            <div className="space-y-4 max-h-[35vh] overflow-y-auto pr-1">
-              {exercises.map((exercise, index) => (
-                <div key={index} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
-                  <div className="flex items-center gap-3">
-                    <Input
-                      placeholder="Nombre"
-                      value={exercise.name}
-                      onChange={(e) => handleUpdateExercise(index, 'name', e.target.value)}
-                      className="flex-1"
-                    />
-                    <select
-                      value={exercise.muscleGroup || 'Pecho'}
-                      onChange={(e) => handleUpdateExercise(index, 'muscleGroup', e.target.value)}
-                      className="px-3 py-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm h-[56px] focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
+
+            <div className="space-y-3">
+              {exercises.map((exercise, index) => {
+                const isExpanded = expandedIndex === index;
+                return (
+                  <div
+                    key={exercise.id || index}
+                    className={`group transition-all duration-300 rounded-[2rem] border overflow-hidden ${isExpanded
+                      ? 'bg-white dark:bg-slate-900 border-blue-200 dark:border-blue-800 shadow-xl shadow-blue-500/5 ring-1 ring-blue-500/10'
+                      : 'bg-slate-50/50 dark:bg-slate-900/30 border-slate-100 dark:border-slate-800/50 hover:border-slate-200 dark:hover:border-slate-700'
+                      }`}
+                  >
+                    {/* Collapsed Header / Toggle */}
+                    <div
+                      onClick={() => setExpandedIndex(isExpanded ? null : index)}
+                      className="p-4 flex items-center gap-3 cursor-pointer select-none"
                     >
-                      {MUSCLE_GROUPS.map(mg => <option key={mg} value={mg}>{mg}</option>)}
-                    </select>
-                    {exercises.length > 1 && (
-                      <button onClick={() => handleRemoveExercise(index)} className="p-2.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition-colors">
-                        <IoTrashOutline className="w-5 h-5" />
-                      </button>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black transition-all ${isExpanded ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'
+                        }`}>
+                        {index + 1}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        {isExpanded ? (
+                          <input
+                            autoFocus
+                            placeholder="Nombre del ejercicio..."
+                            value={exercise.name}
+                            onClick={(e) => e.stopPropagation()}
+                            onChange={(e) => handleUpdateExercise(index, 'name', e.target.value)}
+                            className="w-full bg-transparent font-black text-slate-900 dark:text-white focus:outline-none text-base"
+                          />
+                        ) : (
+                          <div className="flex flex-col">
+                            <span className={`font-black truncate ${exercise.name ? 'text-slate-800 dark:text-white' : 'text-slate-400'}`}>
+                              {exercise.name || 'Nuevo Ejercicio'}
+                            </span>
+                            <div className="flex items-center gap-2 mt-0.5">
+                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{exercise.muscleGroup || 'Pecho'}</span>
+                              <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700"></span>
+                              <span className="text-[10px] font-bold text-blue-500 uppercase">{exercise.sets}x{exercise.reps}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {!isExpanded && exercises.length > 1 && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleRemoveExercise(index); }}
+                            className="p-2 text-slate-300 hover:text-rose-500 transition-colors"
+                          >
+                            <IoTrashOutline className="w-5 h-5" />
+                          </button>
+                        )}
+                        <IoChevronForward className={`w-5 h-5 text-slate-300 transition-transform duration-300 ${isExpanded ? 'rotate-90 text-blue-500' : ''}`} />
+                      </div>
+                    </div>
+
+                    {/* Expanded Content */}
+                    {isExpanded && (
+                      <div className="px-4 pb-5 space-y-5 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">Músculo</label>
+                            <select
+                              value={exercise.muscleGroup || 'Pecho'}
+                              onChange={(e) => handleUpdateExercise(index, 'muscleGroup', e.target.value)}
+                              className="w-full px-4 py-3 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white text-sm font-bold focus:ring-2 focus:ring-blue-500 transition-all outline-none appearance-none"
+                            >
+                              {MUSCLE_GROUPS.map(mg => <option key={mg} value={mg}>{mg}</option>)}
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">Unidad</label>
+                            <div className="flex gap-1 p-1 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800">
+                              {['kg', 'lbs', '—'].map(u => (
+                                <button
+                                  key={u}
+                                  onClick={() => handleUpdateExercise(index, 'unit', u === '—' ? 'barra' : u)}
+                                  className={`flex-1 py-2 rounded-xl text-[10px] font-black transition-all ${(exercise.unit === u || (u === '—' && exercise.unit === 'barra'))
+                                    ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-sm'
+                                    : 'text-slate-400 hover:text-slate-600'
+                                    }`}
+                                >
+                                  {u}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-3">
+                          <div className="space-y-2">
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Series</label>
+                            <input
+                              type="number"
+                              value={exercise.sets}
+                              onChange={(e) => handleUpdateExercise(index, 'sets', parseInt(e.target.value) || 0)}
+                              className="w-full px-4 py-3 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white text-center font-black focus:ring-2 focus:ring-blue-500 outline-none"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Reps</label>
+                            <input
+                              placeholder="10-12"
+                              value={exercise.reps}
+                              onChange={(e) => handleUpdateExercise(index, 'reps', e.target.value)}
+                              className="w-full px-4 py-3 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white text-center font-black focus:ring-2 focus:ring-blue-500 outline-none"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Peso</label>
+                            <input
+                              type="number"
+                              value={exercise.weight}
+                              onChange={(e) => handleUpdateExercise(index, 'weight', parseFloat(e.target.value) || 0)}
+                              className="w-full px-4 py-3 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white text-center font-black focus:ring-2 focus:ring-blue-500 outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-3">
+                          <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Tipo de serie</label>
+                          <div className="flex flex-wrap gap-2">
+                            {SERIES_TYPES.map(st => (
+                              <button
+                                key={st.value}
+                                type="button"
+                                onClick={() => handleUpdateExercise(index, 'seriesType', st.value)}
+                                className={`px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-wide transition-all border ${(exercise.seriesType || 'simple') === st.value
+                                  ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20'
+                                  : 'bg-slate-50 dark:bg-slate-950 border-slate-100 dark:border-slate-800 text-slate-500 hover:border-slate-200'
+                                  }`}
+                              >
+                                {st.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="pt-2 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <IoTimeOutline className="w-4 h-4 text-slate-400" />
+                            <span className="text-[10px] font-black text-slate-400 uppercase">Descanso:</span>
+                            <input
+                              type="number"
+                              value={exercise.restSeconds || 60}
+                              onChange={(e) => handleUpdateExercise(index, 'restSeconds', parseInt(e.target.value) || 0)}
+                              className="w-12 bg-transparent font-black text-slate-900 dark:text-white focus:outline-none border-b border-dashed border-slate-300"
+                            />
+                            <span className="text-[10px] font-black text-slate-400">s</span>
+                          </div>
+                          {exercises.length > 1 && (
+                            <button
+                              onClick={() => handleRemoveExercise(index)}
+                              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20 text-[10px] font-black uppercase transition-colors"
+                            >
+                              <IoTrashOutline className="w-4 h-4" />
+                              Eliminar
+                            </button>
+                          )}
+                        </div>
+                      </div>
                     )}
                   </div>
-
-                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                    <Input label="Series" type="number" value={exercise.sets} onChange={(e) => handleUpdateExercise(index, 'sets', parseInt(e.target.value) || 0)} />
-                    <Input label="Reps" placeholder="10-12" value={exercise.reps} onChange={(e) => handleUpdateExercise(index, 'reps', e.target.value)} />
-                    <Input label="Peso" type="number" value={exercise.weight} onChange={(e) => handleUpdateExercise(index, 'weight', parseFloat(e.target.value) || 0)} />
-                    <Input label="Desc. (s)" type="number" value={exercise.restSeconds || 60} onChange={(e) => handleUpdateExercise(index, 'restSeconds', parseInt(e.target.value) || 0)} />
-                    <div className="pt-7">
-                      <select
-                        value={exercise.unit || 'kg'}
-                        onChange={(e) => handleUpdateExercise(index, 'unit', e.target.value)}
-                        className="w-full px-2 py-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm h-[56px] focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
-                      >
-                        <option value="kg">kg</option>
-                        <option value="lbs">lbs</option>
-                        <option value="barra">—</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 self-center">Tipo:</span>
-                    {SERIES_TYPES.map(st => (
-                      <button key={st.value} type="button" onClick={() => handleUpdateExercise(index, 'seriesType', st.value)}
-                        className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wide transition-all ${(exercise.seriesType || 'simple') === st.value ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'}`}>
-                        {st.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
-            <Button variant="ghost" onClick={handleAddExercise} className="w-full mt-3 h-12 border-dashed border-2 border-slate-200 dark:border-slate-800 text-sm">
-              <IoAddOutline className="w-5 h-5 mr-1" />
-              Agregar ejercicio
-            </Button>
+
+            <button
+              onClick={handleAddExercise}
+              className="w-full mt-4 py-4 rounded-[2rem] border-2 border-dashed border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-600 hover:border-blue-300 hover:text-blue-500 dark:hover:border-blue-900/50 transition-all flex items-center justify-center gap-2 group"
+            >
+              <div className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 group-hover:bg-blue-50 flex items-center justify-center transition-colors">
+                <IoAddOutline className="w-4 h-4" />
+              </div>
+              <span className="text-sm font-black uppercase tracking-wider">Agregar ejercicio</span>
+            </button>
           </div>
-          <div className="sticky bottom-0 bg-white dark:bg-slate-800 pt-3 -mx-6 px-6 -mb-6 pb-6 border-t border-slate-100 dark:border-slate-700/50">
-            <Button onClick={handleSave} className="w-full h-14 premium-gradient" disabled={!name.trim() || exercises.every(e => !e.name.trim())}>Guardar cambios</Button>
-          </div>
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0 p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-t border-slate-100 dark:border-slate-700/50 z-10">
+          <Button
+            onClick={handleSave}
+            className="w-full h-14 premium-gradient shadow-xl shadow-blue-600/20"
+            disabled={!name.trim() || exercises.every(e => !e.name.trim())}
+          >
+            Guardar cambios
+          </Button>
         </div>
       </Modal>
 
@@ -1711,15 +2012,15 @@ function AIGenerateModal({ isOpen, onClose, folderId, folderGoal, onSave, userId
       description: aiRoutine.description,
       exercises: aiRoutine.exercises
         .filter((_, i) => selectedExercises.includes(i))
-        .map((e, i) => ({ 
-          name: e.name, 
+        .map((e, i) => ({
+          name: e.name,
           muscleGroup: e.muscleGroup || selectedMuscles[0] || 'Full Body',
-          sets: e.sets, 
-          reps: e.reps, 
-          weight: 0, 
-          restSeconds: e.restSeconds, 
-          notes: e.notes, 
-          order: i 
+          sets: e.sets,
+          reps: e.reps,
+          weight: 0,
+          restSeconds: e.restSeconds,
+          notes: e.notes,
+          order: i
         })),
       aiGenerated: true,
     }, userId);
@@ -1869,15 +2170,15 @@ function RoutineCard({ routine, onEdit, onDelete, onStart }) {
 
   const handleAddAllToLibrary = async () => {
     if (!routine.exercises?.length) return;
-    
+
     setAddAllStatus('saving');
     let added = 0;
     let skipped = 0;
-    
+
     for (let idx = 0; idx < routine.exercises.length; idx++) {
       const ex = routine.exercises[idx];
       const exists = exerciseLibrary.some(e => e.name.toLowerCase() === ex.name.toLowerCase());
-      
+
       if (!exists) {
         await saveExerciseToLibrary({
           name: ex.name,
@@ -1894,9 +2195,9 @@ function RoutineCard({ routine, onEdit, onDelete, onStart }) {
         setSavedToLib(prev => ({ ...prev, [idx]: true }));
       }
     }
-    
+
     setAddAllStatus({ added, skipped });
-    
+
     // Clear status after 3 seconds
     setTimeout(() => setAddAllStatus(null), 3000);
   };
@@ -1959,17 +2260,16 @@ function RoutineCard({ routine, onEdit, onDelete, onStart }) {
               <button
                 onClick={handleAddAllToLibrary}
                 disabled={addAllStatus === 'saving' || (addAllStatus && typeof addAllStatus === 'object')}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                  addAllStatus === 'saving' 
-                    ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 cursor-wait'
-                    : addAllStatus && typeof addAllStatus === 'object'
-                      ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400'
-                      : 'bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 hover:bg-violet-200 dark:hover:bg-violet-900/50 active:scale-95'
-                }`}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${addAllStatus === 'saving'
+                  ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 cursor-wait'
+                  : addAllStatus && typeof addAllStatus === 'object'
+                    ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400'
+                    : 'bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 hover:bg-violet-200 dark:hover:bg-violet-900/50 active:scale-95'
+                  }`}
               >
                 <IoBookmarkOutline className="w-4 h-4" />
-                {addAllStatus === 'saving' 
-                  ? 'Guardando...' 
+                {addAllStatus === 'saving'
+                  ? 'Guardando...'
                   : addAllStatus && typeof addAllStatus === 'object'
                     ? `${addAllStatus.added} añadidos${addAllStatus.skipped > 0 ? ` · ${addAllStatus.skipped} ya existían` : ''}`
                     : 'Añadir todos a biblioteca'
