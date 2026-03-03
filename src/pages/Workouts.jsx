@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { 
+import {
   IoAddOutline,
   IoFolderOutline,
   IoChevronForward,
@@ -32,9 +32,9 @@ export default function Workouts() {
   const [newFolderColor, setNewFolderColor] = useState(FOLDER_COLORS[0]);
   const [newFolderGoal, setNewFolderGoal] = useState('MUSCLE_GAIN');
 
-  const { 
-    folders, 
-    addFolder, 
+  const {
+    folders,
+    addFolder,
     getRoutinesByFolder,
     addRoutine,
     startSession,
@@ -47,7 +47,7 @@ export default function Workouts() {
   // Active Session View
   if (activeSession) {
     return (
-      <ActiveSessionView 
+      <ActiveSessionView
         session={activeSession}
         onUpdateExercise={updateSessionExercise}
         onComplete={completeSession}
@@ -79,11 +79,11 @@ export default function Workouts() {
   // Routines view
   if (view === 'routines' && selectedFolder) {
     const routines = getRoutinesByFolder(selectedFolder.id);
-    
+
     return (
       <div className="px-4 py-6 space-y-6 animate-fadeIn">
         <header className="flex items-center gap-3 pt-2">
-          <button 
+          <button
             onClick={() => setView('folders')}
             className="p-2 -ml-2 hover:bg-gray-100 active:bg-gray-200 rounded-xl transition-colors"
           >
@@ -109,7 +109,7 @@ export default function Workouts() {
         ) : (
           <div className="space-y-3">
             {routines.map((routine) => (
-              <Card key={routine.id} className="overflow-hidden shadow-sm active:scale-98 transition-transform">
+              <Card key={routine.id} className="overflow-hidden shadow-sm active-scale-98 transition-transform">
                 <Card.Body>
                   <div className="flex items-center justify-between">
                     <div className="min-w-0 flex-1 mr-3">
@@ -123,7 +123,7 @@ export default function Workouts() {
                         )}
                       </p>
                     </div>
-                    <Button 
+                    <Button
                       onClick={() => handleStartWorkout(routine.id)}
                       size="sm"
                       className="flex-shrink-0"
@@ -138,7 +138,7 @@ export default function Workouts() {
           </div>
         )}
 
-        <Button 
+        <Button
           onClick={() => setIsAddRoutineOpen(true)}
           className="w-full"
           variant="outline"
@@ -148,7 +148,7 @@ export default function Workouts() {
         </Button>
 
         {/* Add Routine Modal */}
-        <AddRoutineModal 
+        <AddRoutineModal
           isOpen={isAddRoutineOpen}
           onClose={() => setIsAddRoutineOpen(false)}
           folderId={selectedFolder.id}
@@ -182,18 +182,18 @@ export default function Workouts() {
           {folders.map((folder) => {
             const routineCount = getRoutinesByFolder(folder.id).length;
             return (
-              <Card 
+              <Card
                 key={folder.id}
-                className="cursor-pointer hover:shadow-lg active:scale-95 transition-all duration-200"
+                className="cursor-pointer hover:shadow-lg active-scale-95 transition-all duration-200"
                 onClick={() => handleSelectFolder(folder)}
               >
                 <Card.Body className="text-center py-5">
-                  <div 
+                  <div
                     className="w-14 h-14 rounded-2xl mx-auto mb-3 flex items-center justify-center shadow-sm"
                     style={{ backgroundColor: `${folder.color}15` }}
                   >
-                    <IoFolderOutline 
-                      className="w-7 h-7" 
+                    <IoFolderOutline
+                      className="w-7 h-7"
                       style={{ color: folder.color }}
                     />
                   </div>
@@ -203,10 +203,10 @@ export default function Workouts() {
               </Card>
             );
           })}
-          
+
           {/* Add folder button */}
-          <Card 
-            className="cursor-pointer hover:shadow-md active:scale-95 transition-all duration-200 border-2 border-dashed border-gray-200 bg-gray-50/50"
+          <Card
+            className="cursor-pointer hover:shadow-md active-scale-95 transition-all duration-200 border-2 border-dashed border-gray-200 bg-gray-50/50"
             onClick={() => setIsAddFolderOpen(true)}
           >
             <Card.Body className="text-center flex flex-col items-center justify-center h-full py-8">
@@ -232,7 +232,7 @@ export default function Workouts() {
             value={newFolderName}
             onChange={(e) => setNewFolderName(e.target.value)}
           />
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Color</label>
             <div className="flex gap-2">
@@ -240,9 +240,8 @@ export default function Workouts() {
                 <button
                   key={color}
                   onClick={() => setNewFolderColor(color)}
-                  className={`w-10 h-10 rounded-full transition-transform ${
-                    newFolderColor === color ? 'scale-110 ring-2 ring-offset-2 ring-gray-400' : ''
-                  }`}
+                  className={`w-10 h-10 rounded-full transition-transform ${newFolderColor === color ? 'scale-110 ring-2 ring-offset-2 ring-gray-400' : ''
+                    }`}
                   style={{ backgroundColor: color }}
                 />
               ))}
@@ -296,7 +295,7 @@ function ActiveSessionView({ session, onUpdateExercise, onComplete, onCancel }) 
             En progreso
           </p>
         </div>
-        <button 
+        <button
           onClick={() => confirm('Cancelar entrenamiento?') && onCancel()}
           className="p-2 hover:bg-gray-800 rounded-lg"
         >
@@ -307,13 +306,12 @@ function ActiveSessionView({ session, onUpdateExercise, onComplete, onCancel }) 
       {/* Exercise Progress */}
       <div className="flex gap-1 mb-6">
         {session.exercises.map((_, idx) => (
-          <div 
+          <div
             key={idx}
-            className={`h-1 flex-1 rounded-full ${
-              idx < currentExerciseIndex ? 'bg-green-500' :
-              idx === currentExerciseIndex ? 'bg-blue-500' :
-              'bg-gray-700'
-            }`}
+            className={`h-1 flex-1 rounded-full ${idx < currentExerciseIndex ? 'bg-green-500' :
+                idx === currentExerciseIndex ? 'bg-blue-500' :
+                  'bg-gray-700'
+              }`}
           />
         ))}
       </div>
@@ -329,11 +327,10 @@ function ActiveSessionView({ session, onUpdateExercise, onComplete, onCancel }) 
           {/* Sets */}
           <div className="space-y-3">
             {currentExercise.sets.map((set, setIndex) => (
-              <div 
+              <div
                 key={setIndex}
-                className={`flex items-center justify-between p-4 rounded-xl ${
-                  set.completed ? 'bg-green-900/30' : 'bg-gray-700'
-                }`}
+                className={`flex items-center justify-between p-4 rounded-xl ${set.completed ? 'bg-green-900/30' : 'bg-gray-700'
+                  }`}
               >
                 <span className="text-gray-400">Serie {setIndex + 1}</span>
                 <div className="flex items-center gap-4">
@@ -341,8 +338,8 @@ function ActiveSessionView({ session, onUpdateExercise, onComplete, onCancel }) 
                   {set.completed ? (
                     <IoCheckmarkCircle className="w-6 h-6 text-green-500" />
                   ) : (
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       onClick={() => handleSetComplete(setIndex)}
                     >
                       Completar
@@ -357,7 +354,7 @@ function ActiveSessionView({ session, onUpdateExercise, onComplete, onCancel }) 
 
       {/* Navigation */}
       <div className="flex gap-4 mt-6">
-        <Button 
+        <Button
           variant="secondary"
           onClick={() => setCurrentExerciseIndex(Math.max(0, currentExerciseIndex - 1))}
           disabled={currentExerciseIndex === 0}
@@ -366,14 +363,14 @@ function ActiveSessionView({ session, onUpdateExercise, onComplete, onCancel }) 
           Anterior
         </Button>
         {currentExerciseIndex < session.exercises.length - 1 ? (
-          <Button 
+          <Button
             onClick={() => setCurrentExerciseIndex(currentExerciseIndex + 1)}
             className="flex-1"
           >
             Siguiente
           </Button>
         ) : (
-          <Button 
+          <Button
             onClick={handleFinish}
             variant="success"
             className="flex-1"
@@ -409,13 +406,13 @@ function AddRoutineModal({ isOpen, onClose, folderId, onSave }) {
 
   const handleSave = () => {
     if (!name.trim() || exercises.some(e => !e.name.trim())) return;
-    
+
     onSave({
       folderId,
       name,
       exercises: exercises.map((e, i) => ({ ...e, order: i })),
     });
-    
+
     setName('');
     setExercises([{ name: '', sets: 3, reps: '10-12', weight: 0 }]);
     onClose();
@@ -474,9 +471,9 @@ function AddRoutineModal({ isOpen, onClose, folderId, onSave }) {
               </div>
             ))}
           </div>
-          
-          <Button 
-            variant="ghost" 
+
+          <Button
+            variant="ghost"
             onClick={handleAddExercise}
             className="w-full mt-2"
           >

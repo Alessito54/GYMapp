@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import { 
-  IoFlameOutline, 
-  IoWaterOutline, 
-  IoBarbell, 
+import {
+  IoFlameOutline,
+  IoWaterOutline,
+  IoBarbell,
   IoTrendingUp,
   IoChevronForward,
   IoSparkles
@@ -51,10 +51,10 @@ export default function Dashboard() {
           <p className="text-white/60 text-sm mt-1">
             de {stats?.targetCalories || 2500} kcal objetivo
           </p>
-          
+
           {/* Progress bar */}
           <div className="mt-4 h-2 bg-white/20 rounded-full overflow-hidden">
-            <div 
+            <div
               className="h-full bg-white/90 rounded-full transition-all duration-500"
               style={{ width: `${Math.min((nutritionSummary.totals.calories / (stats?.targetCalories || 2500)) * 100, 100)}%` }}
             />
@@ -87,7 +87,7 @@ export default function Dashboard() {
       {/* Quick Actions */}
       <div className="grid grid-cols-2 gap-4">
         {/* Water Card */}
-        <Link to="/water" className="active:scale-98 transition-transform">
+        <Link to="/water" className="active-scale-98 transition-transform">
           <Card className="p-4 hover:shadow-lg transition-all duration-200 h-full">
             <div className="flex items-center justify-between mb-3">
               <div className="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center">
@@ -97,8 +97,8 @@ export default function Dashboard() {
                 {waterProgress.consumed}ml
               </span>
             </div>
-            <ProgressBar 
-              progress={waterProgress.progress} 
+            <ProgressBar
+              progress={waterProgress.progress}
               color="bg-cyan-500"
               height="h-2"
             />
@@ -108,7 +108,7 @@ export default function Dashboard() {
         </Link>
 
         {/* Workout Card */}
-        <Link to="/workouts" className="active:scale-98 transition-transform">
+        <Link to="/workouts" className="active-scale-98 transition-transform">
           <Card className="p-4 hover:shadow-lg transition-all duration-200 h-full">
             <div className="flex items-center justify-between mb-3">
               <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
@@ -118,8 +118,8 @@ export default function Dashboard() {
                 {recentSessions.length}/5
               </span>
             </div>
-            <ProgressBar 
-              progress={recentSessions.length / 5} 
+            <ProgressBar
+              progress={recentSessions.length / 5}
               color="bg-purple-500"
               height="h-2"
             />
@@ -140,20 +140,20 @@ export default function Dashboard() {
           </div>
         </Card.Header>
         <Card.Body className="space-y-4 pt-2">
-          <MacroProgress 
-            label="Proteina" 
+          <MacroProgress
+            label="Proteina"
             current={nutritionSummary.totals.protein}
             target={stats?.macros?.protein || 150}
             color="bg-blue-500"
           />
-          <MacroProgress 
-            label="Carbohidratos" 
+          <MacroProgress
+            label="Carbohidratos"
             current={nutritionSummary.totals.carbs}
             target={stats?.macros?.carbs || 250}
             color="bg-green-500"
           />
-          <MacroProgress 
-            label="Grasas" 
+          <MacroProgress
+            label="Grasas"
             current={nutritionSummary.totals.fat}
             target={stats?.macros?.fat || 70}
             color="bg-amber-500"
@@ -174,7 +174,7 @@ export default function Dashboard() {
           </Card.Header>
           <Card.Body className="space-y-2 pt-2">
             {recentSessions.map((session) => (
-              <div 
+              <div
                 key={session.id}
                 className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
               >

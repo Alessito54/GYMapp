@@ -41,7 +41,7 @@ export default function Layout() {
                 `flex flex-col items-center py-2 px-4 rounded-2xl transition-all duration-200 ${
                   isActive
                     ? 'text-blue-600'
-                    : 'text-gray-400 hover:text-gray-600 active:scale-95'
+                    : 'text-gray-400 hover:text-gray-600 active-scale-95'
                 }`
               }
             >

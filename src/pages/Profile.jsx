@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
+import {
   IoPersonCircleOutline,
   IoLogOutOutline,
   IoScaleOutline,
@@ -93,11 +93,10 @@ export default function Profile() {
                   <button
                     key={g}
                     onClick={() => handleChange('gender', g)}
-                    className={`py-3 px-4 rounded-2xl text-sm font-medium transition-all active:scale-95 ${
-                      formData.gender === g
+                    className={`py-3 px-4 rounded-2xl text-sm font-medium transition-all active-scale-95 ${formData.gender === g
                         ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
+                      }`}
                   >
                     {g === 'MALE' ? 'Hombre' : g === 'FEMALE' ? 'Mujer' : 'Otro'}
                   </button>
@@ -134,11 +133,10 @@ export default function Profile() {
                   <button
                     key={level.value}
                     onClick={() => handleChange('activityLevel', level.value)}
-                    className={`w-full p-4 rounded-2xl text-left transition-all active:scale-98 ${
-                      formData.activityLevel === level.value
+                    className={`w-full p-4 rounded-2xl text-left transition-all active-scale-98 ${formData.activityLevel === level.value
                         ? 'bg-blue-50 border-2 border-blue-500 shadow-sm'
                         : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
-                    }`}
+                      }`}
                   >
                     <p className="font-medium text-gray-900">{level.label}</p>
                     <p className="text-xs text-gray-500 mt-0.5">{level.desc}</p>
@@ -154,11 +152,10 @@ export default function Profile() {
                   <button
                     key={goal.value}
                     onClick={() => handleChange('goal', goal.value)}
-                    className={`w-full p-4 rounded-2xl text-left transition-all active:scale-98 ${
-                      formData.goal === goal.value
+                    className={`w-full p-4 rounded-2xl text-left transition-all active-scale-98 ${formData.goal === goal.value
                         ? 'bg-green-50 border-2 border-green-500 shadow-sm'
                         : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
-                    }`}
+                      }`}
                   >
                     <p className="font-medium text-gray-900">{goal.label}</p>
                     <p className="text-xs text-gray-500 mt-0.5">{goal.desc}</p>
@@ -169,8 +166,8 @@ export default function Profile() {
           </Card.Body>
         </Card>
 
-        <Button 
-          onClick={handleSave} 
+        <Button
+          onClick={handleSave}
           className="w-full"
           disabled={!formData.name}
         >
@@ -179,9 +176,9 @@ export default function Profile() {
         </Button>
 
         {profile && (
-          <Button 
-            variant="ghost" 
-            onClick={() => setIsEditing(false)} 
+          <Button
+            variant="ghost"
+            onClick={() => setIsEditing(false)}
             className="w-full"
           >
             Cancelar
@@ -262,7 +259,7 @@ export default function Profile() {
 
       {/* Menu Options */}
       <Card className="shadow-sm overflow-hidden">
-        <button 
+        <button
           onClick={() => setIsEditing(true)}
           className="w-full flex items-center justify-between p-4 hover:bg-gray-50 active:bg-gray-100 transition-colors"
         >
@@ -274,8 +271,8 @@ export default function Profile() {
           </div>
           <IoChevronForward className="w-5 h-5 text-gray-400" />
         </button>
-        
-        <button 
+
+        <button
           onClick={handleLogout}
           className="w-full flex items-center justify-between p-4 hover:bg-red-50 active:bg-red-100 transition-colors border-t border-gray-100"
         >

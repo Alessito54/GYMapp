@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { 
-  IoAddCircle, 
-  IoSparkles, 
+import {
+  IoAddCircle,
+  IoSparkles,
   IoTrashOutline,
   IoRestaurantOutline,
   IoCafeOutline,
@@ -42,7 +42,7 @@ export default function Nutrition() {
 
   const handleAnalyzeFood = async () => {
     if (!foodInput.trim()) return;
-    
+
     setIsLoading(true);
     try {
       const result = await calculateNutrition(foodInput);
@@ -57,7 +57,7 @@ export default function Nutrition() {
 
   const handleAddFood = () => {
     if (!aiResult || !selectedMealType) return;
-    
+
     addMeal(selectedMealType, [{
       name: aiResult.food,
       portion: aiResult.portion,
@@ -86,7 +86,7 @@ export default function Nutrition() {
         <Card.Body className="relative">
           <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-xl" />
           <div className="absolute -left-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-xl" />
-          
+
           <div className="text-center relative">
             <p className="text-white/80 text-sm mb-1">Calorias restantes</p>
             <p className="text-5xl font-bold mb-2">
@@ -95,16 +95,16 @@ export default function Nutrition() {
             <p className="text-white/60 text-sm">
               {totals.calories} consumidas de {targetCalories}
             </p>
-            
+
             {/* Progress bar */}
             <div className="mt-4 h-2 bg-white/20 rounded-full overflow-hidden">
-              <div 
+              <div
                 className="h-full bg-white/90 rounded-full transition-all duration-500"
                 style={{ width: `${Math.min((totals.calories / targetCalories) * 100, 100)}%` }}
               />
             </div>
           </div>
-          
+
           {/* Macro summary */}
           <div className="grid grid-cols-3 gap-3 mt-6 pt-4 border-t border-white/20 relative">
             <div className="text-center p-2 bg-white/10 rounded-xl">
@@ -142,22 +142,22 @@ export default function Nutrition() {
                       </p>
                     </div>
                   </div>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     size="icon"
                     onClick={() => handleOpenModal(mealType.type)}
-                    className="w-10 h-10 active:scale-95"
+                    className="w-10 h-10 active-scale-95"
                   >
                     <IoAddCircle className="w-7 h-7 text-blue-600" />
                   </Button>
                 </div>
               </Card.Header>
-              
+
               {meals[mealType.type].length > 0 && (
                 <Card.Body className="pt-0 p-3">
                   <div className="space-y-2">
                     {meals[mealType.type].map((food, index) => (
-                      <div 
+                      <div
                         key={index}
                         className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
                       >
@@ -193,8 +193,8 @@ export default function Nutrition() {
       </div>
 
       {/* Add Food Modal */}
-      <Modal 
-        isOpen={isModalOpen} 
+      <Modal
+        isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title={`Agregar a ${getMealTypeLabel(selectedMealType)}`}
       >
@@ -205,8 +205,8 @@ export default function Nutrition() {
             value={foodInput}
             onChange={(e) => setFoodInput(e.target.value)}
           />
-          
-          <Button 
+
+          <Button
             onClick={handleAnalyzeFood}
             loading={isLoading}
             disabled={!foodInput.trim()}
@@ -221,7 +221,7 @@ export default function Nutrition() {
               <Card.Body>
                 <h4 className="font-semibold text-gray-900 mb-2">{aiResult.food}</h4>
                 <p className="text-sm text-gray-600 mb-3">Porcion: {aiResult.portion}</p>
-                
+
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="bg-white p-3 rounded-xl text-center shadow-sm">
                     <p className="font-bold text-xl text-gray-900">{aiResult.calories}</p>
@@ -245,7 +245,7 @@ export default function Nutrition() {
                   Confianza: <span className="font-medium text-blue-600">{Math.round(aiResult.confidence * 100)}%</span>
                 </div>
 
-                <Button 
+                <Button
                   onClick={handleAddFood}
                   className="w-full mt-4"
                   variant="success"

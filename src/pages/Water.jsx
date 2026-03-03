@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { 
-  IoWater, 
-  IoAddOutline, 
+import {
+  IoWater,
+  IoAddOutline,
   IoRemoveOutline,
   IoSettingsOutline,
   IoCheckmarkCircle
@@ -11,15 +11,15 @@ import { useWaterStore } from '@/stores';
 
 export default function Water() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const { 
-    targetMl, 
-    glassSize, 
-    setTarget, 
+  const {
+    targetMl,
+    glassSize,
+    setTarget,
     setGlassSize,
-    addWater, 
+    addWater,
     removeLastEntry,
     getTodayProgress,
-    getWeekProgress 
+    getWeekProgress
   } = useWaterStore();
 
   const today = getTodayProgress();
@@ -46,8 +46,8 @@ export default function Water() {
           <h1 className="text-2xl font-bold text-gray-900">Hidratacion 💧</h1>
           <p className="text-gray-500 text-sm mt-0.5">Mantente hidratado</p>
         </div>
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           size="icon"
           onClick={() => setIsSettingsOpen(true)}
           className="w-10 h-10"
@@ -59,9 +59,9 @@ export default function Water() {
       {/* Main Progress */}
       <Card className="py-8 shadow-lg">
         <div className="flex flex-col items-center">
-          <ProgressRing 
-            progress={today.progress} 
-            size={180} 
+          <ProgressRing
+            progress={today.progress}
+            size={180}
             strokeWidth={14}
             color={progressColor}
           >
@@ -103,7 +103,7 @@ export default function Water() {
                 key={amount}
                 variant="outline"
                 onClick={() => addWater(amount)}
-                className="flex-col py-3 px-2 h-auto active:scale-95 transition-transform"
+                className="flex-col py-3 px-2 h-auto active-scale-95 transition-transform"
               >
                 <span className="text-base font-bold">{amount}</span>
                 <span className="text-[10px] text-gray-500">ml</span>
@@ -121,7 +121,7 @@ export default function Water() {
             >
               <IoRemoveOutline className="w-6 h-6" />
             </Button>
-            
+
             <div className="text-center">
               <p className="text-2xl font-bold text-gray-900">{glassSize} ml</p>
               <p className="text-xs text-gray-500">Vaso predeterminado</p>
@@ -147,7 +147,7 @@ export default function Water() {
           <Card.Body className="p-3">
             <div className="space-y-2 max-h-40 overflow-y-auto">
               {today.entries.slice().reverse().map((entry, index) => (
-                <div 
+                <div
                   key={index}
                   className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
                 >
@@ -174,18 +174,16 @@ export default function Water() {
           <div className="flex justify-between items-end h-28 px-2">
             {weekProgress.map((day, index) => (
               <div key={index} className="flex flex-col items-center gap-2 flex-1">
-                <div 
-                  className={`w-full max-w-[28px] rounded-lg transition-all duration-300 ${
-                    day.progress >= 1 ? 'bg-green-500' : 'bg-cyan-500'
-                  }`}
-                  style={{ 
+                <div
+                  className={`w-full max-w-[28px] rounded-lg transition-all duration-300 ${day.progress >= 1 ? 'bg-green-500' : 'bg-cyan-500'
+                    }`}
+                  style={{
                     height: `${Math.max(day.progress * 100, 8)}%`,
                     opacity: day.progress > 0 ? 1 : 0.2
                   }}
                 />
-                <span className={`text-xs ${
-                  index === 6 ? 'font-bold text-cyan-600' : 'text-gray-500'
-                }`}>
+                <span className={`text-xs ${index === 6 ? 'font-bold text-cyan-600' : 'text-gray-500'
+                  }`}>
                   {day.day}
                 </span>
               </div>
