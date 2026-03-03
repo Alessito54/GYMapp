@@ -171,17 +171,17 @@ export const useUserStore = create(
       },
 
       clearProfile: () => set({ profile: null }),
-
-      // Initialize dark mode on app load
-      initDarkMode: () => {
-        const { darkMode } = get();
-        if (darkMode) {
-          document.documentElement.classList.add('dark');
-        }
-      },
     }),
     {
       name: 'user-storage',
+      onRehydrateStorage: () => (state) => {
+        // Apply dark mode class after rehydrating from localStorage
+        if (state?.darkMode) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      },
     }
   )
 );

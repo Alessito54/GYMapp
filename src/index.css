@@ -16,6 +16,11 @@
   /* Slate 50 for subtle contrast */
   --color-light-border: #e2e8f0;
   /* Slate 200 */
+  
+  /* Dark mode theme colors */
+  --color-dark-text: #f8fafc;
+  --color-dark-text-muted: #94a3b8;
+  --color-dark-border: #1e293b;
 }
 
 @layer base {

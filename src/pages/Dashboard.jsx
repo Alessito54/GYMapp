@@ -1,14 +1,15 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   IoFlameOutline,
   IoWaterOutline,
   IoBarbell,
-  IoTrendingUp,
   IoChevronForward,
   IoSparkles,
   IoFitnessOutline,
   IoTrashOutline,
-  IoCalendarOutline
+  IoCalendarOutline,
+  IoChevronBack
 } from 'react-icons/io5';
 import { Card, ProgressRing, ProgressBar } from '@/components/ui';
 import { useAuthStore, useUserStore, useWaterStore, useNutritionStore, useWorkoutStore } from '@/stores';
@@ -155,14 +156,13 @@ export default function Dashboard() {
         </Link>
       </div>
 
-      {/* Activity Calendar (Hevy Style) */}
+      {/* Activity Calendar */}
       <Card className="p-6 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/50">
-        <header className="flex items-center justify-between mb-6">
+        <header className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <IoCalendarOutline className="w-5 h-5 text-indigo-500" />
-            <h2 className="text-lg font-black text-slate-800 dark:text-white tracking-tight">Actividad Reciente</h2>
+            <h2 className="text-lg font-black text-slate-800 dark:text-white tracking-tight">Calendario de Actividad</h2>
           </div>
-          <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Últimas 12 semanas</p>
         </header>
         <ActivityCalendar sessions={sessions} />
       </Card>
@@ -269,89 +269,174 @@ function MacroProgress({ label, current, target, color }) {
   );
 }
 function ActivityCalendar({ sessions }) {
+  const [currentDate, setCurrentDate] = useState(new Date());
   const today = new Date();
-  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-  const weekdays = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 
-  // Create 12 weeks of data (84 days)
-  const daysCount = 84;
-  const days = [];
-  for (let i = daysCount - 1; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(today.getDate() - i);
-    const dateStr = d.toISOString().split('T')[0];
-    const hasWorkout = sessions?.some(s => s.startTime.startsWith(dateStr));
+  const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+  const weekdays = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 
-    days.push({
-      date: d,
-      dateLabel: d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
-      active: hasWorkout,
-      month: months[d.getMonth()]
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+
+  // Get first day of month (0 = Sunday, adjust for Monday start)
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+  const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
+  const daysInMonth = lastDayOfMonth.getDate();
+
+  // Adjust for Monday start (0 = Monday, 6 = Sunday)
+  let startDay = firstDayOfMonth.getDay() - 1;
+  if (startDay < 0) startDay = 6;
+
+  // Generate calendar days
+  const calendarDays = [];
+
+  // Add empty slots for days before the 1st
+  for (let i = 0; i < startDay; i++) {
+    calendarDays.push(null);
+  }
+
+  // Add all days of the month
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(currentYear, currentMonth, day);
+    const dateStr = date.toISOString().split('T')[0];
+    const hasWorkout = sessions?.some(s => s.startTime && s.startTime.startsWith(dateStr));
+    const isToday = date.toDateString() === today.toDateString();
+    const isFuture = date > today;
+
+    calendarDays.push({
+      day,
+      date,
+      dateStr,
+      hasWorkout: hasWorkout && !isFuture,
+      isToday,
+      isFuture
     });
   }
 
-  // Group into weeks (columns)
-  const columns = [];
-  for (let i = 0; i < daysCount; i += 7) {
-    columns.push(days.slice(i, i + 7));
-  }
+  // Navigation handlers
+  const goToPrevMonth = () => {
+    setCurrentDate(new Date(currentYear, currentMonth - 1, 1));
+  };
 
-  // Get month labels based on the first day of each week
-  const monthLabels = [];
-  columns.forEach((week, weekIdx) => {
-    const firstDay = week[0].date;
-    // Only add month label if it's the first week or the first day of the month falls in this week
-    // This logic needs to be adjusted for 12 columns to ensure proper spacing
-    if (weekIdx === 0 || firstDay.getDate() <= 7) { // Simplified condition, might need fine-tuning for exact month start alignment
-      monthLabels.push({ index: weekIdx, label: months[firstDay.getMonth()] });
-    }
-  });
+  const goToNextMonth = () => {
+    setCurrentDate(new Date(currentYear, currentMonth + 1, 1));
+  };
+
+  const goToToday = () => {
+    setCurrentDate(new Date());
+  };
+
+  // Check if we can go to next month (don't go past current month)
+  const canGoNext = currentYear < today.getFullYear() ||
+    (currentYear === today.getFullYear() && currentMonth < today.getMonth());
+
+  // Count workouts in current month
+  const workoutsThisMonth = calendarDays.filter(d => d && d.hasWorkout).length;
 
   return (
-    <div className="flex flex-col gap-2">
-      {/* Months header */}
-      <div className="flex ml-6 h-4 relative">
-        {monthLabels.map((m, idx) => (
-          <span
-            key={idx}
-            className="absolute text-[8px] sm:text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-tighter"
-            style={{ left: `${(m.index / 12) * 100}%` }}
+    <div className="space-y-4">
+      {/* Month Navigation */}
+      <div className="flex items-center justify-between">
+        <button
+          onClick={goToPrevMonth}
+          className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95"
+        >
+          <IoChevronBack className="w-5 h-5" />
+        </button>
+
+        <div className="text-center">
+          <button
+            onClick={goToToday}
+            className="group"
           >
-            {m.label}
-          </span>
+            <h3 className="text-lg font-black text-slate-800 dark:text-white tracking-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+              {months[currentMonth]} {currentYear}
+            </h3>
+            <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+              {workoutsThisMonth} {workoutsThisMonth === 1 ? 'entrenamiento' : 'entrenamientos'}
+            </p>
+          </button>
+        </div>
+
+        <button
+          onClick={goToNextMonth}
+          disabled={!canGoNext}
+          className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          <IoChevronForward className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* Weekday Headers */}
+      <div className="grid grid-cols-7 gap-1">
+        {weekdays.map((day, idx) => (
+          <div key={idx} className="h-8 flex items-center justify-center">
+            <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase">
+              {day}
+            </span>
+          </div>
         ))}
       </div>
 
-      <div className="flex gap-2">
-        {/* Weekdays column */}
-        <div className="flex flex-col justify-between py-0.5 h-[120px] sm:h-[140px]">
-          {weekdays.map((day, idx) => (
-            <span key={idx} className="text-[7px] sm:text-[8px] font-bold text-slate-300 dark:text-slate-600">
-              {day}
-            </span>
-          ))}
-        </div>
+      {/* Calendar Grid */}
+      <div className="grid grid-cols-7 gap-1">
+        {calendarDays.map((day, idx) => (
+          <div
+            key={idx}
+            className={`aspect-square rounded-xl flex items-center justify-center relative group transition-all ${day === null
+                ? ''
+                : day.isToday
+                  ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30'
+                  : day.hasWorkout
+                    ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'
+                    : day.isFuture
+                      ? 'bg-slate-50 dark:bg-slate-900/20 text-slate-300 dark:text-slate-700'
+                      : 'bg-slate-100 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+              }`}
+          >
+            {day && (
+              <>
+                <span className={`text-sm font-bold ${day.isToday ? 'font-black' : ''}`}>
+                  {day.day}
+                </span>
 
-        {/* Grid */}
-        <div className="flex-1 grid grid-cols-12 gap-1 sm:gap-1.5 h-[120px] sm:h-[140px]">
-          {columns.map((week, weekIdx) => (
-            <div key={weekIdx} className="flex flex-col justify-between gap-1 sm:gap-1.5">
-              {week.map((day, dayIdx) => (
-                <div
-                  key={dayIdx}
-                  className={`flex-1 aspect-square rounded-[3px] sm:rounded-[4px] transition-all duration-300 relative group cursor-help ${day.active
-                      ? 'bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.3)]'
-                      : 'bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700'
-                    }`}
-                >
-                  {/* Tooltip */}
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-slate-800 text-white text-[9px] rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 transition-all font-bold shadow-xl border border-slate-700">
-                    {day.dateLabel} {day.active ? '• Entrenamiento ✓' : ''}
+                {/* Workout indicator dot */}
+                {day.hasWorkout && !day.isToday && (
+                  <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_4px_rgba(16,185,129,0.6)]" />
+                )}
+
+                {/* Today's workout indicator */}
+                {day.hasWorkout && day.isToday && (
+                  <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_4px_rgba(255,255,255,0.8)]" />
+                )}
+
+                {/* Tooltip */}
+                {!day.isFuture && (
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-slate-800 dark:bg-slate-700 text-white text-[9px] rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 transition-all font-bold shadow-xl">
+                    {day.day} {months[currentMonth].slice(0, 3)} {day.hasWorkout ? '• ✓ Entreno' : ''}
                   </div>
-                </div>
-              ))}
-            </div>
-          ))}
+                )}
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Legend */}
+      <div className="flex items-center justify-center gap-6 pt-2">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-lg bg-indigo-500" />
+          <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500">Hoy</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 relative">
+            <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-emerald-500" />
+          </div>
+          <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500">Con entreno</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-lg bg-slate-100 dark:bg-slate-800/60" />
+          <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500">Sin entreno</span>
         </div>
       </div>
     </div>

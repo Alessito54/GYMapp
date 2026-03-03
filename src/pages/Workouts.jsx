@@ -13,7 +13,8 @@ import {
   IoSparkles,
   IoSearchOutline,
   IoLibraryOutline,
-  IoBookOutline
+  IoBookOutline,
+  IoAlertCircleOutline
 } from 'react-icons/io5';
 import { Card, Button, Input, Modal, Badge } from '@/components/ui';
 import { useWorkoutStore, useAuthStore, MUSCLE_GROUPS } from '@/stores';
@@ -224,7 +225,7 @@ export default function Workouts() {
             <div>
               <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">{selectedFolder.name}</h1>
               <p className="text-indigo-600 dark:text-indigo-400 text-[10px] font-bold uppercase tracking-widest mt-0.5">
-                {routines.length} {routines.length === 1 ? 'Rutina' : 'Rutinas'} • {selectedFolder.goal.replace('_', ' ')}
+                {routines.length} {routines.length === 1 ? 'Rutina' : 'Rutinas'} • {selectedFolder.goal?.replace('_', ' ') || 'GENERAL'}
               </p>
             </div>
           </div>
@@ -258,7 +259,7 @@ export default function Workouts() {
           </Card>
         ) : (
           <div className="space-y-4">
-            {routines.map((routine) => (
+            {routines?.map((routine) => (
               <RoutineCard
                 key={routine.id}
                 routine={routine}
@@ -286,7 +287,7 @@ export default function Workouts() {
           <div className="space-y-4">
             <Input label="Nombre" placeholder="Ej: Push Pull Legs" value={newFolderName} onChange={(e) => setNewFolderName(e.target.value)} />
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Color</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Color</label>
               <div className="flex gap-2">
                 {FOLDER_COLORS.map((color) => (
                   <button key={color} onClick={() => setNewFolderColor(color)} className={`w-10 h-10 rounded-full transition-transform ${newFolderColor === color ? 'scale-110 ring-2 ring-offset-2 ring-gray-400' : ''}`} style={{ backgroundColor: color }} />
@@ -294,8 +295,8 @@ export default function Workouts() {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Objetivo</label>
-              <select value={newFolderGoal} onChange={(e) => setNewFolderGoal(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500">
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Objetivo</label>
+              <select value={newFolderGoal} onChange={(e) => setNewFolderGoal(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500">
                 {GOAL_OPTIONS.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
               </select>
             </div>
@@ -306,11 +307,11 @@ export default function Workouts() {
         {/* Delete Folder Confirmation */}
         <Modal isOpen={isDeleteFolderOpen} onClose={() => setIsDeleteFolderOpen(false)} title="Eliminar carpeta" size="sm">
           <div className="space-y-4">
-            <div className="flex items-start gap-3 p-3 bg-red-50 rounded-2xl text-red-700">
+            <div className="flex items-start gap-3 p-3 bg-red-50 dark:bg-red-900/30 rounded-2xl text-red-700 dark:text-red-400">
               <IoAlertCircleOutline className="w-6 h-6 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold">Esta accion no se puede deshacer</p>
-                <p className="text-sm text-red-600/80">Se eliminaran todas las rutinas dentro de esta carpeta.</p>
+                <p className="text-sm text-red-600/80 dark:text-red-400/80">Se eliminaran todas las rutinas dentro de esta carpeta.</p>
               </div>
             </div>
             <div className="flex gap-3">
@@ -323,11 +324,11 @@ export default function Workouts() {
         {/* Delete Routine Confirmation */}
         <Modal isOpen={isDeleteRoutineOpen} onClose={() => setIsDeleteRoutineOpen(false)} title="Eliminar rutina" size="sm">
           <div className="space-y-4">
-            <div className="flex items-start gap-3 p-3 bg-red-50 rounded-2xl text-red-700">
+            <div className="flex items-start gap-3 p-3 bg-red-50 dark:bg-red-900/30 rounded-2xl text-red-700 dark:text-red-400">
               <IoAlertCircleOutline className="w-6 h-6 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold">Eliminar "{selectedRoutine?.name}"?</p>
-                <p className="text-sm text-red-600/80">Esta accion no se puede deshacer.</p>
+                <p className="text-sm text-red-600/80 dark:text-red-400/80">Esta accion no se puede deshacer.</p>
               </div>
             </div>
             <div className="flex gap-3">
@@ -394,7 +395,7 @@ export default function Workouts() {
                         <div className="flex items-center gap-2 mt-1">
                           <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{routineCount} {routineCount === 1 ? 'Rutina' : 'Rutinas'}</span>
                           <span className="w-1 h-1 rounded-full bg-slate-300" />
-                          <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500">{folder.goal.replace('_', ' ')}</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500">{folder.goal?.replace('_', ' ') || 'GENERAL'}</span>
                         </div>
                       </div>
                     </div>
@@ -1027,27 +1028,27 @@ function AIGenerateModal({ isOpen, onClose, folderId, folderGoal, onSave, userId
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title="Generar con IA" size="lg">
       <div className="space-y-4">
-        {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm">{error}</div>}
+        {error && <div className="p-3 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-xl text-sm">{error}</div>}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Grupos musculares</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Grupos musculares</label>
           <div className="flex flex-wrap gap-2">
             {MUSCLE_GROUPS.map((muscle) => (
-              <button key={muscle} onClick={() => toggleMuscle(muscle)} className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${selectedMuscles.includes(muscle) ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>{muscle}</button>
+              <button key={muscle} onClick={() => toggleMuscle(muscle)} className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${selectedMuscles.includes(muscle) ? 'bg-purple-600 text-white' : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700'}`}>{muscle}</button>
             ))}
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Equipamiento</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Equipamiento</label>
           <div className="flex flex-wrap gap-2">
             {EQUIPMENT.map((eq) => (
-              <button key={eq} onClick={() => toggleEquipment(eq)} className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${selectedEquipment.includes(eq) ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>{eq}</button>
+              <button key={eq} onClick={() => toggleEquipment(eq)} className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${selectedEquipment.includes(eq) ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700'}`}>{eq}</button>
             ))}
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Duracion (min)</label>
-            <select value={duration} onChange={(e) => setDuration(parseInt(e.target.value))} className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white">
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Duracion (min)</label>
+            <select value={duration} onChange={(e) => setDuration(parseInt(e.target.value))} className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 dark:text-slate-200">
               <option value={30}>30 min</option>
               <option value={45}>45 min</option>
               <option value={60}>60 min</option>
@@ -1055,8 +1056,8 @@ function AIGenerateModal({ isOpen, onClose, folderId, folderGoal, onSave, userId
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Experiencia</label>
-            <select value={experience} onChange={(e) => setExperience(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white">
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Experiencia</label>
+            <select value={experience} onChange={(e) => setExperience(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 dark:text-slate-200">
               <option value="BEGINNER">Principiante</option>
               <option value="INTERMEDIATE">Intermedio</option>
               <option value="ADVANCED">Avanzado</option>
@@ -1118,7 +1119,7 @@ function RoutineCard({ routine, onEdit, onDelete, onStart }) {
 
         {isExpanded && (
           <div className="bg-slate-50/50 dark:bg-slate-900/50 p-6 space-y-4 animate-fadeIn border-t border-slate-100 dark:border-slate-800">
-            {routine.exercises.map((ex, idx) => (
+            {routine.exercises?.map((ex, idx) => (
               <div key={idx} className="flex items-center justify-between group/ex">
                 <div className="flex items-center gap-4">
                   <div className="w-1.5 h-1.5 rounded-full bg-indigo-500/50 group-hover/ex:bg-indigo-500 transition-colors" />

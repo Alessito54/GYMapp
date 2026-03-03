@@ -32,6 +32,7 @@ export default function Profile() {
   const { user, logout } = useAuthStore();
   const { profile, setProfile, updateProfile, getStats } = useUserStore();
   const stats = getStats();
+  const userId = user?.uid;
 
   const [isEditing, setIsEditing] = useState(!profile);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -52,9 +53,9 @@ export default function Profile() {
 
   const handleSave = () => {
     if (profile) {
-      updateProfile(formData);
+      updateProfile(formData, userId);
     } else {
-      setProfile(formData);
+      setProfile(formData, userId);
     }
     setIsEditing(false);
   };
@@ -73,21 +74,25 @@ export default function Profile() {
   // Setup view (no profile yet)
   if (!profile || isEditing) {
     return (
-      <div className="px-4 py-6 space-y-6 animate-fadeIn">
-        <header className="pt-2">
-          <div className="flex items-center gap-2">
-            <IoSettingsOutline className="w-6 h-6 text-gray-700" />
-            <h1 className="text-2xl font-bold text-gray-900">
-              {profile ? 'Editar perfil' : 'Configurar perfil'}
-            </h1>
+      <div className="px-5 py-6 space-y-6 animate-fadeIn">
+        <header className="pt-2 pb-2">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+              <IoSettingsOutline className="w-5 h-5" />
+            </div>
+            <div>
+              <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">
+                {profile ? 'Editar perfil' : 'Configurar perfil'}
+              </h1>
+              <p className="text-slate-500 dark:text-slate-400 text-xs font-medium">
+                {profile ? 'Actualiza tu información' : 'Ingresa tus datos para comenzar'}
+              </p>
+            </div>
           </div>
-          <p className="text-gray-500 text-sm mt-0.5">
-            {profile ? 'Actualiza tu informacion' : 'Ingresa tus datos para comenzar'}
-          </p>
         </header>
 
-        <Card className="shadow-sm">
-          <Card.Body className="space-y-5">
+        <Card className="shadow-lg shadow-slate-200/50 dark:shadow-black/20 border-slate-100 dark:border-slate-800">
+          <Card.Body className="space-y-6 p-6">
             <Input
               label="Nombre"
               value={formData.name}
@@ -96,15 +101,15 @@ export default function Profile() {
             />
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Genero</label>
-              <div className="grid grid-cols-3 gap-2">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 px-1">Género</label>
+              <div className="grid grid-cols-3 gap-3">
                 {['MALE', 'FEMALE', 'OTHER'].map((g) => (
                   <button
                     key={g}
                     onClick={() => handleChange('gender', g)}
-                    className={`py-3 px-4 rounded-2xl text-sm font-medium transition-all active-scale-95 ${formData.gender === g
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    className={`py-3.5 px-4 rounded-xl text-sm font-semibold transition-all active-scale-95 ${formData.gender === g
+                      ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                       }`}
                   >
                     {g === 'MALE' ? 'Hombre' : g === 'FEMALE' ? 'Mujer' : 'Otro'}
@@ -136,38 +141,38 @@ export default function Profile() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Nivel de actividad</label>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 px-1">Nivel de actividad</label>
               <div className="space-y-2">
                 {ACTIVITY_LEVELS.map((level) => (
                   <button
                     key={level.value}
                     onClick={() => handleChange('activityLevel', level.value)}
-                    className={`w-full p-4 rounded-2xl text-left transition-all active-scale-98 ${formData.activityLevel === level.value
-                      ? 'bg-blue-50 border-2 border-blue-500 shadow-sm'
-                      : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
+                    className={`w-full p-4 rounded-xl text-left transition-all active-scale-98 ${formData.activityLevel === level.value
+                      ? 'bg-indigo-50 dark:bg-indigo-900/30 border-2 border-indigo-500 shadow-sm'
+                      : 'bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent hover:bg-slate-100 dark:hover:bg-slate-700'
                       }`}
                   >
-                    <p className="font-medium text-gray-900">{level.label}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{level.desc}</p>
+                    <p className="font-semibold text-slate-900 dark:text-white">{level.label}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{level.desc}</p>
                   </button>
                 ))}
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Objetivo</label>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 px-1">Objetivo</label>
               <div className="space-y-2">
                 {GOALS.map((goal) => (
                   <button
                     key={goal.value}
                     onClick={() => handleChange('goal', goal.value)}
-                    className={`w-full p-4 rounded-2xl text-left transition-all active-scale-98 ${formData.goal === goal.value
-                      ? 'bg-green-50 border-2 border-green-500 shadow-sm'
-                      : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
+                    className={`w-full p-4 rounded-xl text-left transition-all active-scale-98 ${formData.goal === goal.value
+                      ? 'bg-emerald-50 dark:bg-emerald-900/30 border-2 border-emerald-500 shadow-sm'
+                      : 'bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent hover:bg-slate-100 dark:hover:bg-slate-700'
                       }`}
                   >
-                    <p className="font-medium text-gray-900">{goal.label}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{goal.desc}</p>
+                    <p className="font-semibold text-slate-900 dark:text-white">{goal.label}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{goal.desc}</p>
                   </button>
                 ))}
               </div>
@@ -175,24 +180,26 @@ export default function Profile() {
           </Card.Body>
         </Card>
 
-        <Button
-          onClick={handleSave}
-          className="w-full"
-          disabled={!formData.name}
-        >
-          <IoSaveOutline className="w-5 h-5 mr-2" />
-          Guardar perfil
-        </Button>
-
-        {profile && (
+        <div className="space-y-3 mt-2">
           <Button
-            variant="ghost"
-            onClick={() => setIsEditing(false)}
-            className="w-full"
+            onClick={handleSave}
+            className="w-full h-14"
+            disabled={!formData.name}
           >
-            Cancelar
+            <IoSaveOutline className="w-5 h-5 mr-2" />
+            Guardar perfil
           </Button>
-        )}
+
+          {profile && (
+            <Button
+              variant="outline"
+              onClick={() => setIsEditing(false)}
+              className="w-full h-12"
+            >
+              Cancelar
+            </Button>
+          )}
+        </div>
       </div>
     );
   }

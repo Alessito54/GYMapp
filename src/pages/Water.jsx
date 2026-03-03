@@ -37,8 +37,6 @@ export default function Water() {
     setIsSettingsOpen(false);
   };
 
-  const progressColor = today.progress >= 1 ? '#10B981' : '#06B6D4';
-
   return (
     <div className="px-5 py-8 space-y-8 animate-fadeIn">
       {/* Header */}

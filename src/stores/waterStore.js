@@ -55,15 +55,23 @@ export const useWaterStore = create(
             });
           }
 
-          // Load Today's Logs
-          const today = getTodayKey();
-          const todaySnap = await getDoc(doc(db, 'users', userId, 'water', today));
-          if (todaySnap.exists()) {
-            const data = todaySnap.data();
-            set((state) => ({
-              logs: { ...state.logs, [today]: { entries: data.entries || [], total: data.total || 0 } }
-            }));
+          // Load last 7 days of data for the week view
+          const loadedLogs = {};
+          for (let i = 0; i < 7; i++) {
+            const date = new Date();
+            date.setDate(date.getDate() - i);
+            const dateKey = date.toISOString().split('T')[0];
+            
+            const daySnap = await getDoc(doc(db, 'users', userId, 'water', dateKey));
+            if (daySnap.exists()) {
+              const data = daySnap.data();
+              loadedLogs[dateKey] = { entries: data.entries || [], total: data.total || 0 };
+            }
           }
+          
+          set((state) => ({
+            logs: { ...state.logs, ...loadedLogs }
+          }));
 
           console.log('Water data loaded successfully');
         } catch (e) {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   IoFitnessOutline,
@@ -29,13 +29,10 @@ const navItems = [
 export default function Layout() {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
-  const { darkMode, toggleDarkMode, initDarkMode } = useUserStore();
+  const { darkMode, toggleDarkMode } = useUserStore();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-  useEffect(() => {
-    initDarkMode();
-  }, [initDarkMode]);
+  const userId = user?.uid;
 
   const handleLogout = async () => {
     try {
@@ -65,7 +62,7 @@ export default function Layout() {
 
           <div className="flex items-center gap-2">
             <button
-              onClick={toggleDarkMode}
+              onClick={() => toggleDarkMode(userId)}
               className="inline-flex items-center justify-center w-11 h-11 rounded-2xl text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all outline-none"
               aria-label="Toggle dark mode"
             >
@@ -82,15 +79,15 @@ export default function Layout() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 pb-28 overflow-y-auto">
+      <main className="flex-1 pb-32 overflow-y-auto">
         <div className="max-w-lg mx-auto">
           <Outlet />
         </div>
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 px-4 pt-3 pb-safe z-50">
-        <div className="flex justify-around items-center max-w-lg mx-auto">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 z-50">
+        <div className="flex justify-around items-center max-w-lg mx-auto px-4 pt-2 pb-4">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
