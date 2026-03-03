@@ -19,6 +19,7 @@ import {
   IoLayers,
   IoSettingsOutline,
   IoSaveOutline,
+  IoReorderTwoOutline,
 } from 'react-icons/io5';
 import { Card, Button, Input, Modal, Badge, ProgressBar } from '@/components/ui';
 import { useWorkoutStore, useAuthStore, MUSCLE_GROUPS } from '@/stores';
@@ -795,28 +796,44 @@ export default function Workouts() {
 
     return (
       <div className="px-4 sm:px-5 py-6 sm:py-8 space-y-6 sm:space-y-8 animate-fadeIn">
-        <header className="flex items-center justify-between px-1">
-          <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-            <button
-              onClick={() => setView('folders')}
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 active:scale-95 transition-all flex-shrink-0"
-            >
-              <IoChevronForward className="w-5 h-5 transform rotate-180" />
-            </button>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight truncate">{selectedFolder.name}</h1>
-              <p className="text-blue-600 dark:text-blue-400 text-[10px] font-bold uppercase tracking-widest mt-0.5">
-                {routines.length} {routines.length === 1 ? 'Rutina' : 'Rutinas'} • {selectedFolder.goal?.replace('_', ' ') || 'GENERAL'}
-              </p>
+        <header className="relative p-8 rounded-[3rem] overflow-hidden group">
+          {/* Animated Background Gradients */}
+          <div className="absolute inset-0 bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl z-0" />
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-violet-500/10 rounded-full blur-3xl animate-pulse delay-700" />
+
+          <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-end justify-between gap-6 w-full">
+            <div className="flex items-center gap-6 min-w-0">
+              <button
+                onClick={() => setView('folders')}
+                className="w-14 h-14 rounded-2xl glass flex items-center justify-center text-slate-600 dark:text-slate-400 active:scale-90 transition-all flex-shrink-0 group/back hover:text-blue-600"
+              >
+                <IoChevronForward className="w-6 h-6 transform rotate-180 group-hover/back:-translate-x-1 transition-transform" />
+              </button>
+              <div>
+                <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-none mb-2 truncate">
+                  {selectedFolder.name}
+                </h1>
+                <div className="flex items-center gap-3">
+                  <Badge className="bg-blue-600 text-white border-none text-[10px] font-black uppercase tracking-widest px-3">
+                    {routines.length} {routines.length === 1 ? 'Rutina' : 'Rutinas'}
+                  </Badge>
+                  <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600" />
+                  <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
+                    {selectedFolder.goal?.replace('_', ' ') || 'GENERAL'}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="flex gap-2">
-            <button onClick={openEditFolder} className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors">
-              <IoCreateOutline className="w-5 h-5" />
-            </button>
-            <button onClick={() => setIsDeleteFolderOpen(true)} className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-500 hover:text-rose-600 transition-colors">
-              <IoTrashOutline className="w-5 h-5" />
-            </button>
+
+            <div className="flex gap-3 flex-shrink-0">
+              <button onClick={openEditFolder} className="w-12 h-12 rounded-2xl glass flex items-center justify-center text-slate-400 hover:text-blue-600 hover:scale-110 active:scale-90 transition-all">
+                <IoCreateOutline className="w-6 h-6" />
+              </button>
+              <button onClick={() => setIsDeleteFolderOpen(true)} className="w-12 h-12 rounded-2xl glass flex items-center justify-center text-slate-400 hover:text-rose-600 hover:scale-110 active:scale-90 transition-all">
+                <IoTrashOutline className="w-6 h-6" />
+              </button>
+            </div>
           </div>
         </header>
 
@@ -1378,6 +1395,7 @@ function AddRoutineModal({ isOpen, onClose, folderId, onSave }) {
   const [exercises, setExercises] = useState([{ id: Date.now(), name: '', sets: 3, reps: '10-12', weight: 0, unit: 'kg', muscleGroup: 'Pecho', restSeconds: 60, seriesType: 'simple' }]);
   const [showLibrary, setShowLibrary] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(0);
+  const [draggedIndex, setDraggedIndex] = useState(null);
 
   const handleAddExercise = () => {
     const newExercise = { id: Date.now(), name: '', sets: 3, reps: '10-12', weight: 0, unit: 'kg', muscleGroup: 'Pecho', restSeconds: 60, seriesType: 'simple' };
@@ -1419,6 +1437,36 @@ function AddRoutineModal({ isOpen, onClose, folderId, onSave }) {
     setExercises(exercises.filter((_, i) => i !== index));
     if (expandedIndex === index) setExpandedIndex(null);
     else if (expandedIndex > index) setExpandedIndex(expandedIndex - 1);
+  };
+
+  const handleDragStart = (e, index) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    // Create a ghost image if needed, or just let default happen
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === index) return;
+
+    const newExercises = [...exercises];
+    const draggedItem = newExercises[draggedIndex];
+    newExercises.splice(draggedIndex, 1);
+    newExercises.splice(index, 0, draggedItem);
+
+    setDraggedIndex(index);
+    setExercises(newExercises);
+
+    // Update expanded index if it matches the dragged item
+    if (expandedIndex === draggedIndex) {
+      setExpandedIndex(index);
+    } else if (expandedIndex === index) {
+      setExpandedIndex(draggedIndex);
+    }
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
   };
 
   const handleSave = async () => {
@@ -1477,9 +1525,13 @@ function AddRoutineModal({ isOpen, onClose, folderId, onSave }) {
                 return (
                   <div
                     key={exercise.id || index}
+                    draggable={!isExpanded}
+                    onDragStart={(e) => handleDragStart(e, index)}
+                    onDragOver={(e) => handleDragOver(e, index)}
+                    onDragEnd={handleDragEnd}
                     className={`group transition-all duration-300 rounded-[2rem] border overflow-hidden ${isExpanded
                       ? 'bg-white dark:bg-slate-900 border-blue-200 dark:border-blue-800 shadow-xl shadow-blue-500/5 ring-1 ring-blue-500/10'
-                      : 'bg-slate-50/50 dark:bg-slate-900/30 border-slate-100 dark:border-slate-800/50 hover:border-slate-200 dark:hover:border-slate-700'
+                      : draggedIndex === index ? 'opacity-50 scale-95 border-blue-400' : 'bg-slate-50/50 dark:bg-slate-900/30 border-slate-100 dark:border-slate-800/50 hover:border-slate-200 dark:hover:border-slate-700'
                       }`}
                   >
                     {/* Collapsed Header / Toggle */}
@@ -1487,6 +1539,11 @@ function AddRoutineModal({ isOpen, onClose, folderId, onSave }) {
                       onClick={() => setExpandedIndex(isExpanded ? null : index)}
                       className="p-4 flex items-center gap-3 cursor-pointer select-none"
                     >
+                      {!isExpanded && (
+                        <div className="text-slate-300 group-hover:text-blue-400 transition-colors drag-handle">
+                          <IoReorderTwoOutline className="w-6 h-6" />
+                        </div>
+                      )}
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black transition-all ${isExpanded ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'
                         }`}>
                         {index + 1}
@@ -1678,6 +1735,7 @@ function EditRoutineModal({ isOpen, onClose, routine, onSave }) {
   const [exercises, setExercises] = useState(routine.exercises || []);
   const [showLibrary, setShowLibrary] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(null);
+  const [draggedIndex, setDraggedIndex] = useState(null);
 
   const handleAddExercise = () => {
     const newExercise = { id: Date.now(), name: '', sets: 3, reps: '10-12', weight: 0, unit: 'kg', muscleGroup: 'Pecho', restSeconds: 60, seriesType: 'simple' };
@@ -1712,6 +1770,34 @@ function EditRoutineModal({ isOpen, onClose, routine, onSave }) {
     setExercises(exercises.filter((_, i) => i !== index));
     if (expandedIndex === index) setExpandedIndex(null);
     else if (expandedIndex > index) setExpandedIndex(expandedIndex - 1);
+  };
+
+  const handleDragStart = (e, index) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === index) return;
+
+    const newExercises = [...exercises];
+    const draggedItem = newExercises[draggedIndex];
+    newExercises.splice(draggedIndex, 1);
+    newExercises.splice(index, 0, draggedItem);
+
+    setDraggedIndex(index);
+    setExercises(newExercises);
+
+    if (expandedIndex === draggedIndex) {
+      setExpandedIndex(index);
+    } else if (expandedIndex === index) {
+      setExpandedIndex(draggedIndex);
+    }
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
   };
 
   const handleSave = async () => {
@@ -1767,9 +1853,13 @@ function EditRoutineModal({ isOpen, onClose, routine, onSave }) {
                 return (
                   <div
                     key={exercise.id || index}
+                    draggable={!isExpanded}
+                    onDragStart={(e) => handleDragStart(e, index)}
+                    onDragOver={(e) => handleDragOver(e, index)}
+                    onDragEnd={handleDragEnd}
                     className={`group transition-all duration-300 rounded-[2rem] border overflow-hidden ${isExpanded
                       ? 'bg-white dark:bg-slate-900 border-blue-200 dark:border-blue-800 shadow-xl shadow-blue-500/5 ring-1 ring-blue-500/10'
-                      : 'bg-slate-50/50 dark:bg-slate-900/30 border-slate-100 dark:border-slate-800/50 hover:border-slate-200 dark:hover:border-slate-700'
+                      : draggedIndex === index ? 'opacity-50 scale-95 border-blue-400' : 'bg-slate-50/50 dark:bg-slate-900/30 border-slate-100 dark:border-slate-800/50 hover:border-slate-200 dark:hover:border-slate-700'
                       }`}
                   >
                     {/* Collapsed Header / Toggle */}
@@ -1777,6 +1867,11 @@ function EditRoutineModal({ isOpen, onClose, routine, onSave }) {
                       onClick={() => setExpandedIndex(isExpanded ? null : index)}
                       className="p-4 flex items-center gap-3 cursor-pointer select-none"
                     >
+                      {!isExpanded && (
+                        <div className="text-slate-300 group-hover:text-blue-400 transition-colors drag-handle">
+                          <IoReorderTwoOutline className="w-6 h-6" />
+                        </div>
+                      )}
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black transition-all ${isExpanded ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'
                         }`}>
                         {index + 1}
@@ -2152,7 +2247,7 @@ function AIGenerateModal({ isOpen, onClose, folderId, folderGoal, onSave, userId
 function RoutineCard({ routine, onEdit, onDelete, onStart }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [savedToLib, setSavedToLib] = useState({});
-  const [addAllStatus, setAddAllStatus] = useState(null); // null | 'saving' | { added: number, skipped: number }
+  const [addAllStatus, setAddAllStatus] = useState(null);
   const { saveExerciseToLibrary, exerciseLibrary } = useWorkoutStore();
   const { user } = useAuthStore();
 
@@ -2170,7 +2265,6 @@ function RoutineCard({ routine, onEdit, onDelete, onStart }) {
 
   const handleAddAllToLibrary = async () => {
     if (!routine.exercises?.length) return;
-
     setAddAllStatus('saving');
     let added = 0;
     let skipped = 0;
@@ -2178,7 +2272,6 @@ function RoutineCard({ routine, onEdit, onDelete, onStart }) {
     for (let idx = 0; idx < routine.exercises.length; idx++) {
       const ex = routine.exercises[idx];
       const exists = exerciseLibrary.some(e => e.name.toLowerCase() === ex.name.toLowerCase());
-
       if (!exists) {
         await saveExerciseToLibrary({
           name: ex.name,
@@ -2197,115 +2290,130 @@ function RoutineCard({ routine, onEdit, onDelete, onStart }) {
     }
 
     setAddAllStatus({ added, skipped });
-
-    // Clear status after 3 seconds
     setTimeout(() => setAddAllStatus(null), 3000);
   };
 
   return (
-    <Card className="p-4 border-slate-200/60 dark:border-slate-700/60 shadow-sm overflow-hidden group">
+    <Card className="border-none bg-white dark:bg-slate-900 shadow-2xl shadow-blue-500/5 overflow-hidden group transition-all duration-500 hover:translate-y-[-4px] rounded-[2.5rem]">
       <Card.Body className="p-0">
-        <div className="p-6">
-          <div className="flex items-center justify-between gap-4">
+        <div className="p-8 relative">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-blue-500/10 transition-colors" />
+
+          <div className="relative z-10 flex items-center justify-between gap-6">
             <div className="min-w-0 flex-1">
-              <h3 className="text-xl font-black text-slate-900 dark:text-white truncate tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{routine.name}</h3>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-2">
-                {routine.exercises?.length || 0} EJERCICIOS
+              <h3 className="text-2xl font-black text-slate-900 dark:text-white truncate tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                {routine.name}
+              </h3>
+              <div className="flex items-center gap-3 mt-2">
+                <Badge className="bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-none text-[9px] font-black tracking-widest px-2.5">
+                  {routine.exercises?.length || 0} EJERCICIOS
+                </Badge>
                 {routine.lastPerformed && (
                   <>
-                    <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600" />
-                    <span>ULTIMO: {new Date(routine.lastPerformed).toLocaleDateString('es-ES')}</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-200 dark:bg-slate-700" />
+                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                      Último: {new Date(routine.lastPerformed).toLocaleDateString('es-ES')}
+                    </p>
                   </>
                 )}
-              </p>
+              </div>
             </div>
+
             <div className="flex items-center gap-2">
               <button
                 onClick={(e) => { e.stopPropagation(); onEdit(); }}
-                className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-blue-600 transition-all active:scale-95"
+                className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all active:scale-90"
               >
-                <IoCreateOutline className="w-5 h-5" />
+                <IoCreateOutline className="w-6 h-6" />
               </button>
               <button
                 onClick={(e) => { e.stopPropagation(); onDelete(); }}
-                className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-600 transition-all active:scale-95"
+                className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-all active:scale-90"
               >
-                <IoTrashOutline className="w-5 h-5" />
+                <IoTrashOutline className="w-6 h-6" />
               </button>
               <button
                 onClick={onStart}
-                className="w-12 h-12 rounded-2xl premium-gradient flex items-center justify-center text-white shadow-lg shadow-blue-500/30 active:scale-95 transition-all"
+                className="w-14 h-14 rounded-[1.5rem] premium-gradient flex items-center justify-center text-white shadow-xl shadow-blue-500/30 hover:scale-110 active:scale-95 transition-all"
               >
-                <IoPlayCircle className="w-7 h-7" />
+                <IoPlayCircle className="w-8 h-8" />
               </button>
             </div>
           </div>
 
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="w-full mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-blue-500 transition-colors"
+            className="w-full mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-blue-500 transition-colors group/toggle"
           >
-            <span>{isExpanded ? 'Ocultar ejercicios' : 'Ver ejercicios'}</span>
-            <IoChevronForward className={`w-4 h-4 transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`} />
+            <span className="flex items-center gap-2">
+              {isExpanded ? 'Contraer Detalles' : 'Ver Detalles de Rutina'}
+              <div className="w-1 h-1 rounded-full bg-slate-200 dark:bg-slate-700 group-hover/toggle:bg-blue-400 transition-colors" />
+            </span>
+            <IoChevronForward className={`w-4 h-4 transition-transform duration-500 ${isExpanded ? 'rotate-90 text-blue-500' : ''}`} />
           </button>
         </div>
 
         {isExpanded && (
-          <div className="bg-slate-50/50 dark:bg-slate-900/50 p-6 space-y-3 animate-fadeIn border-t border-slate-100 dark:border-slate-800">
-            {/* Add All to Library Button */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-200/50 dark:border-slate-700/50 mb-3">
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                {routine.exercises?.length || 0} ejercicios en esta rutina
-              </p>
+          <div className="bg-slate-50/50 dark:bg-slate-950/30 p-8 space-y-4 animate-in fade-in slide-in-from-top-4 duration-500 border-t border-slate-100 dark:border-slate-800/50">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800/50 mb-2">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Desglose de Ejercicios</h4>
               <button
                 onClick={handleAddAllToLibrary}
                 disabled={addAllStatus === 'saving' || (addAllStatus && typeof addAllStatus === 'object')}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${addAllStatus === 'saving'
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${addAllStatus === 'saving'
                   ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 cursor-wait'
                   : addAllStatus && typeof addAllStatus === 'object'
                     ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400'
-                    : 'bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 hover:bg-violet-200 dark:hover:bg-violet-900/50 active:scale-95'
+                    : 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 hover:bg-violet-600 hover:text-white shadow-sm hover:shadow-violet-500/20 active:scale-95'
                   }`}
               >
                 <IoBookmarkOutline className="w-4 h-4" />
                 {addAllStatus === 'saving'
                   ? 'Guardando...'
                   : addAllStatus && typeof addAllStatus === 'object'
-                    ? `${addAllStatus.added} añadidos${addAllStatus.skipped > 0 ? ` · ${addAllStatus.skipped} ya existían` : ''}`
-                    : 'Añadir todos a biblioteca'
+                    ? `${addAllStatus.added} Añadidos`
+                    : 'Guardar todo'
                 }
               </button>
             </div>
 
-            {routine.exercises?.map((ex, idx) => {
-              const st = SERIES_TYPES.find(s => s.value === (ex.seriesType || 'simple'));
-              return (
-                <div key={idx} className="flex items-center justify-between group/ex p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500/50 flex-shrink-0 group-hover/ex:bg-blue-500 transition-colors" />
-                    <div className="min-w-0">
-                      <p className="text-sm font-black text-slate-800 dark:text-slate-200 truncate">{ex.name}</p>
-                      <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{ex.sets} series × {ex.reps} reps</p>
-                        {st && st.value !== 'simple' && (
-                          <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wide ${st.color}`}>
-                            {st.label}
-                          </span>
-                        )}
+            <div className="grid grid-cols-1 gap-3">
+              {routine.exercises?.map((ex, idx) => {
+                const st = SERIES_TYPES.find(s => s.value === (ex.seriesType || 'simple'));
+                return (
+                  <div key={idx} className="flex items-center justify-between group/ex p-4 rounded-3xl bg-white dark:bg-slate-900 border border-transparent hover:border-blue-100 dark:hover:border-blue-900/30 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300">
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-xs font-black text-slate-400 group-hover/ex:bg-blue-600 group-hover/ex:text-white transition-all duration-500">
+                        {idx + 1}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-black text-slate-800 dark:text-slate-100 truncate">{ex.name}</p>
+                        <div className="flex items-center gap-3 mt-1 flex-wrap">
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter bg-slate-50 dark:bg-slate-800 px-2 py-0.5 rounded-md">
+                            {ex.sets} × {ex.reps}
+                          </p>
+                          {st && st.value !== 'simple' && (
+                            <span className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wide ${st.color}`}>
+                              {st.label}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
+                    <button
+                      onClick={() => handleSaveToLibrary(ex, idx)}
+                      disabled={savedToLib[idx]}
+                      className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 ${savedToLib[idx]
+                        ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600'
+                        : 'bg-slate-50 dark:bg-slate-800 text-slate-300 hover:text-blue-600 hover:bg-blue-50 opacity-0 group-hover/ex:opacity-100'
+                        }`}
+                    >
+                      <IoBookmarkOutline className="w-5 h-5" />
+                    </button>
                   </div>
-                  <button
-                    onClick={() => handleSaveToLibrary(ex, idx)}
-                    disabled={savedToLib[idx]}
-                    className={`flex-shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${savedToLib[idx] ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 hover:text-blue-600 dark:hover:text-blue-400 opacity-0 group-hover/ex:opacity-100'}`}
-                  >
-                    <IoBookmarkOutline className="w-3.5 h-3.5" />
-                    {savedToLib[idx] ? 'Guardado' : 'Biblioteca'}
-                  </button>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         )}
       </Card.Body>
