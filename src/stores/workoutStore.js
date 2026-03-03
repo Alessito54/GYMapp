@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where, deleteDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, getDocs, query, where, deleteDoc } from 'firebase/firestore';
 import { db } from '@/config/firebase';
 
 export const MUSCLE_GROUPS = [
@@ -57,16 +57,16 @@ export const useWorkoutStore = create(
         try {
           console.log('Loading workout data from Firebase...');
 
-          // Load Config
+          // Load Config - Always set state from Firebase (source of truth)
           const configSnap = await getDoc(doc(db, 'users', userId, 'data', 'workout_config'));
-          if (configSnap.exists()) {
-            const data = configSnap.data();
-            set({
-              folders: data.folders || [],
-              routines: data.routines || [],
-              exerciseLibrary: data.exerciseLibrary || []
-            });
-          }
+          const data = configSnap.exists() ? configSnap.data() : {};
+          
+          // Always overwrite local state with Firebase data
+          set({
+            folders: data.folders || [],
+            routines: data.routines || [],
+            exerciseLibrary: data.exerciseLibrary || []
+          });
 
           // Load Active Session (from sessions subcollection where status is active)
           const sessionsRef = collection(db, 'users', userId, 'sessions');
@@ -201,6 +201,22 @@ export const useWorkoutStore = create(
         if (userId) await get().saveGlobalToFirebase(userId);
       },
 
+      updateExerciseInLibrary: async (exerciseId, updates, userId) => {
+        set((state) => ({
+          exerciseLibrary: state.exerciseLibrary.map(e =>
+            e.id === exerciseId ? { ...e, ...updates } : e
+          )
+        }));
+        if (userId) await get().saveGlobalToFirebase(userId);
+      },
+
+      deleteExerciseFromLibrary: async (exerciseId, userId) => {
+        set((state) => ({
+          exerciseLibrary: state.exerciseLibrary.filter(e => e.id !== exerciseId)
+        }));
+        if (userId) await get().saveGlobalToFirebase(userId);
+      },
+
       cancelSession: () => {
         set({ activeSession: null });
       },
@@ -268,6 +284,20 @@ export const useWorkoutStore = create(
     }),
     {
       name: 'workout-storage',
+      version: 2, // Increment to invalidate old cache
+      migrate: (persistedState, version) => {
+        // Clear old cached data when version changes
+        if (version < 2) {
+          return {
+            folders: [],
+            routines: [],
+            sessions: [],
+            activeSession: null,
+            exerciseLibrary: []
+          };
+        }
+        return persistedState;
+      }
     }
   )
 );

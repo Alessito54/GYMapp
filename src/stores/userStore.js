@@ -8,6 +8,7 @@ export const useUserStore = create(
     (set, get) => ({
       profile: null,
       darkMode: false,
+      weightHistory: [],
       settings: {
         waterReminder: { enabled: true, intervalMinutes: 60 },
         units: { weight: 'kg', height: 'cm' },
@@ -99,6 +100,70 @@ export const useUserStore = create(
         }
       },
 
+      // Weight tracking
+      addWeightEntry: async (entry, userId) => {
+        const newEntry = {
+          ...entry,
+          id: Date.now().toString(),
+          date: entry.date || new Date().toISOString().split('T')[0],
+        };
+        set((state) => ({
+          weightHistory: [...(state.weightHistory || []), newEntry].sort((a, b) => 
+            new Date(a.date) - new Date(b.date)
+          ),
+        }));
+        if (userId) {
+          try {
+            await setDoc(doc(db, 'users', userId), get()._clean({ 
+              weightHistory: get().weightHistory 
+            }), { merge: true });
+          } catch (e) {
+            console.error('Error saving weight entry:', e);
+          }
+        }
+      },
+
+      deleteWeightEntry: async (entryId, userId) => {
+        set((state) => ({
+          weightHistory: (state.weightHistory || []).filter((e) => e.id !== entryId),
+        }));
+        if (userId) {
+          try {
+            await setDoc(doc(db, 'users', userId), get()._clean({ 
+              weightHistory: get().weightHistory 
+            }), { merge: true });
+          } catch (e) {
+            console.error('Error deleting weight entry:', e);
+          }
+        }
+      },
+
+      getWeightProgress: () => {
+        const { weightHistory, profile } = get();
+        if (!weightHistory || weightHistory.length === 0) return null;
+
+        const sorted = [...weightHistory].sort((a, b) => new Date(a.date) - new Date(b.date));
+        const first = sorted[0];
+        const last = sorted[sorted.length - 1];
+        const change = last.weight - first.weight;
+        const targetWeight = profile?.targetWeight;
+        
+        let progressToGoal = null;
+        if (targetWeight && first.weight !== targetWeight) {
+          const totalNeeded = targetWeight - first.weight;
+          const achieved = last.weight - first.weight;
+          progressToGoal = Math.min(100, Math.max(0, (achieved / totalNeeded) * 100));
+        }
+
+        return {
+          startWeight: first.weight,
+          currentWeight: last.weight,
+          change: Math.round(change * 10) / 10,
+          progressToGoal,
+          entries: sorted,
+        };
+      },
+
       loadUserData: async (userId) => {
         if (!userId) return;
         try {
@@ -108,7 +173,8 @@ export const useUserStore = create(
             set({
               profile: data.profile || null,
               settings: data.settings || get().settings,
-              darkMode: data.darkMode !== undefined ? data.darkMode : get().darkMode
+              darkMode: data.darkMode !== undefined ? data.darkMode : get().darkMode,
+              weightHistory: data.weightHistory || [],
             });
             if (data.darkMode) {
               document.documentElement.classList.add('dark');

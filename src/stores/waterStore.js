@@ -134,6 +134,20 @@ export const useWaterStore = create(
         if (userId && updatedLog) await get().saveDayToFirebase(userId, today, updatedLog);
       },
 
+      removeEntry: async (userId, entryIndex) => {
+        const today = getTodayKey();
+        let updatedLog;
+        set((state) => {
+          const todayLog = state.logs[today];
+          if (!todayLog) return state;
+          const entries = todayLog.entries.filter((_, i) => i !== entryIndex);
+          const total = entries.reduce((sum, e) => sum + e.ml, 0);
+          updatedLog = { entries, total };
+          return { logs: { ...state.logs, [today]: updatedLog } };
+        });
+        if (userId && updatedLog) await get().saveDayToFirebase(userId, today, updatedLog);
+      },
+
       getTodayProgress: () => {
         const { logs, targetMl } = get();
         const today = getTodayKey();
@@ -167,6 +181,23 @@ export const useWaterStore = create(
         }
 
         return result;
+      },
+
+      getStreak: () => {
+        const { logs, targetMl } = get();
+        let streak = 0;
+        for (let i = 0; i < 365; i++) {
+          const date = new Date();
+          date.setDate(date.getDate() - i);
+          const key = date.toISOString().split('T')[0];
+          const dayLog = logs[key] || { total: 0 };
+          if (dayLog.total >= targetMl) {
+            streak++;
+          } else {
+            break;
+          }
+        }
+        return streak;
       },
     }),
     {
