@@ -55,11 +55,11 @@ export default function Layout() {
         <header className="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-slate-200/50 dark:border-slate-800/50">
           <div className="max-w-lg mx-auto px-5 py-4 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/20">
                 <IoFitnessOutline className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="text-[10px] uppercase tracking-[0.15em] text-indigo-600 dark:text-indigo-400 font-bold">FitTrack Pro</p>
+                <p className="text-[10px] uppercase tracking-[0.15em] text-blue-600 dark:text-blue-400 font-bold">FitTrack Pro</p>
                 <p className="text-sm text-slate-500 dark:text-slate-400 font-medium line-clamp-1">{user?.email || 'Atleta'}</p>
               </div>
             </div>
@@ -100,7 +100,7 @@ export default function Layout() {
                 to={item.to}
                 className={({ isActive }) =>
                   `flex flex-col items-center py-1 transition-all duration-300 ${isActive
-                    ? 'text-indigo-600 dark:text-indigo-300'
+                    ? 'text-blue-600 dark:text-blue-300'
                     : 'text-slate-500 dark:text-slate-200 hover:text-slate-700 dark:hover:text-white'
                   }`
                 }
@@ -109,10 +109,10 @@ export default function Layout() {
                   const IconComponent = isActive ? item.activeIcon : item.icon;
                   return (
                     <>
-                      <div className={`relative p-2 rounded-2xl transition-all duration-300 ${isActive ? 'bg-indigo-50 dark:bg-indigo-900/30 ring-1 ring-indigo-500/20' : ''}`}>
+                      <div className={`relative p-2 rounded-2xl transition-all duration-300 ${isActive ? 'bg-blue-50 dark:bg-blue-900/30 ring-1 ring-blue-500/20' : ''}`}>
                         <IconComponent className={`w-6 h-6 transition-transform duration-300 ${isActive ? 'scale-110' : 'scale-100'}`} />
                         {isActive && (
-                          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-indigo-500 dark:bg-indigo-400 rounded-full shadow-[0_0_8px_rgba(99,102,241,0.6)]" />
+                          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-blue-500 dark:bg-blue-400 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.6)]" />
                         )}
                       </div>
                       <span className={`text-[10px] mt-1.5 font-bold tracking-tight transition-all ${isActive ? 'opacity-100 scale-100' : 'opacity-80 scale-95'}`}>

@@ -47,7 +47,7 @@ export default function Water() {
         </div>
         <button
           onClick={() => setIsSettingsOpen(true)}
-          className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 text-slate-500 hover:text-indigo-600 transition-all active:scale-95"
+          className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all active:scale-95"
         >
           <IoSettingsOutline className="w-6 h-6" />
         </button>
@@ -114,7 +114,7 @@ export default function Water() {
           </Card.Body>
         </Card>
 
-        <Card className="border-none shadow-xl shadow-slate-200/50 dark:shadow-black/20 bg-gradient-to-br from-indigo-500 to-blue-600 text-white overflow-hidden relative">
+        <Card className="border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-slate-200/50 dark:shadow-black/20 bg-gradient-to-br from-blue-500 to-cyan-600 text-white overflow-hidden relative">
           <div className="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full blur-xl" />
           <Card.Body className="p-4 flex flex-col justify-between h-full relative z-10">
             <div className="flex justify-between items-start">
@@ -133,7 +133,7 @@ export default function Water() {
 
             <Button
               onClick={() => addWater(user?.uid)}
-              className="w-full h-14 bg-white text-indigo-600 hover:bg-blue-50 mt-4 rounded-2xl shadow-lg border-none"
+              className="w-full h-14 bg-white text-blue-600 hover:bg-blue-50 mt-4 rounded-2xl shadow-lg border-none"
             >
               <IoAddOutline className="w-6 h-6 mr-1" />
               Agregar
@@ -171,7 +171,7 @@ export default function Water() {
                       {isToday && <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_8px_white]" />}
                     </div>
                   </div>
-                  <span className={`text-[9px] font-black uppercase tracking-tighter ${isToday ? 'text-indigo-500' : 'text-slate-400'
+                  <span className={`text-[9px] font-black uppercase tracking-tighter ${isToday ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400'
                     }`}>
                     {day.day}
                   </span>

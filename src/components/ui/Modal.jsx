@@ -36,7 +36,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
         className={`
           relative w-full ${sizes[size]}
           bg-white dark:bg-slate-800 rounded-t-[2.5rem] sm:rounded-[2.5rem]
-          shadow-2xl shadow-indigo-500/10
+          shadow-2xl shadow-blue-500/10
           max-h-[90vh] overflow-hidden
           animate-slide-up sm:animate-scale-in
           transition-all duration-300
@@ -49,7 +49,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
             <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{title}</h2>
             <button
               onClick={onClose}
-              className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 hover:text-indigo-600 transition-colors"
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors"
             >
               <IoClose className="w-6 h-6" />
             </button>

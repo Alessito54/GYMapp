@@ -42,8 +42,8 @@ export default function Login() {
     <div className="min-h-screen min-h-dvh flex flex-col bg-slate-950 safe-area-top overflow-hidden relative">
       {/* Dynamic Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/20 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-cyan-600/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
         <div className="absolute top-[20%] left-[10%] w-32 h-32 bg-emerald-500/10 rounded-full blur-[60px]" />
       </div>
 
@@ -52,19 +52,19 @@ export default function Login() {
         {/* Logo Section */}
         <div className="mb-12 text-center animate-fadeIn group">
           <div className="relative">
-            <div className="absolute -inset-4 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-[2.5rem] blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000" />
+            <div className="absolute -inset-4 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-[2.5rem] blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000" />
             <div className="relative w-24 h-24 sm:w-28 sm:h-28 bg-white dark:bg-slate-800 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6 shadow-2xl border border-white/20 dark:border-slate-700/50">
-              <IoFitness className="w-12 h-12 sm:w-14 sm:h-14 text-indigo-600 dark:text-indigo-400" />
+              <IoFitness className="w-12 h-12 sm:w-14 sm:h-14 text-blue-600 dark:text-blue-400" />
             </div>
           </div>
           <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tighter">
-            FIT<span className="text-indigo-500">TRAK</span>
+            FIT<span className="text-blue-500">TRAK</span>
           </h1>
           <p className="text-slate-400 mt-2 text-sm font-bold uppercase tracking-[0.3em]">Premium Fitness Ecosystem</p>
         </div>
 
         {/* Login Card */}
-        <div className="w-full max-w-sm bg-white dark:bg-slate-900/80 backdrop-blur-xl rounded-[3rem] shadow-2xl shadow-indigo-500/10 p-8 sm:p-10 animate-scale-in border border-white/20 dark:border-slate-800/50">
+        <div className="w-full max-w-sm bg-white dark:bg-slate-900/80 backdrop-blur-xl rounded-[3rem] shadow-2xl shadow-blue-500/10 p-8 sm:p-10 animate-scale-in border border-white/20 dark:border-slate-800/50">
           <div className="mb-8 text-center">
             <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
               {isRegister ? 'Nueva Cuenta' : 'Bienvenido'}
@@ -82,7 +82,7 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="relative group">
-              <IoMailOutline className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors z-10" />
+              <IoMailOutline className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-500 transition-colors z-10" />
               <Input
                 type="email"
                 placeholder="Email corporativo o personal"
@@ -94,7 +94,7 @@ export default function Login() {
             </div>
 
             <div className="relative group">
-              <IoLockClosedOutline className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors z-10" />
+              <IoLockClosedOutline className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-500 transition-colors z-10" />
               <Input
                 type="password"
                 placeholder="Contraseña segura"
@@ -108,7 +108,7 @@ export default function Login() {
 
             <Button
               type="submit"
-              className="w-full h-14 rounded-2xl premium-gradient text-white font-black uppercase tracking-widest shadow-xl shadow-indigo-500/20 active:scale-95 transition-all"
+              className="w-full h-14 rounded-2xl premium-gradient text-white font-black uppercase tracking-widest shadow-xl shadow-blue-500/20 active:scale-95 transition-all"
               loading={loading}
             >
               {isRegister ? 'Registrarme' : 'Entrar'}
@@ -142,7 +142,7 @@ export default function Login() {
                 setIsRegister(!isRegister);
                 clearError();
               }}
-              className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors underline decoration-2 underline-offset-4"
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors underline decoration-2 underline-offset-4"
             >
               {isRegister ? 'INICIA SESIÓN' : 'ÚNETE AHORA'}
             </button>
@@ -153,7 +153,7 @@ export default function Login() {
       {/* Footer */}
       <div className="py-8 text-center relative z-10">
         <p className="text-slate-500 dark:text-slate-600 text-[10px] font-black uppercase tracking-[0.3em]">
-          FitTrak <span className="text-indigo-500/50">PRO</span> • Versión 2.0.0 Alpha
+          FitTrak <span className="text-blue-500/50">PRO</span> • Versión 2.0.0 Alpha
         </p>
       </div>
     </div>

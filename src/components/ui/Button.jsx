@@ -1,12 +1,12 @@
 import { forwardRef } from 'react';
 
 const variants = {
-  primary: 'bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white shadow-lg shadow-indigo-600/20 dark:shadow-indigo-900/40',
-  secondary: 'bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200',
-  success: 'bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white shadow-lg shadow-emerald-600/20 dark:shadow-emerald-900/40',
-  danger: 'bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white shadow-lg shadow-rose-600/20 dark:shadow-rose-900/40',
-  ghost: 'bg-transparent hover:bg-slate-100 active:bg-slate-200 text-slate-600 dark:text-slate-400 dark:hover:bg-slate-800',
-  outline: 'border-2 border-slate-200 text-slate-700 hover:bg-slate-50 active:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800',
+  primary: 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white shadow-lg shadow-blue-600/25 dark:shadow-blue-900/40',
+  secondary: 'bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200',
+  success: 'bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white shadow-lg shadow-emerald-600/25 dark:shadow-emerald-900/40',
+  danger: 'bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white shadow-lg shadow-rose-600/25 dark:shadow-rose-900/40',
+  ghost: 'bg-transparent hover:bg-slate-100 active:bg-slate-200 text-slate-600 dark:text-slate-300 dark:hover:bg-slate-800',
+  outline: 'border-2 border-slate-300 text-slate-700 hover:bg-slate-100 active:bg-slate-200 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800',
 };
 
 const sizes = {

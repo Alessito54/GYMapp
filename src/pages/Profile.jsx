@@ -77,7 +77,7 @@ export default function Profile() {
       <div className="px-5 py-6 space-y-6 animate-fadeIn">
         <header className="pt-2 pb-2">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+            <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
               <IoSettingsOutline className="w-5 h-5" />
             </div>
             <div>
@@ -108,7 +108,7 @@ export default function Profile() {
                     key={g}
                     onClick={() => handleChange('gender', g)}
                     className={`py-3.5 px-4 rounded-xl text-sm font-semibold transition-all active-scale-95 ${formData.gender === g
-                      ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30'
+                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
                       : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                       }`}
                   >
@@ -148,7 +148,7 @@ export default function Profile() {
                     key={level.value}
                     onClick={() => handleChange('activityLevel', level.value)}
                     className={`w-full p-4 rounded-xl text-left transition-all active-scale-98 ${formData.activityLevel === level.value
-                      ? 'bg-indigo-50 dark:bg-indigo-900/30 border-2 border-indigo-500 shadow-sm'
+                      ? 'bg-blue-50 dark:bg-blue-900/30 border-2 border-blue-500 shadow-sm'
                       : 'bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent hover:bg-slate-100 dark:hover:bg-slate-700'
                       }`}
                   >
@@ -210,8 +210,8 @@ export default function Profile() {
       {/* Header */}
       <header className="flex items-center gap-6 pt-2 px-1">
         <div className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-[2rem] blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-          <div className="relative w-24 h-24 rounded-[2rem] bg-indigo-600 flex items-center justify-center shadow-xl">
+          <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-[2rem] blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+          <div className="relative w-24 h-24 rounded-[2rem] bg-blue-600 flex items-center justify-center shadow-xl">
             <IoPersonCircleOutline className="w-14 h-14 text-white" />
           </div>
         </div>
@@ -225,7 +225,7 @@ export default function Profile() {
       {stats && (
         <div className="grid grid-cols-3 gap-4">
           {[
-            { label: 'Peso', value: profile.weight, unit: 'kg', icon: IoScaleOutline, color: 'text-indigo-500', bg: 'bg-indigo-50 dark:bg-indigo-900/30' },
+            { label: 'Peso', value: profile.weight, unit: 'kg', icon: IoScaleOutline, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-900/30' },
             { label: 'IMC', value: stats.bmi, unit: '', icon: IoBodyOutline, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-900/30' },
             { label: 'TDEE', value: stats.tdee, unit: 'kcal', icon: IoFitnessOutline, color: 'text-rose-500', bg: 'bg-rose-50 dark:bg-rose-950/30' }
           ].map((stat) => {
@@ -247,18 +247,18 @@ export default function Profile() {
 
       {/* Macros Recommendation */}
       {stats && (
-        <Card className="border-none shadow-2xl shadow-slate-200/50 dark:shadow-black/20 overflow-hidden relative group">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl -mr-16 -mt-16" />
+        <Card className="border-slate-200/60 dark:border-slate-700/60 shadow-2xl shadow-slate-200/50 dark:shadow-black/20 overflow-hidden relative group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl -mr-16 -mt-16" />
           <Card.Header className="pt-8 px-8 border-none bg-transparent">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-widest">Plan Nutricional</h2>
-              <span className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-widest rounded-full">Automático</span>
+              <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[10px] font-black uppercase tracking-widest rounded-full">Automático</span>
             </div>
           </Card.Header>
           <Card.Body className="p-8 pt-6">
             <div className="grid grid-cols-3 gap-4 text-center">
               {[
-                { label: 'Proteína', value: stats.macros.protein, color: 'text-indigo-500', bg: 'bg-indigo-50/50 dark:bg-indigo-900/20' },
+                { label: 'Proteína', value: stats.macros.protein, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50/50 dark:bg-blue-900/20' },
                 { label: 'Carbos', value: stats.macros.carbs, color: 'text-emerald-500', bg: 'bg-emerald-50/50 dark:bg-emerald-900/20' },
                 { label: 'Grasas', value: stats.macros.fat, color: 'text-amber-500', bg: 'bg-amber-50/50 dark:bg-amber-900/20' }
               ].map((macro) => (
@@ -292,7 +292,7 @@ export default function Profile() {
               <span className="text-[10px] text-slate-500 dark:text-slate-300 font-bold uppercase tracking-widest">Información personal y metas</span>
             </div>
           </div>
-          <IoChevronForward className="w-6 h-6 text-slate-400 dark:text-slate-300 group-hover:text-indigo-500 dark:group-hover:text-indigo-300 group-hover:translate-x-1 transition-all" />
+          <IoChevronForward className="w-6 h-6 text-slate-400 dark:text-slate-300 group-hover:text-blue-500 dark:group-hover:text-blue-300 group-hover:translate-x-1 transition-all" />
         </button>
 
         <button

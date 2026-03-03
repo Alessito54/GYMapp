@@ -7,17 +7,18 @@ import {
   IoCafeOutline,
   IoFastFoodOutline,
   IoIceCreamOutline,
-  IoCreateOutline
+  IoCreateOutline,
+  IoCheckmarkCircle
 } from 'react-icons/io5';
 import { Card, Button, Input, Modal } from '@/components/ui';
 import { useNutritionStore, useUserStore, useAuthStore } from '@/stores';
 import { calculateNutrition } from '@/config/gemini';
 
 const MEAL_TYPES = [
-  { type: 'BREAKFAST', label: 'Desayuno', icon: IoCafeOutline, color: 'bg-yellow-100 text-yellow-600' },
-  { type: 'LUNCH', label: 'Almuerzo', icon: IoRestaurantOutline, color: 'bg-green-100 text-green-600' },
-  { type: 'DINNER', label: 'Cena', icon: IoFastFoodOutline, color: 'bg-blue-100 text-blue-600' },
-  { type: 'SNACK', label: 'Snack', icon: IoIceCreamOutline, color: 'bg-pink-100 text-pink-600' },
+  { type: 'BREAKFAST', label: 'Desayuno', icon: IoCafeOutline, color: 'bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300' },
+  { type: 'LUNCH', label: 'Almuerzo', icon: IoRestaurantOutline, color: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-300' },
+  { type: 'DINNER', label: 'Cena', icon: IoFastFoodOutline, color: 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300' },
+  { type: 'SNACK', label: 'Snack', icon: IoIceCreamOutline, color: 'bg-pink-100 dark:bg-pink-900/40 text-pink-600 dark:text-pink-300' },
 ];
 
 export default function Nutrition() {
@@ -85,7 +86,7 @@ export default function Nutrition() {
       </header>
 
       {/* Summary Card */}
-      <Card className="bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white border-none shadow-2xl shadow-emerald-500/20 overflow-hidden group">
+      <Card className="bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-600 text-white border-none shadow-2xl shadow-blue-500/30 overflow-hidden group">
         <Card.Body className="p-8 relative">
           <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl -mr-24 -mt-24 group-hover:scale-110 transition-transform duration-700" />
           <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -ml-16 -mb-16" />
@@ -115,14 +116,14 @@ export default function Nutrition() {
           {/* Macro summary */}
           <div className="grid grid-cols-3 gap-4 mt-10 relative z-10">
             {[
-              { label: 'Proteina', value: totals.protein, color: 'bg-indigo-500' },
-              { label: 'Carbos', value: totals.carbs, color: 'bg-amber-500' },
-              { label: 'Grasas', value: totals.fat, color: 'bg-rose-500' }
+              { label: 'Proteina', value: totals.protein, color: 'bg-sky-300' },
+              { label: 'Carbos', value: totals.carbs, color: 'bg-amber-300' },
+              { label: 'Grasas', value: totals.fat, color: 'bg-rose-300' }
             ].map((macro) => (
               <div key={macro.label} className="bg-white/10 backdrop-blur-md rounded-[1.5rem] p-4 border border-white/10 flex flex-col items-center">
-                <p className="text-lg font-black">{macro.value}g</p>
-                <p className="text-white/60 text-[9px] font-black uppercase tracking-widest mt-1">{macro.label}</p>
-                <div className={`h-1 w-6 ${macro.color} rounded-full mt-2`} />
+                <p className="text-lg font-black text-white">{macro.value}g</p>
+                <p className="text-white/80 text-[9px] font-black uppercase tracking-widest mt-1">{macro.label}</p>
+                <div className={`h-1.5 w-8 ${macro.color} rounded-full mt-2`} />
               </div>
             ))}
           </div>
@@ -147,14 +148,14 @@ export default function Nutrition() {
                       </div>
                       <div>
                         <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">{mealType.label}</h3>
-                        <p className="text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-widest mt-0.5">
+                        <p className="text-blue-600 dark:text-blue-400 text-[10px] font-black uppercase tracking-widest mt-0.5">
                           {mealCalories} kcal totales
                         </p>
                       </div>
                     </div>
                     <button
                       onClick={() => handleOpenModal(mealType.type)}
-                      className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all active:scale-95 shadow-sm"
+                      className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all active:scale-95 shadow-sm"
                     >
                       <IoAddCircle className="w-8 h-8" />
                     </button>
@@ -175,8 +176,8 @@ export default function Nutrition() {
                           </div>
                           <div className="flex items-center gap-4">
                             <div className="hidden sm:flex items-center gap-3 text-[9px] font-black uppercase tracking-widest">
-                              <span className="px-2 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-md">P:{food.protein}g</span>
-                              <span className="px-2 py-1 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-md">C:{food.carbs}g</span>
+                              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-200 rounded-md">P:{food.protein}g</span>
+                              <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-200 rounded-md">C:{food.carbs}g</span>
                             </div>
                             <button
                               onClick={() => removeMealItem(mealType.type, index, user?.uid)}
@@ -223,32 +224,32 @@ export default function Nutrition() {
           {aiResult && (
             <div className="animate-slide-up">
               <Card className="p-6 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/50 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl" />
+                <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl" />
 
                 <h4 className="text-xl font-black text-slate-900 dark:text-white mb-1">{aiResult.food}</h4>
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Porcion: {aiResult.portion}</p>
 
                 <div className="grid grid-cols-2 gap-3 mb-6">
                   {[
-                    { label: 'Calorias', value: aiResult.calories, color: 'text-emerald-500', unit: '' },
-                    { label: 'Proteina', value: aiResult.protein, color: 'text-indigo-500', unit: 'g' },
-                    { label: 'Carbos', value: aiResult.carbs, color: 'text-amber-500', unit: 'g' },
-                    { label: 'Grasas', value: aiResult.fat, color: 'text-rose-500', unit: 'g' }
+                    { label: 'Calorias', value: aiResult.calories, color: 'text-emerald-600 dark:text-emerald-400', unit: '' },
+                    { label: 'Proteina', value: aiResult.protein, color: 'text-blue-600 dark:text-blue-400', unit: 'g' },
+                    { label: 'Carbos', value: aiResult.carbs, color: 'text-amber-600 dark:text-amber-400', unit: 'g' },
+                    { label: 'Grasas', value: aiResult.fat, color: 'text-rose-600 dark:text-rose-400', unit: 'g' }
                   ].map((item) => (
-                    <div key={item.label} className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm text-center">
+                    <div key={item.label} className="bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-600 shadow-sm text-center">
                       <p className={`text-2xl font-black ${item.color}`}>{item.value}{item.unit}</p>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{item.label}</p>
+                      <p className="text-[9px] font-black text-slate-500 dark:text-slate-300 uppercase tracking-widest mt-1">{item.label}</p>
                     </div>
                   ))}
                 </div>
 
                 <div className="flex items-center justify-between mb-6 px-2">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Confianza IA</p>
+                  <p className="text-[10px] font-black text-slate-500 dark:text-slate-300 uppercase tracking-widest">Confianza IA</p>
                   <div className="flex items-center gap-2">
-                    <div className="h-1.5 w-20 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                      <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${aiResult.confidence * 100}%` }} />
+                    <div className="h-1.5 w-20 bg-slate-200 dark:bg-slate-600 rounded-full overflow-hidden">
+                      <div className="h-full bg-blue-500 rounded-full" style={{ width: `${aiResult.confidence * 100}%` }} />
                     </div>
-                    <span className="text-[10px] font-black text-indigo-500 tracking-tighter">{Math.round(aiResult.confidence * 100)}%</span>
+                    <span className="text-[10px] font-black text-blue-600 dark:text-blue-400 tracking-tighter">{Math.round(aiResult.confidence * 100)}%</span>
                   </div>
                 </div>
 

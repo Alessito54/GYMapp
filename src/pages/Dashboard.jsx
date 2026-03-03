@@ -45,13 +45,13 @@ export default function Dashboard() {
           </h1>
         </div>
         <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
-          <IoSparkles className="w-6 h-6 text-indigo-500 animate-pulse" />
+          <IoSparkles className="w-6 h-6 text-blue-500 animate-pulse" />
         </div>
       </header>
 
       {/* Today's Summary Card */}
-      <Card className="overflow-hidden border-none shadow-2xl shadow-indigo-500/10 active-scale-98 transition-transform cursor-default">
-        <div className="premium-gradient p-7 relative overflow-hidden">
+      <Card className="overflow-hidden border-none shadow-2xl shadow-blue-500/15 active-scale-98 transition-transform cursor-default">
+        <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-600 p-7 relative overflow-hidden">
           {/* Decorative background circle */}
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
 
@@ -86,20 +86,20 @@ export default function Dashboard() {
             <QuickStat
               label="Proteina"
               value={`${nutritionSummary.totals.protein}g`}
-              color="bg-indigo-50 dark:bg-indigo-500/10"
-              textColor="text-indigo-600 dark:text-indigo-400"
+              color="bg-blue-100 dark:bg-blue-900/30"
+              textColor="text-blue-700 dark:text-blue-300"
             />
             <QuickStat
               label="Carbos"
               value={`${nutritionSummary.totals.carbs}g`}
-              color="bg-emerald-50 dark:bg-emerald-500/10"
-              textColor="text-emerald-600 dark:text-emerald-400"
+              color="bg-emerald-100 dark:bg-emerald-900/30"
+              textColor="text-emerald-700 dark:text-emerald-300"
             />
             <QuickStat
               label="Grasas"
               value={`${nutritionSummary.totals.fat}g`}
-              color="bg-rose-50 dark:bg-rose-500/10"
-              textColor="text-rose-600 dark:text-rose-400"
+              color="bg-rose-100 dark:bg-rose-900/30"
+              textColor="text-rose-700 dark:text-rose-300"
             />
           </div>
         </Card.Body>
@@ -108,23 +108,23 @@ export default function Dashboard() {
       {/* Quick Actions Grid */}
       <div className="grid grid-cols-2 gap-5">
         <Link to="/water" className="active-scale-95 transition-all">
-          <Card className="p-5 border-none shadow-xl shadow-cyan-500/5 dark:shadow-cyan-900/10 h-full group">
+          <Card className="p-5 border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-blue-500/5 dark:shadow-blue-900/10 h-full group">
             <div className="flex items-center justify-between mb-5">
-              <div className="w-12 h-12 bg-cyan-50 dark:bg-cyan-900/30 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ring-1 ring-cyan-500/10">
-                <IoWaterOutline className="w-6 h-6 text-cyan-500" />
+              <div className="w-12 h-12 bg-sky-100 dark:bg-sky-900/40 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ring-1 ring-sky-500/20">
+                <IoWaterOutline className="w-6 h-6 text-sky-600 dark:text-sky-400" />
               </div>
-              <span className="text-xs font-black text-cyan-600 dark:text-cyan-400 bg-cyan-100 dark:bg-cyan-900/50 px-2 py-1 rounded-lg">
+              <span className="text-xs font-black text-sky-700 dark:text-sky-300 bg-sky-100 dark:bg-sky-900/50 px-2 py-1 rounded-lg">
                 {waterProgress.consumed}ml
               </span>
             </div>
             <ProgressBar
               progress={waterProgress.progress}
-              color="bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.4)]"
+              color="bg-sky-500 shadow-[0_0_10px_rgba(14,165,233,0.4)]"
               height="h-2"
             />
             <div className="mt-4">
               <p className="text-sm font-black text-slate-800 dark:text-white">Agua</p>
-              <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter mt-0.5">
+              <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tighter mt-0.5">
                 {Math.round(waterProgress.progress * 100)}% del dia
               </p>
             </div>
@@ -132,23 +132,23 @@ export default function Dashboard() {
         </Link>
 
         <Link to="/workouts" className="active-scale-95 transition-all">
-          <Card className="p-5 border-none shadow-xl shadow-indigo-500/5 dark:shadow-indigo-900/10 h-full group">
+          <Card className="p-5 border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-blue-500/5 dark:shadow-blue-900/10 h-full group">
             <div className="flex items-center justify-between mb-5">
-              <div className="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ring-1 ring-indigo-500/10">
-                <IoBarbell className="w-6 h-6 text-indigo-500" />
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/40 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ring-1 ring-blue-500/20">
+                <IoBarbell className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
-              <span className="text-xs font-black text-indigo-600 dark:text-indigo-400 bg-indigo-100 dark:bg-indigo-900/50 px-2 py-1 rounded-lg">
+              <span className="text-xs font-black text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/50 px-2 py-1 rounded-lg">
                 {recentSessions.length}/5
               </span>
             </div>
             <ProgressBar
               progress={recentSessions.length / 5}
-              color="bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.4)]"
+              color="bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.4)]"
               height="h-2"
             />
             <div className="mt-4">
               <p className="text-sm font-black text-slate-800 dark:text-white">Rutinas</p>
-              <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter mt-0.5">
+              <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tighter mt-0.5">
                 {recentSessions.length} completadas
               </p>
             </div>
@@ -157,10 +157,10 @@ export default function Dashboard() {
       </div>
 
       {/* Activity Calendar */}
-      <Card className="p-6 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/50">
+      <Card className="p-6 border-slate-200/60 dark:border-slate-700/60 bg-white dark:bg-slate-900/60">
         <header className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <IoCalendarOutline className="w-5 h-5 text-indigo-500" />
+            <IoCalendarOutline className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             <h2 className="text-lg font-black text-slate-800 dark:text-white tracking-tight">Calendario de Actividad</h2>
           </div>
         </header>
@@ -168,11 +168,11 @@ export default function Dashboard() {
       </Card>
 
       {/* Macros Detail */}
-      <Card className="border-none shadow-xl shadow-slate-200/50 dark:shadow-black/20">
+      <Card className="border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-slate-200/50 dark:shadow-black/20">
         <Card.Header className="pb-4 border-slate-100 dark:border-slate-700/50">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">Mis Macros</h2>
-            <Link to="/nutrition" className="p-2 bg-slate-50 dark:bg-slate-800 rounded-xl text-indigo-600 dark:text-indigo-400 transition-colors">
+            <Link to="/nutrition" className="p-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-blue-600 dark:text-blue-400 transition-colors">
               <IoChevronForward className="w-5 h-5" />
             </Link>
           </div>
@@ -182,7 +182,7 @@ export default function Dashboard() {
             label="Proteina"
             current={nutritionSummary.totals.protein}
             target={stats?.macros?.protein || 150}
-            color="bg-indigo-500"
+            color="bg-blue-500"
           />
           <MacroProgress
             label="Carbos"
@@ -203,30 +203,30 @@ export default function Dashboard() {
       <section className="space-y-4">
         <div className="flex items-center justify-between px-1">
           <h2 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">Historial Reciente</h2>
-          <Link to="/workouts" className="text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-widest hover:underline decoration-2 underline-offset-4">Ver Todos</Link>
+          <Link to="/workouts" className="text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-widest hover:underline decoration-2 underline-offset-4">Ver Todos</Link>
         </div>
 
         <div className="space-y-3">
           {recentSessions.length === 0 ? (
-            <p className="text-center py-6 text-slate-400 text-sm font-medium">Aún no hay entrenamientos registrados.</p>
+            <p className="text-center py-6 text-slate-400 dark:text-slate-500 text-sm font-medium">Aún no hay entrenamientos registrados.</p>
           ) : (
             recentSessions.map((session) => (
-              <Card key={session.id} className="p-4 border-none shadow-md shadow-slate-200/50 dark:shadow-black/20 active-scale-98 transition-all">
+              <Card key={session.id} className="p-4 border-slate-200/60 dark:border-slate-700/60 shadow-md shadow-slate-200/50 dark:shadow-black/20 active-scale-98 transition-all">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center border border-slate-100 dark:border-slate-700">
-                      <IoFitnessOutline className="w-6 h-6 text-indigo-500" />
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center border border-blue-100 dark:border-blue-800/50">
+                      <IoFitnessOutline className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div>
                       <p className="text-sm font-black text-slate-800 dark:text-white">{session.routineName}</p>
-                      <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter mt-0.5">
+                      <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tighter mt-0.5">
                         {new Date(session.startTime).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })} • {session.duration} min
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={() => deleteSession(session.id, userId)}
-                    className="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-900/10 text-rose-500 hover:bg-rose-100 transition-colors"
+                    className="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-900/20 text-rose-500 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/40 transition-colors"
                   >
                     <IoTrashOutline className="w-5 h-5" />
                   </button>
@@ -242,9 +242,9 @@ export default function Dashboard() {
 
 function QuickStat({ label, value, color, textColor }) {
   return (
-    <div className={`p-4 ${color} rounded-[2rem] text-center border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none`}>
+    <div className={`p-4 ${color} rounded-[2rem] text-center border border-slate-200/30 dark:border-white/5 shadow-sm dark:shadow-none`}>
       <p className={`text-xl font-black ${textColor} leading-tight`}>{value}</p>
-      <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-1">{label}</p>
+      <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-1">{label}</p>
     </div>
   );
 }
@@ -260,7 +260,7 @@ function MacroProgress({ label, current, target, color }) {
             {current}g <span className="text-xs text-slate-400 font-bold ml-1 tracking-normal">/ {target}g</span>
           </p>
         </div>
-        <span className="text-sm font-black text-indigo-500 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 rounded-lg">
+        <span className="text-sm font-black text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-lg">
           {Math.round(progress * 100)}%
         </span>
       </div>
@@ -349,7 +349,7 @@ function ActivityCalendar({ sessions }) {
             onClick={goToToday}
             className="group"
           >
-            <h3 className="text-lg font-black text-slate-800 dark:text-white tracking-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+            <h3 className="text-lg font-black text-slate-800 dark:text-white tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
               {months[currentMonth]} {currentYear}
             </h3>
             <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
@@ -386,7 +386,7 @@ function ActivityCalendar({ sessions }) {
             className={`aspect-square rounded-xl flex items-center justify-center relative group transition-all ${day === null
                 ? ''
                 : day.isToday
-                  ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30'
+                  ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30'
                   : day.hasWorkout
                     ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'
                     : day.isFuture
@@ -425,7 +425,7 @@ function ActivityCalendar({ sessions }) {
       {/* Legend */}
       <div className="flex items-center justify-center gap-6 pt-2">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-lg bg-indigo-500" />
+          <div className="w-4 h-4 rounded-lg bg-blue-500" />
           <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500">Hoy</span>
         </div>
         <div className="flex items-center gap-2">

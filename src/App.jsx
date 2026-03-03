@@ -11,7 +11,7 @@ function PrivateRoute({ children }) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
         <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-indigo-600 border-t-transparent" />
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent" />
           <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Cargando...</p>
         </div>
       </div>
@@ -70,7 +70,7 @@ function DataLoader({ children }) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
         <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-indigo-600 border-t-transparent" />
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent" />
           <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Sincronizando datos...</p>
         </div>
       </div>

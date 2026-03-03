@@ -53,7 +53,7 @@ function ExerciseLibraryModal({ isOpen, onClose, onSelect, library }) {
             placeholder="Buscar ejercicio o músculo..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all"
+            className="w-full pl-12 pr-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
           />
         </div>
 
@@ -68,10 +68,10 @@ function ExerciseLibraryModal({ isOpen, onClose, onSelect, library }) {
               <button
                 key={idx}
                 onClick={() => onSelect(exercise)}
-                className="w-full p-4 flex items-center justify-between bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-indigo-500/50 hover:bg-indigo-50/30 dark:hover:bg-indigo-500/5 transition-all group text-left"
+                className="w-full p-4 flex items-center justify-between bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-500/50 hover:bg-blue-50/30 dark:hover:bg-blue-500/5 transition-all group text-left"
               >
                 <div>
-                  <p className="font-black text-slate-800 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  <p className="font-black text-slate-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {exercise.name}
                   </p>
                   <div className="flex items-center gap-2 mt-1">
@@ -80,7 +80,7 @@ function ExerciseLibraryModal({ isOpen, onClose, onSelect, library }) {
                     </Badge>
                   </div>
                 </div>
-                <IoAddOutline className="w-6 h-6 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+                <IoAddOutline className="w-6 h-6 text-slate-300 dark:text-slate-600 group-hover:text-blue-500 transition-colors" />
               </button>
             ))
           )}
@@ -228,13 +228,13 @@ export default function Workouts() {
             </button>
             <div>
               <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">{selectedFolder.name}</h1>
-              <p className="text-indigo-600 dark:text-indigo-400 text-[10px] font-bold uppercase tracking-widest mt-0.5">
+              <p className="text-blue-600 dark:text-blue-400 text-[10px] font-bold uppercase tracking-widest mt-0.5">
                 {routines.length} {routines.length === 1 ? 'Rutina' : 'Rutinas'} • {selectedFolder.goal?.replace('_', ' ') || 'GENERAL'}
               </p>
             </div>
           </div>
           <div className="flex gap-2">
-            <button onClick={openEditFolder} className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-500 hover:text-indigo-600 transition-colors">
+            <button onClick={openEditFolder} className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors">
               <IoCreateOutline className="w-5 h-5" />
             </button>
             <button onClick={() => setIsDeleteFolderOpen(true)} className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-500 hover:text-rose-600 transition-colors">
@@ -244,12 +244,12 @@ export default function Workouts() {
         </header>
 
         {routines.length === 0 ? (
-          <Card className="text-center py-16 border-none shadow-xl shadow-slate-200/50 dark:shadow-black/20">
-            <div className="w-20 h-20 rounded-3xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center mx-auto mb-6 ring-4 ring-indigo-500/5">
-              <IoBarbell className="w-10 h-10 text-indigo-500" />
+          <Card className="text-center py-16 border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-slate-200/50 dark:shadow-black/20">
+            <div className="w-20 h-20 rounded-3xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mx-auto mb-6 ring-4 ring-blue-500/10">
+              <IoBarbell className="w-10 h-10 text-blue-600 dark:text-blue-400" />
             </div>
             <h3 className="text-lg font-black text-slate-900 dark:text-white mb-2">Sin rutinas todavia</h3>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mb-8 max-w-[200px] mx-auto">Comienza agregando una rutina manual o usa nuestra IA.</p>
+            <p className="text-slate-600 dark:text-slate-400 text-sm mb-8 max-w-[200px] mx-auto">Comienza agregando una rutina manual o usa nuestra IA.</p>
             <div className="flex flex-col gap-3 max-w-xs mx-auto px-6">
               <Button onClick={() => setIsAddRoutineOpen(true)} className="h-14">
                 <IoAddOutline className="w-5 h-5 mr-2" />
@@ -365,12 +365,12 @@ export default function Workouts() {
       </header>
 
       {folders.length === 0 ? (
-        <Card className="text-center py-20 border-none shadow-xl shadow-slate-200/50 dark:shadow-black/20">
-          <div className="w-24 h-24 rounded-[2.5rem] bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center mx-auto mb-8 ring-8 ring-indigo-500/5">
-            <IoFolderOutline className="w-12 h-12 text-indigo-500" />
+        <Card className="text-center py-20 border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-slate-200/50 dark:shadow-black/20">
+          <div className="w-24 h-24 rounded-[2.5rem] bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mx-auto mb-8 ring-8 ring-blue-500/10">
+            <IoFolderOutline className="w-12 h-12 text-blue-600 dark:text-blue-400" />
           </div>
           <h2 className="text-xl font-black text-slate-900 dark:text-white mb-2">Comienza tu viaje</h2>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mb-8 max-w-[220px] mx-auto">Crea carpetas para organizar tus diferentes metas de entrenamiento.</p>
+          <p className="text-slate-600 dark:text-slate-400 text-sm mb-8 max-w-[220px] mx-auto">Crea carpetas para organizar tus diferentes metas de entrenamiento.</p>
           <Button onClick={() => setIsAddFolderOpen(true)} className="px-10 h-14">
             <IoAddOutline className="w-6 h-6 mr-2" />
             Nueva Meta
@@ -384,26 +384,26 @@ export default function Workouts() {
             return (
               <Card
                 key={folder.id}
-                className="group relative overflow-hidden border-none shadow-xl shadow-slate-200/50 dark:shadow-black/20 active-scale-98 transition-all duration-300 cursor-pointer"
+                className="group relative overflow-hidden border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-slate-200/50 dark:shadow-black/20 active-scale-98 transition-all duration-300 cursor-pointer"
                 onClick={() => handleSelectFolder(folder)}
               >
                 <div className="absolute top-0 left-0 w-2 h-full" style={{ backgroundColor: folder.color }} />
                 <Card.Body className="p-6">
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-5 min-w-0">
-                      <div className="w-16 h-16 rounded-3xl flex items-center justify-center flex-shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-500" style={{ backgroundColor: `${folder.color}15` }}>
+                      <div className="w-16 h-16 rounded-3xl flex items-center justify-center flex-shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-500" style={{ backgroundColor: `${folder.color}20` }}>
                         <IoFolderOutline className="w-8 h-8" style={{ color: folder.color }} />
                       </div>
                       <div className="min-w-0">
                         <h3 className="text-xl font-black text-slate-900 dark:text-white truncate tracking-tight">{folder.name}</h3>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{routineCount} {routineCount === 1 ? 'Rutina' : 'Rutinas'}</span>
-                          <span className="w-1 h-1 rounded-full bg-slate-300" />
-                          <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500">{folder.goal?.replace('_', ' ') || 'GENERAL'}</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">{routineCount} {routineCount === 1 ? 'Rutina' : 'Rutinas'}</span>
+                          <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600" />
+                          <span className="text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">{folder.goal?.replace('_', ' ') || 'GENERAL'}</span>
                         </div>
                       </div>
                     </div>
-                    <IoChevronForward className="w-6 h-6 text-slate-300 group-hover:text-indigo-500 group-hover:translate-x-1 transition-all" />
+                    <IoChevronForward className="w-6 h-6 text-slate-400 dark:text-slate-500 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
                   </div>
                 </Card.Body>
               </Card>
@@ -412,12 +412,12 @@ export default function Workouts() {
 
           <button
             onClick={() => setIsAddFolderOpen(true)}
-            className="flex items-center justify-center gap-3 p-8 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-all duration-300 group"
+            className="flex items-center justify-center gap-3 p-8 rounded-3xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500/50 hover:bg-blue-50/50 dark:hover:bg-slate-900/50 transition-all duration-300 group"
           >
-            <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-indigo-500 group-hover:text-white transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all">
               <IoAddOutline className="w-7 h-7 text-slate-400 group-hover:text-white" />
             </div>
-            <span className="text-lg font-black text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300">Nueva Meta</span>
+            <span className="text-lg font-black text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300">Nueva Meta</span>
           </button>
         </div>
       )}
@@ -433,7 +433,7 @@ export default function Workouts() {
                 <button
                   key={color}
                   onClick={() => setNewFolderColor(color)}
-                  className={`w-12 h-12 rounded-2xl transition-all duration-300 shadow-sm ${newFolderColor === color ? 'scale-125 ring-4 ring-indigo-500 ring-offset-4 dark:ring-offset-slate-900' : 'hover:scale-110 opacity-70'}`}
+                  className={`w-12 h-12 rounded-2xl transition-all duration-300 shadow-sm ${newFolderColor === color ? 'scale-125 ring-4 ring-blue-500 ring-offset-4 dark:ring-offset-slate-900' : 'hover:scale-110 opacity-70'}`}
                   style={{ backgroundColor: color }}
                 />
               ))}
@@ -446,7 +446,7 @@ export default function Workouts() {
                 <button
                   key={opt.value}
                   onClick={() => setNewFolderGoal(opt.value)}
-                  className={`p-4 rounded-2xl text-xs font-black uppercase tracking-tighter border-2 transition-all ${newFolderGoal === opt.value ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'bg-slate-50 dark:bg-slate-800 border-transparent text-slate-500 dark:text-slate-400'}`}
+                  className={`p-4 rounded-2xl text-xs font-black uppercase tracking-tighter border-2 transition-all ${newFolderGoal === opt.value ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-600/25' : 'bg-slate-50 dark:bg-slate-800 border-transparent text-slate-600 dark:text-slate-400'}`}
                 >
                   {opt.label}
                 </button>
@@ -509,8 +509,8 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
       <header className="flex items-start justify-between mb-10 px-1">
         <div>
           <h1 className="text-3xl font-black tracking-tighter text-white">{session.routineName}</h1>
-          <p className="text-indigo-400 text-xs font-bold flex items-center gap-1.5 uppercase tracking-widest mt-1">
-            <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_8px_rgba(99,102,241,0.8)]" />
+          <p className="text-blue-400 text-xs font-bold flex items-center gap-1.5 uppercase tracking-widest mt-1">
+            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
             Entrenamiento en Curso
           </p>
         </div>
@@ -526,7 +526,7 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
             className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${idx < currentExerciseIndex
               ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.4)]'
               : idx === currentExerciseIndex
-                ? 'bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.4)]'
+                ? 'bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.4)]'
                 : 'bg-slate-800'
               }`}
           />
@@ -534,13 +534,13 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
       </div>
 
       <Card className="bg-slate-900 border-slate-800 shadow-2xl relative overflow-hidden active-scale-98 transition-transform">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-3xl -mr-16 -mt-16" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl -mr-16 -mt-16" />
 
         <Card.Body className="p-8">
           <div className="mb-8">
             <h2 className="text-4xl font-black text-white mb-2 leading-tight">{currentExercise.name}</h2>
             <div className="flex items-center gap-3">
-              <span className="px-3 py-1 bg-indigo-500/10 text-indigo-400 text-[10px] font-black uppercase tracking-widest rounded-full ring-1 ring-indigo-500/20">
+              <span className="px-3 py-1 bg-blue-500/10 text-blue-400 text-[10px] font-black uppercase tracking-widest rounded-full ring-1 ring-blue-500/20">
                 {currentExercise.sets.length} Series
               </span>
               <span className="px-3 py-1 bg-slate-800 text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-full">
@@ -561,7 +561,7 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
                   ) : (
                     <button
                       onClick={() => handleSetComplete(setIndex)}
-                      className="text-xs font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
+                      className="text-xs font-black uppercase tracking-widest text-blue-400 hover:text-blue-300 transition-colors"
                     >
                       Completar
                     </button>
@@ -576,13 +576,13 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
                         type="number"
                         value={set.weight}
                         onChange={(e) => handleSetUpdate(setIndex, 'weight', parseFloat(e.target.value) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 rounded-2xl px-4 py-3 text-white font-black text-center focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                        className="w-full bg-slate-900 border border-slate-700 rounded-2xl px-4 py-3 text-white font-black text-center focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                         disabled={set.unit === 'barra'}
                       />
                       <select
                         value={set.unit}
                         onChange={(e) => handleSetUpdate(setIndex, 'unit', e.target.value)}
-                        className="bg-slate-900 border border-slate-700 rounded-2xl px-2 py-3 text-indigo-400 font-bold text-center text-xs focus:ring-2 focus:ring-indigo-500 outline-none"
+                        className="bg-slate-900 border border-slate-700 rounded-2xl px-2 py-3 text-blue-400 font-bold text-center text-xs focus:ring-2 focus:ring-blue-500 outline-none"
                       >
                         <option value="kg">kg</option>
                         <option value="lbs">lbs</option>
@@ -597,7 +597,7 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
                       inputMode="decimal"
                       value={set.reps || currentExercise.reps}
                       onChange={(e) => handleSetUpdate(setIndex, 'reps', e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-2xl px-4 py-3 text-white font-black text-center focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-2xl px-4 py-3 text-white font-black text-center focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -655,8 +655,8 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
       {/* Rest Timer Overlay */}
       {showRestTimer && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-sm animate-fadeIn">
-          <div className="w-full max-w-sm bg-slate-900 border border-indigo-500/30 rounded-[3rem] p-10 text-center shadow-2xl shadow-indigo-500/20">
-            <IoTimeOutline className="w-16 h-16 text-indigo-500 mx-auto mb-6 animate-pulse" />
+          <div className="w-full max-w-sm bg-slate-900 border border-blue-500/30 rounded-[3rem] p-10 text-center shadow-2xl shadow-blue-500/20">
+            <IoTimeOutline className="w-16 h-16 text-blue-500 mx-auto mb-6 animate-pulse" />
             <h3 className="text-xl font-black text-slate-400 uppercase tracking-widest mb-2">Descansa</h3>
             <p className="text-7xl font-black text-white tracking-tighter mb-10">
               {Math.floor(restTimeLeft / 60)}:{(restTimeLeft % 60).toString().padStart(2, '0')}
@@ -671,7 +671,7 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
               </Button>
               <Button
                 onClick={() => setShowRestTimer(false)}
-                className="h-14 bg-indigo-600 hover:bg-indigo-500"
+                className="h-14 bg-blue-600 hover:bg-blue-500"
               >
                 Omitir
               </Button>
@@ -747,7 +747,7 @@ function AddRoutineModal({ isOpen, onClose, folderId, onSave }) {
               <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 px-1">Ejercicios</label>
               <button
                 onClick={() => setShowLibrary(true)}
-                className="text-xs font-bold text-indigo-500 flex items-center gap-1 hover:text-indigo-600 transition-colors"
+                className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
               >
                 <IoLibraryOutline className="w-4 h-4" />
                 Biblioteca
@@ -766,7 +766,7 @@ function AddRoutineModal({ isOpen, onClose, folderId, onSave }) {
                     <select
                       value={exercise.muscleGroup}
                       onChange={(e) => handleUpdateExercise(index, 'muscleGroup', e.target.value)}
-                      className="px-3 py-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm h-[56px] focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all"
+                      className="px-3 py-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm h-[56px] focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
                     >
                       {MUSCLE_GROUPS.map(mg => <option key={mg} value={mg}>{mg}</option>)}
                     </select>
@@ -786,7 +786,7 @@ function AddRoutineModal({ isOpen, onClose, folderId, onSave }) {
                       <select
                         value={exercise.unit || 'kg'}
                         onChange={(e) => handleUpdateExercise(index, 'unit', e.target.value)}
-                        className="w-full px-2 py-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm h-[56px] focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all"
+                        className="w-full px-2 py-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm h-[56px] focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
                       >
                         <option value="kg">kg</option>
                         <option value="lbs">lbs</option>
@@ -876,7 +876,7 @@ function EditRoutineModal({ isOpen, onClose, routine, onSave }) {
               <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 px-1">Ejercicios</label>
               <button
                 onClick={() => setShowLibrary(true)}
-                className="text-xs font-bold text-indigo-500 flex items-center gap-1 hover:text-indigo-600 transition-colors"
+                className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
               >
                 <IoLibraryOutline className="w-4 h-4" />
                 Biblioteca
@@ -895,7 +895,7 @@ function EditRoutineModal({ isOpen, onClose, routine, onSave }) {
                     <select
                       value={exercise.muscleGroup || 'Pecho'}
                       onChange={(e) => handleUpdateExercise(index, 'muscleGroup', e.target.value)}
-                      className="px-3 py-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm h-[56px] focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all"
+                      className="px-3 py-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm h-[56px] focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
                     >
                       {MUSCLE_GROUPS.map(mg => <option key={mg} value={mg}>{mg}</option>)}
                     </select>
@@ -915,7 +915,7 @@ function EditRoutineModal({ isOpen, onClose, routine, onSave }) {
                       <select
                         value={exercise.unit || 'kg'}
                         onChange={(e) => handleUpdateExercise(index, 'unit', e.target.value)}
-                        className="w-full px-2 py-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm h-[56px] focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all"
+                        className="w-full px-2 py-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm h-[56px] focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
                       >
                         <option value="kg">kg</option>
                         <option value="lbs">lbs</option>
@@ -1005,13 +1005,13 @@ function AIGenerateModal({ isOpen, onClose, folderId, folderGoal, onSave, userId
     return (
       <Modal isOpen={isOpen} onClose={handleClose} title="Rutina generada" size="lg">
         <div className="space-y-4">
-          <div className="p-4 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl">
+          <div className="p-4 bg-gradient-to-br from-blue-50 to-sky-50 dark:from-blue-900/30 dark:to-sky-900/20 rounded-2xl">
             <div className="flex items-center gap-2 mb-2">
-              <IoSparkles className="w-5 h-5 text-purple-600" />
-              <h3 className="font-bold text-gray-900">{aiRoutine.name}</h3>
+              <IoSparkles className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <h3 className="font-bold text-gray-900 dark:text-white">{aiRoutine.name}</h3>
             </div>
-            <p className="text-sm text-gray-600">{aiRoutine.description}</p>
-            <p className="text-xs text-gray-500 mt-2">Duracion estimada: {aiRoutine.estimatedDuration} min</p>
+            <p className="text-sm text-gray-600 dark:text-gray-300">{aiRoutine.description}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Duracion estimada: {aiRoutine.estimatedDuration} min</p>
           </div>
           <div className="space-y-2 max-h-60 overflow-y-auto">
             {aiRoutine.exercises.map((ex, idx) => (
@@ -1093,17 +1093,17 @@ function RoutineCard({ routine, onEdit, onDelete, onStart }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <Card className="p-4 border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden group">
+    <Card className="p-4 border-slate-200/60 dark:border-slate-700/60 shadow-sm overflow-hidden group">
       <Card.Body className="p-0">
         <div className="p-6">
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0 flex-1">
-              <h3 className="text-xl font-black text-slate-900 dark:text-white truncate tracking-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{routine.name}</h3>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1 flex items-center gap-2">
+              <h3 className="text-xl font-black text-slate-900 dark:text-white truncate tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{routine.name}</h3>
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-2">
                 {routine.exercises?.length || 0} EJERCICIOS
                 {routine.lastPerformed && (
                   <>
-                    <span className="w-1 h-1 rounded-full bg-slate-200" />
+                    <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600" />
                     <span>ULTIMO: {new Date(routine.lastPerformed).toLocaleDateString('es-ES')}</span>
                   </>
                 )}
@@ -1112,13 +1112,13 @@ function RoutineCard({ routine, onEdit, onDelete, onStart }) {
             <div className="flex items-center gap-2">
               <button
                 onClick={(e) => { e.stopPropagation(); onEdit(); }}
-                className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-indigo-600 transition-all active:scale-95"
+                className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-blue-600 transition-all active:scale-95"
               >
                 <IoCreateOutline className="w-5 h-5" />
               </button>
               <button
                 onClick={onStart}
-                className="w-12 h-12 rounded-2xl premium-gradient flex items-center justify-center text-white shadow-lg shadow-indigo-500/30 active:scale-95 transition-all"
+                className="w-12 h-12 rounded-2xl premium-gradient flex items-center justify-center text-white shadow-lg shadow-blue-500/30 active:scale-95 transition-all"
               >
                 <IoPlayCircle className="w-7 h-7" />
               </button>
@@ -1127,7 +1127,7 @@ function RoutineCard({ routine, onEdit, onDelete, onStart }) {
 
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="w-full mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-indigo-500 transition-colors"
+            className="w-full mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-blue-500 transition-colors"
           >
             <span>{isExpanded ? 'Ocultar ejercicios' : 'Ver ejercicios'}</span>
             <IoChevronForward className={`w-4 h-4 transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`} />
@@ -1139,7 +1139,7 @@ function RoutineCard({ routine, onEdit, onDelete, onStart }) {
             {routine.exercises?.map((ex, idx) => (
               <div key={idx} className="flex items-center justify-between group/ex">
                 <div className="flex items-center gap-4">
-                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-500/50 group-hover/ex:bg-indigo-500 transition-colors" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500/50 group-hover/ex:bg-blue-500 transition-colors" />
                   <div>
                     <p className="text-sm font-black text-slate-800 dark:text-slate-200">{ex.name}</p>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{ex.sets} series x {ex.reps} reps</p>
@@ -1148,7 +1148,7 @@ function RoutineCard({ routine, onEdit, onDelete, onStart }) {
                 {/* Individual start button for exercise */}
                 <button
                   onClick={() => onStart()} // For now just starts the routine, but shows intent
-                  className="px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 opacity-0 group-hover/ex:opacity-100 transition-all hover:bg-indigo-100"
+                  className="px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 opacity-0 group-hover/ex:opacity-100 transition-all hover:bg-blue-100 dark:hover:bg-blue-900/50"
                 >
                   Entrenar
                 </button>
