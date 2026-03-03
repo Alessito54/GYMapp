@@ -10,7 +10,7 @@ import {
   IoCreateOutline
 } from 'react-icons/io5';
 import { Card, Button, Input, Modal } from '@/components/ui';
-import { useNutritionStore, useUserStore } from '@/stores';
+import { useNutritionStore, useUserStore, useAuthStore } from '@/stores';
 import { calculateNutrition } from '@/config/gemini';
 
 const MEAL_TYPES = [
@@ -28,6 +28,7 @@ export default function Nutrition() {
   const [aiResult, setAiResult] = useState(null);
 
   const { getTodaySummary, addMeal, removeMealItem, getMealTypeLabel } = useNutritionStore();
+  const { user } = useAuthStore();
   const getStats = useUserStore((state) => state.getStats);
   const stats = getStats();
   const { meals, totals } = getTodaySummary();
@@ -68,7 +69,7 @@ export default function Nutrition() {
       carbs: aiResult.carbs,
       fat: aiResult.fat,
       aiGenerated: true,
-    }]);
+    }], user?.uid);
 
     setIsModalOpen(false);
     setAiResult(null);
@@ -76,137 +77,135 @@ export default function Nutrition() {
   };
 
   return (
-    <div className="px-4 py-6 space-y-6 animate-fadeIn">
+    <div className="px-5 py-8 space-y-8 animate-fadeIn">
       {/* Header */}
-      <header className="pt-2">
-        <div className="flex items-center gap-2">
-          <IoRestaurantOutline className="w-6 h-6 text-green-600" />
-          <h1 className="text-2xl font-bold text-gray-900">Nutricion</h1>
-        </div>
-        <p className="text-gray-500 text-sm mt-0.5">Registra tus comidas del dia</p>
+      <header className="px-1">
+        <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Mi <span className="text-gradient">Nutricion</span></h1>
+        <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Registra tu combustible diario</p>
       </header>
 
       {/* Summary Card */}
-      <Card className="bg-gradient-to-br from-green-500 via-green-600 to-emerald-700 text-white shadow-lg overflow-hidden">
-        <Card.Body className="relative">
-          <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-xl" />
-          <div className="absolute -left-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-xl" />
+      <Card className="bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white border-none shadow-2xl shadow-emerald-500/20 overflow-hidden group">
+        <Card.Body className="p-8 relative">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl -mr-24 -mt-24 group-hover:scale-110 transition-transform duration-700" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -ml-16 -mb-16" />
 
-          <div className="text-center relative">
-            <p className="text-white/80 text-sm mb-1">Calorias restantes</p>
-            <p className="text-5xl font-bold mb-2">
-              {caloriesRemaining > 0 ? caloriesRemaining : 0}
-            </p>
-            <p className="text-white/60 text-sm">
-              {totals.calories} consumidas de {targetCalories}
-            </p>
+          <div className="text-center relative z-10">
+            <p className="text-white/70 text-[10px] font-black uppercase tracking-[0.2em] mb-3">Calorias restantes</p>
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <p className="text-6xl font-black tracking-tighter">
+                {caloriesRemaining > 0 ? caloriesRemaining : 0}
+              </p>
+              <span className="text-lg font-bold text-white/60 mt-4">kcal</span>
+            </div>
 
-            {/* Progress bar */}
-            <div className="mt-4 h-2 bg-white/20 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-white/90 rounded-full transition-all duration-500"
-                style={{ width: `${Math.min((totals.calories / targetCalories) * 100, 100)}%` }}
-              />
+            <div className="flex items-center justify-center gap-4 mt-2">
+              <div className="h-1.5 w-32 bg-white/20 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-white rounded-full transition-all duration-1000"
+                  style={{ width: `${Math.min((totals.calories / targetCalories) * 100, 100)}%` }}
+                />
+              </div>
+              <p className="text-[10px] font-black text-white/80 uppercase tracking-widest">
+                {Math.round((totals.calories / targetCalories) * 100)}% META
+              </p>
             </div>
           </div>
 
           {/* Macro summary */}
-          <div className="grid grid-cols-3 gap-3 mt-6 pt-4 border-t border-white/20 relative">
-            <div className="text-center p-2 bg-white/10 rounded-xl">
-              <p className="text-xl font-bold">{totals.protein}g</p>
-              <p className="text-white/70 text-xs">Proteina</p>
-            </div>
-            <div className="text-center p-2 bg-white/10 rounded-xl">
-              <p className="text-xl font-bold">{totals.carbs}g</p>
-              <p className="text-white/70 text-xs">Carbos</p>
-            </div>
-            <div className="text-center p-2 bg-white/10 rounded-xl">
-              <p className="text-xl font-bold">{totals.fat}g</p>
-              <p className="text-white/70 text-xs">Grasas</p>
-            </div>
+          <div className="grid grid-cols-3 gap-4 mt-10 relative z-10">
+            {[
+              { label: 'Proteina', value: totals.protein, color: 'bg-indigo-500' },
+              { label: 'Carbos', value: totals.carbs, color: 'bg-amber-500' },
+              { label: 'Grasas', value: totals.fat, color: 'bg-rose-500' }
+            ].map((macro) => (
+              <div key={macro.label} className="bg-white/10 backdrop-blur-md rounded-[1.5rem] p-4 border border-white/10 flex flex-col items-center">
+                <p className="text-lg font-black">{macro.value}g</p>
+                <p className="text-white/60 text-[9px] font-black uppercase tracking-widest mt-1">{macro.label}</p>
+                <div className={`h-1 w-6 ${macro.color} rounded-full mt-2`} />
+              </div>
+            ))}
           </div>
         </Card.Body>
       </Card>
 
       {/* Meals */}
-      <div className="space-y-4">
-        {MEAL_TYPES.map((mealType) => {
-          const MealIcon = mealType.icon;
-          return (
-            <Card key={mealType.type} className="shadow-sm">
-              <Card.Header className="pb-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl ${mealType.color} flex items-center justify-center`}>
-                      <MealIcon className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">{mealType.label}</h3>
-                      <p className="text-xs text-gray-500">
-                        {meals[mealType.type].reduce((sum, f) => sum + f.calories, 0)} kcal
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleOpenModal(mealType.type)}
-                    className="w-10 h-10 active-scale-95"
-                  >
-                    <IoAddCircle className="w-7 h-7 text-blue-600" />
-                  </Button>
-                </div>
-              </Card.Header>
+      <div className="space-y-6">
+        <h2 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] px-1">Comidas de Hoy</h2>
+        <div className="space-y-4">
+          {MEAL_TYPES.map((mealType) => {
+            const MealIcon = mealType.icon;
+            const mealCalories = meals[mealType.type].reduce((sum, f) => sum + f.calories, 0);
 
-              {meals[mealType.type].length > 0 && (
-                <Card.Body className="pt-0 p-3">
-                  <div className="space-y-2">
-                    {meals[mealType.type].map((food, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
-                      >
-                        <div className="flex-1 min-w-0 mr-3">
-                          <p className="font-medium text-gray-900 text-sm truncate">{food.name}</p>
-                          <p className="text-xs text-gray-500 mt-0.5">
-                            {food.portion} • {food.calories} kcal
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-3 flex-shrink-0">
-                          <div className="text-right text-[11px] text-gray-500 hidden sm:block">
-                            <span className="text-blue-600 font-medium">P:{food.protein}g</span>
-                            <span className="mx-1 text-gray-300">|</span>
-                            <span className="text-green-600 font-medium">C:{food.carbs}g</span>
-                            <span className="mx-1 text-gray-300">|</span>
-                            <span className="text-amber-600 font-medium">G:{food.fat}g</span>
-                          </div>
-                          <button
-                            onClick={() => removeMealItem(mealType.type, index)}
-                            className="p-2 text-red-500 hover:bg-red-100 active:bg-red-200 rounded-xl transition-colors"
-                          >
-                            <IoTrashOutline className="w-4 h-4" />
-                          </button>
-                        </div>
+            return (
+              <Card key={mealType.type} className="shadow-sm border-slate-100 group">
+                <div className="p-5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-14 h-14 rounded-2xl ${mealType.color.replace('100', '50').replace('600', '500')} flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-500`}>
+                        <MealIcon className="w-7 h-7" />
                       </div>
-                    ))}
+                      <div>
+                        <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">{mealType.label}</h3>
+                        <p className="text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-widest mt-0.5">
+                          {mealCalories} kcal totales
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleOpenModal(mealType.type)}
+                      className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all active:scale-95 shadow-sm"
+                    >
+                      <IoAddCircle className="w-8 h-8" />
+                    </button>
                   </div>
-                </Card.Body>
-              )}
-            </Card>
-          );
-        })}
+
+                  {meals[mealType.type].length > 0 && (
+                    <div className="mt-6 space-y-3 pt-4 border-t border-slate-50 dark:border-slate-800">
+                      {meals[mealType.type].map((food, index) => (
+                        <div
+                          key={index}
+                          className="group/item flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-all"
+                        >
+                          <div className="flex-1 min-w-0 mr-4">
+                            <p className="font-black text-slate-800 dark:text-slate-200 text-sm truncate">{food.name}</p>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                              {food.portion} • <span className="text-emerald-500">{food.calories} kcal</span>
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <div className="hidden sm:flex items-center gap-3 text-[9px] font-black uppercase tracking-widest">
+                              <span className="px-2 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-md">P:{food.protein}g</span>
+                              <span className="px-2 py-1 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-md">C:{food.carbs}g</span>
+                            </div>
+                            <button
+                              onClick={() => removeMealItem(mealType.type, index, user?.uid)}
+                              className="p-2.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-xl transition-all"
+                            >
+                              <IoTrashOutline className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Card>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Add Food Modal */}
+      {/* Add Food Modal internals are updated because Modal.jsx was updated, but we can polish the inner content */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title={`Agregar a ${getMealTypeLabel(selectedMealType)}`}
       >
-        <div className="space-y-5">
+        <div className="space-y-6">
           <Input
-            label="Describe tu comida"
-            placeholder="Ej: 2 huevos revueltos con tostada integral"
+            label="¿Qué has comido?"
+            placeholder="Ej: 2 huevos revueltos con aguacate"
             value={foodInput}
             onChange={(e) => setFoodInput(e.target.value)}
           />
@@ -215,50 +214,54 @@ export default function Nutrition() {
             onClick={handleAnalyzeFood}
             loading={isLoading}
             disabled={!foodInput.trim()}
-            className="w-full"
+            className="w-full h-14 premium-gradient"
           >
             <IoSparkles className="w-5 h-5 mr-2" />
-            Analizar con IA
+            Analizar con IA Fit
           </Button>
 
           {aiResult && (
-            <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 shadow-sm">
-              <Card.Body>
-                <h4 className="font-semibold text-gray-900 mb-2">{aiResult.food}</h4>
-                <p className="text-sm text-gray-600 mb-3">Porcion: {aiResult.portion}</p>
+            <div className="animate-slide-up">
+              <Card className="p-6 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/50 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl" />
 
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div className="bg-white p-3 rounded-xl text-center shadow-sm">
-                    <p className="font-bold text-xl text-gray-900">{aiResult.calories}</p>
-                    <p className="text-gray-500 text-xs">Calorias</p>
-                  </div>
-                  <div className="bg-white p-3 rounded-xl text-center shadow-sm">
-                    <p className="font-bold text-xl text-blue-600">{aiResult.protein}g</p>
-                    <p className="text-gray-500 text-xs">Proteina</p>
-                  </div>
-                  <div className="bg-white p-3 rounded-xl text-center shadow-sm">
-                    <p className="font-bold text-xl text-green-600">{aiResult.carbs}g</p>
-                    <p className="text-gray-500 text-xs">Carbos</p>
-                  </div>
-                  <div className="bg-white p-3 rounded-xl text-center shadow-sm">
-                    <p className="font-bold text-xl text-amber-600">{aiResult.fat}g</p>
-                    <p className="text-gray-500 text-xs">Grasas</p>
-                  </div>
+                <h4 className="text-xl font-black text-slate-900 dark:text-white mb-1">{aiResult.food}</h4>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Porcion: {aiResult.portion}</p>
+
+                <div className="grid grid-cols-2 gap-3 mb-6">
+                  {[
+                    { label: 'Calorias', value: aiResult.calories, color: 'text-emerald-500', unit: '' },
+                    { label: 'Proteina', value: aiResult.protein, color: 'text-indigo-500', unit: 'g' },
+                    { label: 'Carbos', value: aiResult.carbs, color: 'text-amber-500', unit: 'g' },
+                    { label: 'Grasas', value: aiResult.fat, color: 'text-rose-500', unit: 'g' }
+                  ].map((item) => (
+                    <div key={item.label} className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm text-center">
+                      <p className={`text-2xl font-black ${item.color}`}>{item.value}{item.unit}</p>
+                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{item.label}</p>
+                    </div>
+                  ))}
                 </div>
 
-                <div className="mt-3 text-xs text-gray-500 text-center">
-                  Confianza: <span className="font-medium text-blue-600">{Math.round(aiResult.confidence * 100)}%</span>
+                <div className="flex items-center justify-between mb-6 px-2">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Confianza IA</p>
+                  <div className="flex items-center gap-2">
+                    <div className="h-1.5 w-20 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                      <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${aiResult.confidence * 100}%` }} />
+                    </div>
+                    <span className="text-[10px] font-black text-indigo-500 tracking-tighter">{Math.round(aiResult.confidence * 100)}%</span>
+                  </div>
                 </div>
 
                 <Button
                   onClick={handleAddFood}
-                  className="w-full mt-4"
-                  variant="success"
+                  className="w-full h-14"
+                  variant="primary"
                 >
-                  Agregar comida
+                  <IoCheckmarkCircle className="w-5 h-5 mr-2" />
+                  Confirmar y Agregar
                 </Button>
-              </Card.Body>
-            </Card>
+              </Card>
+            </div>
           )}
         </div>
       </Modal>

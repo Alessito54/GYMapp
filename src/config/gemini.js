@@ -5,6 +5,22 @@ const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_KEY;
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
+/**
+ * Clean AI response to ensure it's valid JSON
+ * @param {string} text - Raw response text
+ * @returns {Object} Parsed JSON
+ */
+function parseAIResponse(text) {
+  try {
+    // Remove markdown code blocks if present
+    const cleanText = text.replace(/```json\n?|```/g, '').trim();
+    return JSON.parse(cleanText);
+  } catch (e) {
+    console.error('Failed to parse AI response:', text);
+    throw new Error('Formato de respuesta invalido');
+  }
+}
+
 // Model configurations
 export const MODELS = {
   // Fast responses, good for simple tasks
@@ -29,7 +45,7 @@ export function getModel(modelName = MODELS.FLASH) {
  */
 export async function calculateNutrition(foodDescription) {
   const model = getModel(MODELS.FLASH);
-  
+
   const prompt = `Eres un nutricionista experto. Analiza el siguiente alimento y proporciona informacion nutricional estimada.
 
 Alimento: "${foodDescription}"
@@ -49,7 +65,7 @@ Responde UNICAMENTE con un JSON valido (sin markdown, sin explicaciones):
   try {
     const result = await model.generateContent(prompt);
     const text = result.response.text();
-    return JSON.parse(text);
+    return parseAIResponse(text);
   } catch (error) {
     console.error('Error calculating nutrition:', error);
     throw new Error('No se pudo calcular la informacion nutricional');
@@ -63,9 +79,9 @@ Responde UNICAMENTE con un JSON valido (sin markdown, sin explicaciones):
  */
 export async function getWorkoutRecommendation(params) {
   const model = getModel(MODELS.PRO);
-  
+
   const { goal, experience, equipment, duration, focusMuscles } = params;
-  
+
   const prompt = `Eres un entrenador personal experto. Genera una rutina de entrenamiento.
 
 Parametros:
@@ -96,7 +112,7 @@ Responde UNICAMENTE con un JSON valido (sin markdown):
   try {
     const result = await model.generateContent(prompt);
     const text = result.response.text();
-    return JSON.parse(text);
+    return parseAIResponse(text);
   } catch (error) {
     console.error('Error generating workout:', error);
     throw new Error('No se pudo generar la rutina');

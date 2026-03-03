@@ -49,58 +49,56 @@ export default function Layout() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen min-h-dvh bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <div className="flex flex-col min-h-screen min-h-dvh bg-slate-50 dark:bg-slate-950 transition-colors duration-500">
       {/* Top Bar */}
-      <header className="sticky top-0 z-40 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border-b border-gray-200/60 dark:border-gray-700/60 shadow-sm">
-        <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <header className="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-slate-200/50 dark:border-slate-800/50">
+        <div className="max-w-lg mx-auto px-5 py-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-500/30">
-              <IoFitnessOutline className="w-5 h-5 text-white" />
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+              <IoFitnessOutline className="w-6 h-6 text-white" />
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wide text-blue-600 dark:text-blue-400 font-semibold">FitTrack</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 font-medium line-clamp-1">{user?.email || 'Atleta'}</p>
+              <p className="text-[10px] uppercase tracking-[0.15em] text-indigo-600 dark:text-indigo-400 font-bold">FitTrack Pro</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium line-clamp-1">{user?.email || 'Atleta'}</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={toggleDarkMode}
-              className="inline-flex items-center justify-center w-10 h-10 rounded-xl text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 active:scale-[0.98] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              className="inline-flex items-center justify-center w-11 h-11 rounded-2xl text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all outline-none"
               aria-label="Toggle dark mode"
             >
               {darkMode ? <IoSunnyOutline className="w-5 h-5" /> : <IoMoonOutline className="w-5 h-5" />}
             </button>
             <button
               onClick={() => setShowLogoutModal(true)}
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 active:scale-[0.98] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              className="inline-flex items-center justify-center w-11 h-11 rounded-2xl text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-900/20 hover:text-rose-600 transition-all active:scale-95"
             >
               <IoLogOutOutline className="w-5 h-5" />
-              <span className="hidden sm:inline">Salir</span>
             </button>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 pb-24 overflow-y-auto overflow-x-hidden">
+      <main className="flex-1 pb-28 overflow-y-auto">
         <div className="max-w-lg mx-auto">
           <Outlet />
         </div>
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-t border-gray-200/50 dark:border-gray-700/50 px-2 pt-2 safe-area-bottom z-50">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 px-4 pt-3 pb-safe z-50">
         <div className="flex justify-around items-center max-w-lg mx-auto">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
               className={({ isActive }) =>
-                `flex flex-col items-center py-2 px-4 rounded-2xl transition-all duration-200 ${
-                  isActive
-                    ? 'text-blue-600 dark:text-blue-400'
-                    : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 active-scale-95'
+                `flex flex-col items-center py-1 transition-all duration-300 ${isActive
+                  ? 'text-indigo-600 dark:text-indigo-400'
+                  : 'text-slate-400 dark:text-slate-600 hover:text-slate-600 dark:hover:text-slate-400'
                 }`
               }
             >
@@ -108,10 +106,13 @@ export default function Layout() {
                 const IconComponent = isActive ? item.activeIcon : item.icon;
                 return (
                   <>
-                    <div className={`p-1 rounded-xl transition-all ${isActive ? 'bg-blue-100 dark:bg-blue-900/50' : ''}`}>
-                      <IconComponent className="w-6 h-6" />
+                    <div className={`relative p-2 rounded-2xl transition-all duration-300 ${isActive ? 'bg-indigo-50 dark:bg-indigo-900/30 ring-1 ring-indigo-500/20' : ''}`}>
+                      <IconComponent className={`w-6 h-6 transition-transform duration-300 ${isActive ? 'scale-110' : 'scale-100'}`} />
+                      {isActive && (
+                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-indigo-500 dark:bg-indigo-400 rounded-full shadow-[0_0_8px_rgba(99,102,241,0.6)]" />
+                      )}
                     </div>
-                    <span className={`text-[11px] mt-1 font-medium ${isActive ? 'text-blue-600 dark:text-blue-400' : ''}`}>
+                    <span className={`text-[10px] mt-1.5 font-bold tracking-tight transition-all ${isActive ? 'opacity-100 scale-100' : 'opacity-80 scale-95'}`}>
                       {item.label}
                     </span>
                   </>

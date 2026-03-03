@@ -1,14 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #3B82F6;
-  --color-primary-dark: #2563EB;
-  --color-secondary: #10B981;
-  --color-accent: #F59E0B;
-  --color-danger: #EF4444;
-  --color-dark: #1F2937;
-  --color-gray: #6B7280;
-  --color-light: #F3F4F6;
+  --color-primary: #4F46E5;
+  /* Indigo 600 - sharper in light mode */
+  --color-primary-dark: #4338CA;
+  --color-secondary: #059669;
+  --color-accent: #E11D48;
+  --color-danger: #DC2626;
+  --color-dark-bg: #020617;
+  --color-dark-card: #0f172a;
+  --color-gray: #64748b;
+  --color-light-bg: #FFFFFF;
+  /* Pure white for maximum clarity */
+  --color-light-card: #f9fafb;
+  /* Slate 50 for subtle contrast */
+  --color-light-border: #e2e8f0;
+  /* Slate 200 */
 }
 
 @layer base {
@@ -25,21 +32,20 @@
   }
 
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #F9FAFB;
-    color: #1F2937;
+    font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--color-light-bg);
+    color: #0f172a;
     min-height: 100vh;
     min-height: 100dvh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   /* Dark mode styles */
-  .dark body,
-  body.dark {
-    background-color: #111827;
-    color: #F9FAFB;
+  .dark body {
+    background-color: var(--color-dark-bg);
+    color: #f8fafc;
   }
 
   .dark {
@@ -82,21 +88,28 @@
   }
 
   .dark ::-webkit-scrollbar-thumb {
-    background: #4B5563;
+    background: #334155;
   }
 
   .dark ::-webkit-scrollbar-thumb:hover {
-    background: #6B7280;
+    background: #475569;
   }
 
   /* Touch friendly */
-  button, a, input, select, textarea {
+  button,
+  a,
+  input,
+  select,
+  textarea {
     touch-action: manipulation;
   }
 
   /* Prevent zoom on input focus (iOS) */
   @media screen and (max-width: 768px) {
-    input, select, textarea {
+
+    input,
+    select,
+    textarea {
       font-size: 16px !important;
     }
   }
@@ -115,9 +128,10 @@
 /* Animations */
 @keyframes slide-up {
   from {
-    transform: translateY(100%);
+    transform: translateY(20px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -129,6 +143,7 @@
     transform: scale(0.95);
     opacity: 0;
   }
+
   to {
     transform: scale(1);
     opacity: 1;
@@ -139,41 +154,45 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
   }
+
   50% {
-    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+    box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
   }
 }
 
 .animate-slide-up {
-  animation: slide-up 0.3s ease-out;
+  animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animate-scale-in {
-  animation: scale-in 0.2s ease-out;
+  animation: scale-in 0.3s ease-out;
 }
 
 .animate-fade-in {
-  animation: fade-in 0.2s ease-out;
+  animation: fade-in 0.3s ease-out;
 }
 
 .animate-fadeIn {
-  animation: fade-in 0.3s ease-out;
+  animation: fade-in 0.4s ease-out;
 }
 
 .animate-pulse-glow {
   animation: pulse-glow 2s infinite;
 }
 
-/* Scale utilities */
+/* Interactive Utilities */
 .active-scale-98:active {
   transform: scale(0.98);
 }
@@ -182,13 +201,40 @@
   transform: scale(0.95);
 }
 
-/* Glass effect */
+/* Glass & Premium Effects */
 .glass {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .dark .glass {
-  background: rgba(31, 41, 55, 0.8);
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.premium-shadow {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.premium-gradient {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #4f46e5 100%);
+}
+
+.dark .premium-card {
+  background: var(--color-dark-card);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Custom Typography */
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, var(--color-primary), #818cf8);
 }

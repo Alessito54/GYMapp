@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '@/config/firebase';
 
 export const useUserStore = create(
   persist(
@@ -12,16 +14,23 @@ export const useUserStore = create(
         notifications: { push: true, email: false },
       },
 
-      setDarkMode: (enabled) => {
+      setDarkMode: async (enabled, userId) => {
         set({ darkMode: enabled });
         if (enabled) {
           document.documentElement.classList.add('dark');
         } else {
           document.documentElement.classList.remove('dark');
         }
+        if (userId) {
+          try {
+            await setDoc(doc(db, 'users', userId), { darkMode: enabled }, { merge: true });
+          } catch (e) {
+            console.error('Error saving dark mode:', e);
+          }
+        }
       },
 
-      toggleDarkMode: () => {
+      toggleDarkMode: async (userId) => {
         const newValue = !get().darkMode;
         set({ darkMode: newValue });
         if (newValue) {
@@ -29,19 +38,77 @@ export const useUserStore = create(
         } else {
           document.documentElement.classList.remove('dark');
         }
+        if (userId) {
+          try {
+            await setDoc(doc(db, 'users', userId), { darkMode: newValue }, { merge: true });
+          } catch (e) {
+            console.error('Error toggling dark mode:', e);
+          }
+        }
       },
 
-      setProfile: (profile) => set({ profile }),
+      setProfile: async (profile, userId) => {
+        set({ profile });
+        if (userId) {
+          try {
+            await setDoc(doc(db, 'users', userId), { profile }, { merge: true });
+          } catch (e) {
+            console.error('Error saving profile:', e);
+          }
+        }
+      },
 
-      updateProfile: (updates) => 
+      updateProfile: async (updates, userId) => {
         set((state) => ({
           profile: { ...state.profile, ...updates },
-        })),
+        }));
+        if (userId) {
+          try {
+            await updateDoc(doc(db, 'users', userId), {
+              'profile': { ...get().profile, ...updates }
+            });
+          } catch (e) {
+            console.error('Error updating profile:', e);
+          }
+        }
+      },
 
-      updateSettings: (updates) =>
+      updateSettings: async (updates, userId) => {
         set((state) => ({
           settings: { ...state.settings, ...updates },
-        })),
+        }));
+        if (userId) {
+          try {
+            await updateDoc(doc(db, 'users', userId), {
+              'settings': { ...get().settings, ...updates }
+            });
+          } catch (e) {
+            console.error('Error updating settings:', e);
+          }
+        }
+      },
+
+      loadUserData: async (userId) => {
+        if (!userId) return;
+        try {
+          const userDoc = await getDoc(doc(db, 'users', userId));
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            set({
+              profile: data.profile || null,
+              settings: data.settings || get().settings,
+              darkMode: data.darkMode !== undefined ? data.darkMode : get().darkMode
+            });
+            if (data.darkMode) {
+              document.documentElement.classList.add('dark');
+            } else {
+              document.documentElement.classList.remove('dark');
+            }
+          }
+        } catch (e) {
+          console.error('Error loading user data:', e);
+        }
+      },
 
       // Calculate stats based on profile
       getStats: () => {
@@ -49,7 +116,7 @@ export const useUserStore = create(
         if (!profile) return null;
 
         const { weight, height, birthDate, gender, activityLevel, goal } = profile;
-        
+
         // BMI
         const heightM = height / 100;
         const bmi = weight / (heightM * heightM);

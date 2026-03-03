@@ -35,28 +35,29 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
       <div
         className={`
           relative w-full ${sizes[size]}
-          bg-white dark:bg-gray-800 rounded-t-3xl sm:rounded-2xl
-          shadow-xl
+          bg-white dark:bg-slate-800 rounded-t-[2.5rem] sm:rounded-[2.5rem]
+          shadow-2xl shadow-indigo-500/10
           max-h-[90vh] overflow-hidden
           animate-slide-up sm:animate-scale-in
-          transition-colors
+          transition-all duration-300
+          border-t sm:border border-slate-200/50 dark:border-slate-700/50
         `}
       >
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h2>
+          <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-700/50">
+            <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{title}</h2>
             <button
               onClick={onClose}
-              className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 hover:text-indigo-600 transition-colors"
             >
-              <IoClose className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+              <IoClose className="w-6 h-6" />
             </button>
           </div>
         )}
 
         {/* Content */}
-        <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-4">
+        <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-6">
           {children}
         </div>
       </div>

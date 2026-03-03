@@ -1,12 +1,12 @@
 import { forwardRef } from 'react';
 
 const variants = {
-  primary: 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white shadow-lg shadow-blue-600/25',
-  secondary: 'bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-800',
-  success: 'bg-green-600 hover:bg-green-700 active:bg-green-800 text-white shadow-lg shadow-green-600/25',
-  danger: 'bg-red-600 hover:bg-red-700 active:bg-red-800 text-white shadow-lg shadow-red-600/25',
-  ghost: 'bg-transparent hover:bg-gray-100 active:bg-gray-200 text-gray-700',
-  outline: 'border-2 border-gray-200 text-gray-700 hover:bg-gray-50 active:bg-gray-100',
+  primary: 'bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white shadow-lg shadow-indigo-600/20 dark:shadow-indigo-900/40',
+  secondary: 'bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200',
+  success: 'bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white shadow-lg shadow-emerald-600/20 dark:shadow-emerald-900/40',
+  danger: 'bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white shadow-lg shadow-rose-600/20 dark:shadow-rose-900/40',
+  ghost: 'bg-transparent hover:bg-slate-100 active:bg-slate-200 text-slate-600 dark:text-slate-400 dark:hover:bg-slate-800',
+  outline: 'border-2 border-slate-200 text-slate-700 hover:bg-slate-50 active:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800',
 };
 
 const sizes = {

@@ -103,8 +103,8 @@ export default function Profile() {
                     key={g}
                     onClick={() => handleChange('gender', g)}
                     className={`py-3 px-4 rounded-2xl text-sm font-medium transition-all active-scale-95 ${formData.gender === g
-                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                   >
                     {g === 'MALE' ? 'Hombre' : g === 'FEMALE' ? 'Mujer' : 'Otro'}
@@ -143,8 +143,8 @@ export default function Profile() {
                     key={level.value}
                     onClick={() => handleChange('activityLevel', level.value)}
                     className={`w-full p-4 rounded-2xl text-left transition-all active-scale-98 ${formData.activityLevel === level.value
-                        ? 'bg-blue-50 border-2 border-blue-500 shadow-sm'
-                        : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
+                      ? 'bg-blue-50 border-2 border-blue-500 shadow-sm'
+                      : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
                       }`}
                   >
                     <p className="font-medium text-gray-900">{level.label}</p>
@@ -162,8 +162,8 @@ export default function Profile() {
                     key={goal.value}
                     onClick={() => handleChange('goal', goal.value)}
                     className={`w-full p-4 rounded-2xl text-left transition-all active-scale-98 ${formData.goal === goal.value
-                        ? 'bg-green-50 border-2 border-green-500 shadow-sm'
-                        : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
+                      ? 'bg-green-50 border-2 border-green-500 shadow-sm'
+                      : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
                       }`}
                   >
                     <p className="font-medium text-gray-900">{goal.label}</p>
@@ -199,135 +199,143 @@ export default function Profile() {
 
   // Profile view
   return (
-    <div className="px-4 py-6 space-y-6 animate-fadeIn">
+    <div className="px-5 py-8 space-y-8 animate-fadeIn">
       {/* Header */}
-      <header className="flex items-center gap-4 pt-2">
-        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
-          <IoPersonCircleOutline className="w-10 h-10 text-white" />
+      <header className="flex items-center gap-6 pt-2 px-1">
+        <div className="relative group">
+          <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-[2rem] blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+          <div className="relative w-24 h-24 rounded-[2rem] bg-indigo-600 flex items-center justify-center shadow-xl">
+            <IoPersonCircleOutline className="w-14 h-14 text-white" />
+          </div>
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{profile.name}</h1>
-          <p className="text-gray-500 text-sm">{user?.email || 'Usuario'}</p>
+          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{profile.name}</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">{user?.email || 'Miembro Fit'}</p>
         </div>
       </header>
 
       {/* Stats Cards */}
       {stats && (
-        <div className="grid grid-cols-3 gap-3">
-          <Card className="text-center p-4 shadow-sm">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center mx-auto mb-2">
-              <IoScaleOutline className="w-5 h-5 text-blue-600" />
-            </div>
-            <p className="text-xl font-bold text-gray-900">{profile.weight}</p>
-            <p className="text-xs text-gray-500">kg</p>
-          </Card>
-          <Card className="text-center p-4 shadow-sm">
-            <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center mx-auto mb-2">
-              <IoBodyOutline className="w-5 h-5 text-green-600" />
-            </div>
-            <p className="text-xl font-bold text-gray-900">{stats.bmi}</p>
-            <p className="text-xs text-gray-500">IMC</p>
-          </Card>
-          <Card className="text-center p-4 shadow-sm">
-            <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center mx-auto mb-2">
-              <IoFitnessOutline className="w-5 h-5 text-purple-600" />
-            </div>
-            <p className="text-xl font-bold text-gray-900">{stats.tdee}</p>
-            <p className="text-xs text-gray-500">TDEE</p>
-          </Card>
+        <div className="grid grid-cols-3 gap-4">
+          {[
+            { label: 'Peso', value: profile.weight, unit: 'kg', icon: IoScaleOutline, color: 'text-indigo-500', bg: 'bg-indigo-50 dark:bg-indigo-900/30' },
+            { label: 'IMC', value: stats.bmi, unit: '', icon: IoBodyOutline, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-900/30' },
+            { label: 'TDEE', value: stats.tdee, unit: 'kcal', icon: IoFitnessOutline, color: 'text-rose-500', bg: 'bg-rose-50 dark:bg-rose-950/30' }
+          ].map((stat) => {
+            const Icon = stat.icon;
+            return (
+              <Card key={stat.label} className="border-none shadow-xl shadow-slate-200/50 dark:shadow-black/20 group">
+                <Card.Body className="p-5 text-center">
+                  <div className={`w-12 h-12 rounded-2xl ${stat.bg} ${stat.color} flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform`}>
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">{stat.value}</p>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">{stat.label} <span className="lowercase">{stat.unit}</span></p>
+                </Card.Body>
+              </Card>
+            );
+          })}
         </div>
       )}
 
-      {/* Macros */}
+      {/* Macros Recommendation */}
       {stats && (
-        <Card className="shadow-sm">
-          <Card.Header>
-            <h2 className="font-semibold text-gray-900">Macros recomendados</h2>
-          </Card.Header>
-          <Card.Body>
-            <div className="grid grid-cols-3 gap-3 text-center">
-              <div className="p-3 bg-blue-50 rounded-2xl">
-                <p className="text-xl font-bold text-blue-600">{stats.macros.protein}g</p>
-                <p className="text-xs text-gray-500 mt-0.5">Proteina</p>
-              </div>
-              <div className="p-3 bg-green-50 rounded-2xl">
-                <p className="text-xl font-bold text-green-600">{stats.macros.carbs}g</p>
-                <p className="text-xs text-gray-500 mt-0.5">Carbos</p>
-              </div>
-              <div className="p-3 bg-amber-50 rounded-2xl">
-                <p className="text-xl font-bold text-amber-600">{stats.macros.fat}g</p>
-                <p className="text-xs text-gray-500 mt-0.5">Grasas</p>
-              </div>
+        <Card className="border-none shadow-2xl shadow-slate-200/50 dark:shadow-black/20 overflow-hidden relative group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl -mr-16 -mt-16" />
+          <Card.Header className="pt-8 px-8 border-none bg-transparent">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-widest">Plan Nutricional</h2>
+              <span className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-widest rounded-full">Automático</span>
             </div>
-            <p className="text-center text-sm text-gray-500 mt-4">
-              Objetivo diario: <span className="font-semibold text-gray-900">{stats.targetCalories} kcal</span>
-            </p>
+          </Card.Header>
+          <Card.Body className="p-8 pt-6">
+            <div className="grid grid-cols-3 gap-4 text-center">
+              {[
+                { label: 'Proteína', value: stats.macros.protein, color: 'text-indigo-500', bg: 'bg-indigo-50/50 dark:bg-indigo-900/20' },
+                { label: 'Carbos', value: stats.macros.carbs, color: 'text-emerald-500', bg: 'bg-emerald-50/50 dark:bg-emerald-900/20' },
+                { label: 'Grasas', value: stats.macros.fat, color: 'text-amber-500', bg: 'bg-amber-50/50 dark:bg-amber-900/20' }
+              ].map((macro) => (
+                <div key={macro.label} className={`${macro.bg} rounded-[1.5rem] p-5 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-all`}>
+                  <p className={`text-2xl font-black ${macro.color}`}>{macro.value}g</p>
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{macro.label}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-8 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl flex items-center justify-between">
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Objetivo diario</p>
+              <p className="text-xl font-black text-slate-900 dark:text-white tracking-tighter">{stats.targetCalories} <span className="text-xs text-slate-400 font-bold ml-1">kcal</span></p>
+            </div>
           </Card.Body>
         </Card>
       )}
 
       {/* Menu Options */}
-      <Card className="shadow-sm overflow-hidden">
+      <h2 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] px-1 -mb-4">Gestion</h2>
+      <Card className="border-none shadow-xl shadow-slate-200/50 dark:shadow-black/20 overflow-hidden divide-y divide-slate-100 dark:divide-slate-800">
         <button
           onClick={() => setIsEditing(true)}
-          className="w-full flex items-center justify-between p-4 hover:bg-gray-50 active:bg-gray-100 transition-colors"
+          className="w-full flex items-center justify-between p-6 hover:bg-slate-50 dark:hover:bg-slate-900 transition-all group"
         >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center">
-              <IoSettingsOutline className="w-5 h-5 text-gray-600" />
+          <div className="flex items-center gap-5">
+            <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <IoSettingsOutline className="w-6 h-6 text-slate-600" />
             </div>
-            <span className="font-medium text-gray-900">Editar perfil</span>
+            <div className="text-left">
+              <span className="block font-black text-slate-900 dark:text-white tracking-tight">Preferencias</span>
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Información personal y metas</span>
+            </div>
           </div>
-          <IoChevronForward className="w-5 h-5 text-gray-400" />
+          <IoChevronForward className="w-6 h-6 text-slate-300 group-hover:text-indigo-500 group-hover:translate-x-1 transition-all" />
         </button>
 
         <button
           onClick={() => setShowLogoutModal(true)}
-          className="w-full flex items-center justify-between p-4 hover:bg-red-50 active:bg-red-100 transition-colors border-t border-gray-100"
+          className="w-full flex items-center justify-between p-6 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-all group"
         >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center">
-              <IoLogOutOutline className="w-5 h-5 text-red-600" />
+          <div className="flex items-center gap-5">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <IoLogOutOutline className="w-6 h-6 text-rose-500" />
             </div>
-            <span className="font-medium text-red-600">Cerrar sesion</span>
+            <div className="text-left">
+              <span className="block font-black text-rose-500 tracking-tight">Cerrar Sesión</span>
+              <span className="text-[10px] text-rose-400/60 font-bold uppercase tracking-widest">Salir de tu cuenta</span>
+            </div>
           </div>
-          <IoChevronForward className="w-5 h-5 text-gray-400" />
+          <IoChevronForward className="w-6 h-6 text-rose-300 group-hover:translate-x-1 transition-all" />
         </button>
       </Card>
 
       <Modal
         isOpen={showLogoutModal}
         onClose={() => (!isLoggingOut ? setShowLogoutModal(false) : null)}
-        title="Cerrar sesion"
+        title="Cerrar sesión"
         size="sm"
       >
-        <div className="space-y-4">
-          <div className="flex items-start gap-3 p-3 bg-red-50 rounded-2xl text-red-700">
-            <div className="p-2 bg-white rounded-xl shadow-sm">
-              <IoLogOutOutline className="w-6 h-6" />
+        <div className="space-y-6">
+          <div className="p-6 bg-rose-50 dark:bg-rose-950/20 rounded-[2rem] text-center">
+            <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-3xl shadow-xl flex items-center justify-center mx-auto mb-4 border border-rose-100 dark:border-rose-900/50">
+              <IoLogOutOutline className="w-8 h-8 text-rose-500" />
             </div>
-            <div>
-              <p className="font-semibold">¿Deseas cerrar sesion?</p>
-              <p className="text-sm text-red-600/80">Se cerrara tu sesion y volveras a la pantalla de acceso.</p>
-            </div>
+            <p className="text-xl font-black text-slate-900 dark:text-white mb-2">¿Deseas salir?</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Tu progreso se mantiene sincronizado en la nube.</p>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             <Button
               variant="outline"
-              className="flex-1"
+              className="flex-1 h-14"
               onClick={() => setShowLogoutModal(false)}
               disabled={isLoggingOut}
             >
-              Cancelar
+              Quedarme
             </Button>
             <Button
               variant="danger"
-              className="flex-1"
+              className="flex-1 h-14"
               onClick={handleLogout}
               loading={isLoggingOut}
             >
-              Cerrar sesion
+              Salir
             </Button>
           </div>
         </div>
