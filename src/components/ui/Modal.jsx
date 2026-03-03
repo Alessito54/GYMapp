@@ -37,7 +37,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
           relative w-full ${sizes[size]}
           bg-white dark:bg-slate-800 rounded-[2.5rem]
           shadow-2xl shadow-blue-500/10
-          max-h-[85vh] overflow-hidden
+          max-h-[85vh] flex flex-col
           animate-scale-in
           transition-all duration-300
           border border-slate-200/50 dark:border-slate-700/50
@@ -45,7 +45,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
       >
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-700/50">
+          <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-700/50 flex-shrink-0">
             <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{title}</h2>
             <button
               onClick={onClose}
@@ -57,7 +57,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
         )}
 
         {/* Content */}
-        <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-6">
+        <div className="overflow-y-auto flex-1 p-6">
           {children}
         </div>
       </div>

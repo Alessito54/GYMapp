@@ -223,7 +223,6 @@ export const useWorkoutStore = create(
         // Delete the active session from Firebase so it doesn't reload
         if (userId && session?.id) {
           try {
-            const { deleteDoc } = await import('firebase/firestore');
             await deleteDoc(doc(db, 'users', userId, 'sessions', session.id));
           } catch (e) {
             console.error('Error deleting cancelled session:', e);
@@ -294,9 +293,8 @@ export const useWorkoutStore = create(
     }),
     {
       name: 'workout-storage',
-      version: 2, // Increment to invalidate old cache
+      version: 2,
       migrate: (persistedState, version) => {
-        // Clear old cached data when version changes
         if (version < 2) {
           return {
             folders: [],
@@ -307,7 +305,15 @@ export const useWorkoutStore = create(
           };
         }
         return persistedState;
-      }
+      },
+      // Don't persist activeSession — it comes from Firebase only
+      // This prevents stale cancelled sessions from reappearing on reload
+      partialize: (state) => ({
+        folders: state.folders,
+        routines: state.routines,
+        sessions: state.sessions,
+        exerciseLibrary: state.exerciseLibrary,
+      }),
     }
   )
 );

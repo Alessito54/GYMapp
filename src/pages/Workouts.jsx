@@ -1446,7 +1446,7 @@ function AddRoutineModal({ isOpen, onClose, folderId, onSave }) {
                 Biblioteca
               </button>
             </div>
-            <div className="space-y-4 max-h-[400px] overflow-y-auto pr-1">
+            <div className="space-y-4 max-h-[35vh] overflow-y-auto pr-1">
               {exercises.map((exercise, index) => (
                 <div key={index} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
                   <div className="flex items-center gap-3">
@@ -1499,12 +1499,14 @@ function AddRoutineModal({ isOpen, onClose, folderId, onSave }) {
                 </div>
               ))}
             </div>
-            <Button variant="ghost" onClick={handleAddExercise} className="w-full mt-4 h-14 border-dashed border-2 border-slate-200 dark:border-slate-800">
+            <Button variant="ghost" onClick={handleAddExercise} className="w-full mt-3 h-12 border-dashed border-2 border-slate-200 dark:border-slate-800 text-sm">
               <IoAddOutline className="w-5 h-5 mr-1" />
-              Agregar ejercicio manual
+              Agregar ejercicio
             </Button>
           </div>
-          <Button onClick={handleSave} className="w-full h-16 premium-gradient mt-4">Guardar rutina</Button>
+          <div className="sticky bottom-0 bg-white dark:bg-slate-800 pt-3 -mx-6 px-6 -mb-6 pb-6 border-t border-slate-100 dark:border-slate-700/50">
+            <Button onClick={handleSave} className="w-full h-14 premium-gradient" disabled={!name.trim() || exercises.every(e => !e.name.trim())}>Guardar rutina</Button>
+          </div>
         </div>
       </Modal>
 
@@ -1584,7 +1586,7 @@ function EditRoutineModal({ isOpen, onClose, routine, onSave }) {
                 Biblioteca
               </button>
             </div>
-            <div className="space-y-4 max-h-[400px] overflow-y-auto pr-1">
+            <div className="space-y-4 max-h-[35vh] overflow-y-auto pr-1">
               {exercises.map((exercise, index) => (
                 <div key={index} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
                   <div className="flex items-center gap-3">
@@ -1637,12 +1639,14 @@ function EditRoutineModal({ isOpen, onClose, routine, onSave }) {
                 </div>
               ))}
             </div>
-            <Button variant="ghost" onClick={handleAddExercise} className="w-full mt-4 h-14 border-dashed border-2 border-slate-200 dark:border-slate-800">
+            <Button variant="ghost" onClick={handleAddExercise} className="w-full mt-3 h-12 border-dashed border-2 border-slate-200 dark:border-slate-800 text-sm">
               <IoAddOutline className="w-5 h-5 mr-1" />
-              Agregar ejercicio manual
+              Agregar ejercicio
             </Button>
           </div>
-          <Button onClick={handleSave} className="w-full h-16 premium-gradient mt-4">Guardar cambios</Button>
+          <div className="sticky bottom-0 bg-white dark:bg-slate-800 pt-3 -mx-6 px-6 -mb-6 pb-6 border-t border-slate-100 dark:border-slate-700/50">
+            <Button onClick={handleSave} className="w-full h-14 premium-gradient" disabled={!name.trim() || exercises.every(e => !e.name.trim())}>Guardar cambios</Button>
+          </div>
         </div>
       </Modal>
 
