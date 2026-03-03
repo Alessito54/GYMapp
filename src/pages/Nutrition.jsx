@@ -6,7 +6,8 @@ import {
   IoRestaurantOutline,
   IoCafeOutline,
   IoFastFoodOutline,
-  IoIceCreamOutline
+  IoIceCreamOutline,
+  IoCreateOutline
 } from 'react-icons/io5';
 import { Card, Button, Input, Modal } from '@/components/ui';
 import { useNutritionStore, useUserStore } from '@/stores';
@@ -27,7 +28,8 @@ export default function Nutrition() {
   const [aiResult, setAiResult] = useState(null);
 
   const { getTodaySummary, addMeal, removeMealItem, getMealTypeLabel } = useNutritionStore();
-  const stats = useUserStore((state) => state.getStats());
+  const getStats = useUserStore((state) => state.getStats);
+  const stats = getStats();
   const { meals, totals } = getTodaySummary();
 
   const targetCalories = stats?.targetCalories || 2500;
@@ -77,7 +79,10 @@ export default function Nutrition() {
     <div className="px-4 py-6 space-y-6 animate-fadeIn">
       {/* Header */}
       <header className="pt-2">
-        <h1 className="text-2xl font-bold text-gray-900">Nutricion 🍎</h1>
+        <div className="flex items-center gap-2">
+          <IoRestaurantOutline className="w-6 h-6 text-green-600" />
+          <h1 className="text-2xl font-bold text-gray-900">Nutricion</h1>
+        </div>
         <p className="text-gray-500 text-sm mt-0.5">Registra tus comidas del dia</p>
       </header>
 

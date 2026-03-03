@@ -35,21 +35,22 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
       <div
         className={`
           relative w-full ${sizes[size]}
-          bg-white rounded-t-3xl sm:rounded-2xl
+          bg-white dark:bg-gray-800 rounded-t-3xl sm:rounded-2xl
           shadow-xl
           max-h-[90vh] overflow-hidden
           animate-slide-up sm:animate-scale-in
+          transition-colors
         `}
       >
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
-            <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+          <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100 dark:border-gray-700">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h2>
             <button
               onClick={onClose}
-              className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+              className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             >
-              <IoClose className="w-6 h-6 text-gray-500" />
+              <IoClose className="w-6 h-6 text-gray-500 dark:text-gray-400" />
             </button>
           </div>
         )}

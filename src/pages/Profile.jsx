@@ -30,10 +30,12 @@ const GOALS = [
 export default function Profile() {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
-  const { profile, setProfile, updateProfile } = useUserStore();
-  const stats = useUserStore((state) => state.getStats());
+  const { profile, setProfile, updateProfile, getStats } = useUserStore();
+  const stats = getStats();
 
   const [isEditing, setIsEditing] = useState(!profile);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [formData, setFormData] = useState({
     name: profile?.name || '',
     gender: profile?.gender || 'MALE',
@@ -58,9 +60,13 @@ export default function Profile() {
   };
 
   const handleLogout = async () => {
-    if (confirm('Cerrar sesion?')) {
+    setIsLoggingOut(true);
+    try {
       await logout();
+      setShowLogoutModal(false);
       navigate('/login');
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
@@ -69,9 +75,12 @@ export default function Profile() {
     return (
       <div className="px-4 py-6 space-y-6 animate-fadeIn">
         <header className="pt-2">
-          <h1 className="text-2xl font-bold text-gray-900">
-            {profile ? 'Editar perfil' : 'Configurar perfil'} ⚙️
-          </h1>
+          <div className="flex items-center gap-2">
+            <IoSettingsOutline className="w-6 h-6 text-gray-700" />
+            <h1 className="text-2xl font-bold text-gray-900">
+              {profile ? 'Editar perfil' : 'Configurar perfil'}
+            </h1>
+          </div>
           <p className="text-gray-500 text-sm mt-0.5">
             {profile ? 'Actualiza tu informacion' : 'Ingresa tus datos para comenzar'}
           </p>
@@ -273,7 +282,7 @@ export default function Profile() {
         </button>
 
         <button
-          onClick={handleLogout}
+          onClick={() => setShowLogoutModal(true)}
           className="w-full flex items-center justify-between p-4 hover:bg-red-50 active:bg-red-100 transition-colors border-t border-gray-100"
         >
           <div className="flex items-center gap-3">
@@ -285,6 +294,44 @@ export default function Profile() {
           <IoChevronForward className="w-5 h-5 text-gray-400" />
         </button>
       </Card>
+
+      <Modal
+        isOpen={showLogoutModal}
+        onClose={() => (!isLoggingOut ? setShowLogoutModal(false) : null)}
+        title="Cerrar sesion"
+        size="sm"
+      >
+        <div className="space-y-4">
+          <div className="flex items-start gap-3 p-3 bg-red-50 rounded-2xl text-red-700">
+            <div className="p-2 bg-white rounded-xl shadow-sm">
+              <IoLogOutOutline className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="font-semibold">¿Deseas cerrar sesion?</p>
+              <p className="text-sm text-red-600/80">Se cerrara tu sesion y volveras a la pantalla de acceso.</p>
+            </div>
+          </div>
+
+          <div className="flex gap-3">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setShowLogoutModal(false)}
+              disabled={isLoggingOut}
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="danger"
+              className="flex-1"
+              onClick={handleLogout}
+              loading={isLoggingOut}
+            >
+              Cerrar sesion
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

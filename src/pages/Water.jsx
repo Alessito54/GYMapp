@@ -43,7 +43,10 @@ export default function Water() {
       {/* Header */}
       <header className="flex items-center justify-between pt-2">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Hidratacion 💧</h1>
+          <div className="flex items-center gap-2">
+            <IoWater className="w-6 h-6 text-cyan-600" />
+            <h1 className="text-2xl font-bold text-gray-900">Hidratacion</h1>
+          </div>
           <p className="text-gray-500 text-sm mt-0.5">Mantente hidratado</p>
         </div>
         <Button
@@ -85,7 +88,7 @@ export default function Water() {
             {today.remaining > 0 ? (
               <>Faltan <span className="font-semibold text-cyan-600">{today.remaining} ml</span> para tu meta</>
             ) : (
-              <span className="text-green-600 font-medium">Excelente trabajo! 🎉</span>
+              <span className="text-green-600 font-medium flex items-center justify-center gap-1"><IoCheckmarkCircle className="w-4 h-4" /> Excelente trabajo!</span>
             )}
           </p>
         </div>

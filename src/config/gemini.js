@@ -8,9 +8,9 @@ const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 // Model configurations
 export const MODELS = {
   // Fast responses, good for simple tasks
-  FLASH: 'gemini-1.5-flash',
-  // More capable, better for complex reasoning
-  PRO: 'gemini-1.5-pro',
+  FLASH: 'gemini-2.0-flash',
+  // More capable, better for complex reasoning (using flash as fallback since pro may not be available)
+  PRO: 'gemini-2.0-flash',
 };
 
 /**

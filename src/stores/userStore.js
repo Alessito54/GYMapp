@@ -5,10 +5,30 @@ export const useUserStore = create(
   persist(
     (set, get) => ({
       profile: null,
+      darkMode: false,
       settings: {
         waterReminder: { enabled: true, intervalMinutes: 60 },
         units: { weight: 'kg', height: 'cm' },
         notifications: { push: true, email: false },
+      },
+
+      setDarkMode: (enabled) => {
+        set({ darkMode: enabled });
+        if (enabled) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      },
+
+      toggleDarkMode: () => {
+        const newValue = !get().darkMode;
+        set({ darkMode: newValue });
+        if (newValue) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
       },
 
       setProfile: (profile) => set({ profile }),
@@ -84,6 +104,14 @@ export const useUserStore = create(
       },
 
       clearProfile: () => set({ profile: null }),
+
+      // Initialize dark mode on app load
+      initDarkMode: () => {
+        const { darkMode } = get();
+        if (darkMode) {
+          document.documentElement.classList.add('dark');
+        }
+      },
     }),
     {
       name: 'user-storage',

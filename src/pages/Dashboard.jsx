@@ -5,17 +5,18 @@ import {
   IoBarbell,
   IoTrendingUp,
   IoChevronForward,
-  IoSparkles
+  IoSparkles,
+  IoFitnessOutline
 } from 'react-icons/io5';
 import { Card, ProgressRing, ProgressBar } from '@/components/ui';
 import { useUserStore, useWaterStore, useNutritionStore, useWorkoutStore } from '@/stores';
 
 export default function Dashboard() {
-  const { profile } = useUserStore();
+  const { profile, getStats } = useUserStore();
   const { getTodayProgress } = useWaterStore();
   const { getTodaySummary } = useNutritionStore();
   const { getRecentSessions } = useWorkoutStore();
-  const stats = useUserStore((state) => state.getStats());
+  const stats = getStats();
 
   const waterProgress = getTodayProgress();
   const nutritionSummary = getTodaySummary();
@@ -32,10 +33,13 @@ export default function Dashboard() {
     <div className="px-4 py-6 space-y-6 animate-fadeIn">
       {/* Header */}
       <header className="pt-2">
-        <p className="text-gray-500 text-sm">{greeting()}</p>
-        <h1 className="text-2xl font-bold text-gray-900 mt-0.5">
-          {profile?.name || 'Atleta'} 💪
-        </h1>
+        <p className="text-gray-500 dark:text-gray-400 text-sm">{greeting()}</p>
+        <div className="flex items-center gap-2 mt-0.5">
+          <IoFitnessOutline className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            {profile?.name || 'Atleta'}
+          </h1>
+        </div>
       </header>
 
       {/* Today's Summary Card */}
@@ -62,23 +66,23 @@ export default function Dashboard() {
         </div>
         <Card.Body className="p-4">
           <div className="grid grid-cols-3 gap-3 text-center">
-            <div className="p-3 bg-blue-50 rounded-2xl">
-              <p className="text-xl font-bold text-blue-600">
+            <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-2xl">
+              <p className="text-xl font-bold text-blue-600 dark:text-blue-400">
                 {nutritionSummary.totals.protein}g
               </p>
-              <p className="text-xs text-gray-500 mt-0.5">Proteina</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Proteina</p>
             </div>
-            <div className="p-3 bg-green-50 rounded-2xl">
-              <p className="text-xl font-bold text-green-600">
+            <div className="p-3 bg-green-50 dark:bg-green-900/30 rounded-2xl">
+              <p className="text-xl font-bold text-green-600 dark:text-green-400">
                 {nutritionSummary.totals.carbs}g
               </p>
-              <p className="text-xs text-gray-500 mt-0.5">Carbos</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Carbos</p>
             </div>
-            <div className="p-3 bg-amber-50 rounded-2xl">
-              <p className="text-xl font-bold text-amber-600">
+            <div className="p-3 bg-amber-50 dark:bg-amber-900/30 rounded-2xl">
+              <p className="text-xl font-bold text-amber-600 dark:text-amber-400">
                 {nutritionSummary.totals.fat}g
               </p>
-              <p className="text-xs text-gray-500 mt-0.5">Grasas</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Grasas</p>
             </div>
           </div>
         </Card.Body>
@@ -90,10 +94,10 @@ export default function Dashboard() {
         <Link to="/water" className="active-scale-98 transition-transform">
           <Card className="p-4 hover:shadow-lg transition-all duration-200 h-full">
             <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center">
-                <IoWaterOutline className="w-5 h-5 text-cyan-600" />
+              <div className="w-10 h-10 bg-cyan-100 dark:bg-cyan-900/40 rounded-xl flex items-center justify-center">
+                <IoWaterOutline className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
               </div>
-              <span className="text-xs text-gray-500 font-medium">
+              <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
                 {waterProgress.consumed}ml
               </span>
             </div>
@@ -102,8 +106,8 @@ export default function Dashboard() {
               color="bg-cyan-500"
               height="h-2"
             />
-            <p className="text-sm font-semibold mt-3 text-gray-800">Hidratacion</p>
-            <p className="text-xs text-gray-400">{Math.round(waterProgress.progress * 100)}% completado</p>
+            <p className="text-sm font-semibold mt-3 text-gray-800 dark:text-gray-200">Hidratacion</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500">{Math.round(waterProgress.progress * 100)}% completado</p>
           </Card>
         </Link>
 
@@ -111,10 +115,10 @@ export default function Dashboard() {
         <Link to="/workouts" className="active-scale-98 transition-transform">
           <Card className="p-4 hover:shadow-lg transition-all duration-200 h-full">
             <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-                <IoBarbell className="w-5 h-5 text-purple-600" />
+              <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/40 rounded-xl flex items-center justify-center">
+                <IoBarbell className="w-5 h-5 text-purple-600 dark:text-purple-400" />
               </div>
-              <span className="text-xs text-gray-500 font-medium">
+              <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
                 {recentSessions.length}/5
               </span>
             </div>
@@ -123,8 +127,8 @@ export default function Dashboard() {
               color="bg-purple-500"
               height="h-2"
             />
-            <p className="text-sm font-semibold mt-3 text-gray-800">Entrenos</p>
-            <p className="text-xs text-gray-400">{recentSessions.length} esta semana</p>
+            <p className="text-sm font-semibold mt-3 text-gray-800 dark:text-gray-200">Entrenos</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500">{recentSessions.length} esta semana</p>
           </Card>
         </Link>
       </div>
@@ -133,8 +137,8 @@ export default function Dashboard() {
       <Card className="shadow-sm">
         <Card.Header className="pb-2">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold text-gray-900">Macronutrientes</h2>
-            <Link to="/nutrition" className="text-blue-600 text-sm flex items-center gap-1 font-medium active:opacity-70">
+            <h2 className="font-semibold text-gray-900 dark:text-gray-100">Macronutrientes</h2>
+            <Link to="/nutrition" className="text-blue-600 dark:text-blue-400 text-sm flex items-center gap-1 font-medium active:opacity-70">
               Ver mas <IoChevronForward className="w-4 h-4" />
             </Link>
           </div>
@@ -166,8 +170,8 @@ export default function Dashboard() {
         <Card className="shadow-sm">
           <Card.Header className="pb-2">
             <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-gray-900">Entrenamientos recientes</h2>
-              <Link to="/workouts" className="text-blue-600 text-sm flex items-center gap-1 font-medium active:opacity-70">
+              <h2 className="font-semibold text-gray-900 dark:text-gray-100">Entrenamientos recientes</h2>
+              <Link to="/workouts" className="text-blue-600 dark:text-blue-400 text-sm flex items-center gap-1 font-medium active:opacity-70">
                 Ver todos <IoChevronForward className="w-4 h-4" />
               </Link>
             </div>
@@ -176,15 +180,15 @@ export default function Dashboard() {
             {recentSessions.map((session) => (
               <div
                 key={session.id}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
+                className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
-                    <IoBarbell className="w-5 h-5 text-purple-600" />
+                  <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center flex-shrink-0">
+                    <IoBarbell className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div className="min-w-0">
-                    <p className="font-medium text-gray-900 truncate">{session.routineName}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="font-medium text-gray-900 dark:text-gray-100 truncate">{session.routineName}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                       {new Date(session.startTime).toLocaleDateString('es-ES', {
                         weekday: 'short',
                         day: 'numeric',
@@ -193,7 +197,7 @@ export default function Dashboard() {
                     </p>
                   </div>
                 </div>
-                <span className="text-sm text-gray-500 font-medium flex-shrink-0">{session.duration} min</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400 font-medium flex-shrink-0">{session.duration} min</span>
               </div>
             ))}
           </Card.Body>
@@ -206,18 +210,18 @@ export default function Dashboard() {
           <Card.Header className="pb-2">
             <div className="flex items-center gap-2">
               <IoTrendingUp className="w-5 h-5 text-blue-500" />
-              <h2 className="font-semibold text-gray-900">Tus metricas</h2>
+              <h2 className="font-semibold text-gray-900 dark:text-gray-100">Tus metricas</h2>
             </div>
           </Card.Header>
           <Card.Body className="pt-2">
             <div className="grid grid-cols-2 gap-3">
-              <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl">
-                <p className="text-3xl font-bold text-blue-600">{stats.bmi}</p>
-                <p className="text-xs text-gray-500 mt-1">IMC</p>
+              <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-2xl">
+                <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stats.bmi}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">IMC</p>
               </div>
-              <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl">
-                <p className="text-3xl font-bold text-green-600">{stats.tdee}</p>
-                <p className="text-xs text-gray-500 mt-1">TDEE (kcal)</p>
+              <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 rounded-2xl">
+                <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.tdee}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">TDEE (kcal)</p>
               </div>
             </div>
           </Card.Body>
@@ -233,8 +237,8 @@ function MacroProgress({ label, current, target, color }) {
   return (
     <div>
       <div className="flex justify-between text-sm mb-2">
-        <span className="text-gray-600 font-medium">{label}</span>
-        <span className="text-gray-900 font-semibold">{current}g <span className="text-gray-400 font-normal">/ {target}g</span></span>
+        <span className="text-gray-600 dark:text-gray-400 font-medium">{label}</span>
+        <span className="text-gray-900 dark:text-gray-100 font-semibold">{current}g <span className="text-gray-400 font-normal">/ {target}g</span></span>
       </div>
       <div className="relative">
         <ProgressBar progress={progress} color={color} height="h-2.5" />

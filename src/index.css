@@ -32,6 +32,18 @@
     min-height: 100dvh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Dark mode styles */
+  .dark body,
+  body.dark {
+    background-color: #111827;
+    color: #F9FAFB;
+  }
+
+  .dark {
+    color-scheme: dark;
   }
 
   #root {
@@ -67,6 +79,14 @@
 
   ::-webkit-scrollbar-thumb:hover {
     background: #94A3B8;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: #4B5563;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #6B7280;
   }
 
   /* Touch friendly */
@@ -167,4 +187,8 @@
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+}
+
+.dark .glass {
+  background: rgba(31, 41, 55, 0.8);
 }
