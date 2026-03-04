@@ -1115,7 +1115,19 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
   const [restTimeLeft, setRestTimeLeft] = useState(0);
   const [savedIndices, setSavedIndices] = useState(new Set());
   const [sessionElapsed, setSessionElapsed] = useState(0);
-  const { saveExerciseToLibrary } = useWorkoutStore();
+
+  // States for in-session modification
+  const [showLibrary, setShowLibrary] = useState(false);
+  const [libraryAction, setLibraryAction] = useState({ type: null, index: null }); // type: 'add' | 'replace'
+  const [updateBaseRoutine, setUpdateBaseRoutine] = useState(false);
+
+  const {
+    saveExerciseToLibrary,
+    exerciseLibrary,
+    addExerciseToActiveSession,
+    removeExerciseFromActiveSession,
+    replaceExerciseInActiveSession
+  } = useWorkoutStore();
   const librarySaved = savedIndices.has(currentExerciseIndex);
 
   // Session duration timer
@@ -1136,21 +1148,35 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
+  // Background-safe rest timer
   useEffect(() => {
-    let timer;
-    if (showRestTimer && restTimeLeft > 0) {
-      timer = setInterval(() => {
-        setRestTimeLeft((prev) => {
-          if (prev <= 1) {
-            setShowRestTimer(false);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(timer);
-  }, [showRestTimer]);
+    const checkRestTimer = () => {
+      const restEndTime = localStorage.getItem('restEndTime');
+      if (restEndTime) {
+        const remaining = Math.ceil((parseInt(restEndTime) - Date.now()) / 1000);
+        if (remaining > 0) {
+          setRestTimeLeft(remaining);
+          setShowRestTimer(true);
+        } else {
+          setRestTimeLeft(0);
+          setShowRestTimer(false);
+          localStorage.removeItem('restEndTime');
+        }
+      }
+    };
+
+    // Check immediately and then poll
+    checkRestTimer();
+    const interval = setInterval(checkRestTimer, 1000);
+
+    // Also check when window regains focus
+    window.addEventListener('focus', checkRestTimer);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('focus', checkRestTimer);
+    };
+  }, []);
 
   if (!session?.exercises || !session.exercises[currentExerciseIndex]) {
     return (
@@ -1169,12 +1195,51 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
     onUpdateExercise(currentExerciseIndex, setIndex, { completed: true }, userId);
     // Trigger rest timer
     const restTime = currentExercise.restSeconds || 60;
+    const endTime = Date.now() + (restTime * 1000);
+    localStorage.setItem('restEndTime', endTime.toString());
     setRestTimeLeft(restTime);
     setShowRestTimer(true);
   };
 
   const handleSetUpdate = (setIndex, field, value) => {
     onUpdateExercise(currentExerciseIndex, setIndex, { [field]: value }, userId);
+  };
+
+  const handleLibrarySelect = async (exercise) => {
+    if (libraryAction.type === 'replace') {
+      await replaceExerciseInActiveSession(libraryAction.index, exercise, userId);
+    } else if (libraryAction.type === 'add') {
+      await addExerciseToActiveSession(exercise, libraryAction.index, userId);
+      // Auto move to the new exercise if added next
+      if (libraryAction.index === currentExerciseIndex + 1) {
+        setCurrentExerciseIndex(currentExerciseIndex + 1);
+      }
+    }
+    setShowLibrary(false);
+    setLibraryAction({ type: null, index: null });
+    setUpdateBaseRoutine(true); // Flag that routine was modified
+  };
+
+  const handleRemoveExercise = async () => {
+    if (session.exercises.length <= 1) {
+      alert("No puedes eliminar el único ejercicio de la sesión.");
+      return;
+    }
+    const confirm = window.confirm("¿Estás seguro de que deseas eliminar este ejercicio de la sesión actual?");
+    if (confirm) {
+      await removeExerciseFromActiveSession(currentExerciseIndex, userId);
+      setUpdateBaseRoutine(true);
+      // Adjust index if we removed the last one or earlier one
+      if (currentExerciseIndex >= session.exercises.length - 1) {
+        setCurrentExerciseIndex(Math.max(0, session.exercises.length - 2));
+      }
+    }
+  };
+
+  const handleFinishSession = () => {
+    // If routine was modified, we can pass a flag inside rating/feedback object
+    // to signal `Workouts.jsx` backend to update the base routine
+    onComplete(userId, { rating: 5, updateBaseRoutine });
   };
 
   return (
@@ -1274,9 +1339,10 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
                     <div className="flex gap-1.5 sm:gap-2">
                       <input
                         type="number"
-                        value={set.weight}
-                        onChange={(e) => handleSetUpdate(setIndex, 'weight', parseFloat(e.target.value) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-white font-black text-center text-sm sm:text-base focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                        value={set.weight !== undefined ? set.weight : ''}
+                        placeholder={currentExercise.weight || ''}
+                        onChange={(e) => handleSetUpdate(setIndex, 'weight', e.target.value === '' ? '' : parseFloat(e.target.value) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-white font-black text-center text-sm sm:text-base focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder:text-slate-600"
                         disabled={set.unit === 'barra'}
                       />
                       <select
@@ -1295,9 +1361,10 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
                     <input
                       type="text"
                       inputMode="decimal"
-                      value={set.reps || currentExercise.reps}
+                      value={set.reps !== undefined ? set.reps : ''}
+                      placeholder={currentExercise.reps || ''}
                       onChange={(e) => handleSetUpdate(setIndex, 'reps', e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-white font-black text-center text-sm sm:text-base focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-white font-black text-center text-sm sm:text-base focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder:text-slate-600"
                     />
                   </div>
                 </div>
@@ -1307,8 +1374,35 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
         </Card.Body>
       </Card>
 
-      <div className="sticky bottom-[5.5rem] sm:bottom-[6.5rem] left-0 right-0 p-4 sm:p-8 pb-safe bg-gradient-to-t from-slate-950 via-slate-950 to-transparent -mx-4 sm:-mx-5">
-        <div className="max-w-lg mx-auto flex gap-3 sm:gap-4">
+      <div className="sticky bottom-[5.5rem] sm:bottom-[6.5rem] left-0 right-0 p-4 sm:p-8 pb-safe bg-gradient-to-t from-slate-950 via-slate-950 to-transparent -mx-4 sm:-mx-5 flex flex-col gap-3">
+        {/* In-session Modify Buttons */}
+        <div className="max-w-lg mx-auto w-full flex gap-3 text-xs sm:text-sm font-bold uppercase tracking-widest text-slate-400">
+          <button
+            onClick={() => { setLibraryAction({ type: 'add', index: currentExerciseIndex + 1 }); setShowLibrary(true); }}
+            className="flex-1 py-3 sm:py-4 bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-[2rem] hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
+          >
+            <IoAddOutline className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
+            <span>Añadir Ejercicio</span>
+          </button>
+
+          <button
+            onClick={() => { setLibraryAction({ type: 'replace', index: currentExerciseIndex }); setShowLibrary(true); }}
+            className="flex-1 py-3 sm:py-4 bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-[2rem] hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
+          >
+            <IoLibraryOutline className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400" />
+            <span>Reemplazar</span>
+          </button>
+
+          <button
+            onClick={handleRemoveExercise}
+            className="w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center flex-shrink-0 bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-[2rem] hover:bg-rose-900/30 text-slate-500 hover:text-rose-500 transition-all"
+          >
+            <IoTrashOutline className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+        </div>
+
+        {/* Navigation Buttons */}
+        <div className="max-w-lg mx-auto w-full flex gap-3 sm:gap-4">
           <Button
             variant="ghost"
             onClick={() => setCurrentExerciseIndex(Math.max(0, currentExerciseIndex - 1))}
@@ -1350,12 +1444,35 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
             <p className="font-bold text-lg tabular-nums">{formatTime(sessionElapsed)}</p>
             <p className="text-sm text-blue-500">de entrenamiento</p>
           </div>
+
+          {/* Base Routine Update Checkbox (only show if modified during session) */}
+          {updateBaseRoutine && (
+            <label className="flex items-start gap-3 p-3 bg-amber-50 rounded-2xl cursor-pointer hover:bg-amber-100 transition-colors">
+              <input
+                type="checkbox"
+                checked={updateBaseRoutine}
+                onChange={(e) => setUpdateBaseRoutine(e.target.checked)}
+                className="mt-1 w-4 h-4 rounded text-amber-600 focus:ring-amber-500"
+              />
+              <span className="text-sm text-amber-800 font-medium">
+                ¿Deseas guardar estos cambios (ejercicios nuevos, reemplazos, eliminaciones) en la rutina original?
+              </span>
+            </label>
+          )}
+
           <div className="flex gap-3">
             <Button variant="outline" className="flex-1" onClick={() => setShowFinishModal(false)}>Seguir</Button>
-            <Button variant="success" className="flex-1" onClick={() => onComplete(userId, { rating: 5 })}>Finalizar</Button>
+            <Button variant="success" className="flex-1" onClick={handleFinishSession}>Finalizar</Button>
           </div>
         </div>
       </Modal>
+
+      <ExerciseLibraryModal
+        isOpen={showLibrary}
+        onClose={() => setShowLibrary(false)}
+        library={exerciseLibrary}
+        onSelect={handleLibrarySelect}
+      />
 
       {/* Rest Timer Overlay */}
       {showRestTimer && (

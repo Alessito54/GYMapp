@@ -60,7 +60,7 @@ export const useWorkoutStore = create(
           // Load Config - Always set state from Firebase (source of truth)
           const configSnap = await getDoc(doc(db, 'users', userId, 'data', 'workout_config'));
           const data = configSnap.exists() ? configSnap.data() : {};
-          
+
           // Always overwrite local state with Firebase data
           set({
             folders: data.folders || [],
@@ -161,15 +161,38 @@ export const useWorkoutStore = create(
           ...feedback,
         };
 
-        set((state) => ({
-          sessions: [...state.sessions, completedSession],
-          activeSession: null,
-          routines: state.routines.map((r) =>
-            r.id === activeSession.routineId
-              ? { ...r, lastPerformed: endTime }
-              : r
-          ),
-        }));
+        set((state) => {
+          let updatedRoutines = state.routines;
+
+          if (feedback.updateBaseRoutine) {
+            updatedRoutines = updatedRoutines.map((r) => {
+              if (r.id === activeSession.routineId) {
+                return {
+                  ...r,
+                  lastPerformed: endTime,
+                  exercises: completedSession.exercises.map(ex => ({
+                    ...ex,
+                    sets: ex.sets.length,
+                    reps: ex.sets[0]?.reps || 10,
+                  }))
+                };
+              }
+              return r;
+            });
+          } else {
+            updatedRoutines = updatedRoutines.map((r) =>
+              r.id === activeSession.routineId
+                ? { ...r, lastPerformed: endTime }
+                : r
+            );
+          }
+
+          return {
+            sessions: [...state.sessions, completedSession],
+            activeSession: null,
+            routines: updatedRoutines,
+          };
+        });
 
         if (userId) {
           await get().saveSessionToFirebase(userId, completedSession);
@@ -264,8 +287,8 @@ export const useWorkoutStore = create(
             ...ex,
             restSeconds: ex.restSeconds || 60,
             sets: Array(ex.sets).fill().map(() => ({
-              reps: 0,
-              weight: ex.weight || 0,
+              reps: '',
+              weight: '',
               unit: ex.unit || 'kg',
               completed: false,
             })),
@@ -290,6 +313,64 @@ export const useWorkoutStore = create(
         set({ activeSession: updatedSession });
         if (userId) await get().saveSessionToFirebase(userId, updatedSession);
       },
+
+      addExerciseToActiveSession: async (exercise, insertIndex, userId) => {
+        const { activeSession } = get();
+        if (!activeSession) return;
+
+        const updatedSession = { ...activeSession };
+        const newEx = {
+          ...exercise,
+          restSeconds: exercise.restSeconds || 60,
+          sets: Array(exercise.sets || 3).fill().map(() => ({
+            reps: '',
+            weight: '',
+            unit: exercise.unit || 'kg',
+            completed: false,
+          })),
+        };
+
+        if (insertIndex !== undefined) {
+          updatedSession.exercises.splice(insertIndex, 0, newEx);
+        } else {
+          updatedSession.exercises.push(newEx);
+        }
+
+        set({ activeSession: updatedSession });
+        if (userId) await get().saveSessionToFirebase(userId, updatedSession);
+      },
+
+      removeExerciseFromActiveSession: async (exerciseIndex, userId) => {
+        const { activeSession } = get();
+        if (!activeSession) return;
+
+        const updatedSession = { ...activeSession };
+        updatedSession.exercises.splice(exerciseIndex, 1);
+
+        set({ activeSession: updatedSession });
+        if (userId) await get().saveSessionToFirebase(userId, updatedSession);
+      },
+
+      replaceExerciseInActiveSession: async (exerciseIndex, newExercise, userId) => {
+        const { activeSession } = get();
+        if (!activeSession) return;
+
+        const updatedSession = { ...activeSession };
+        updatedSession.exercises[exerciseIndex] = {
+          ...newExercise,
+          restSeconds: newExercise.restSeconds || 60,
+          sets: Array(newExercise.sets || 3).fill().map(() => ({
+            reps: '',
+            weight: '',
+            unit: newExercise.unit || 'kg',
+            completed: false,
+          })),
+        };
+
+        set({ activeSession: updatedSession });
+        if (userId) await get().saveSessionToFirebase(userId, updatedSession);
+      },
+
     }),
     {
       name: 'workout-storage',

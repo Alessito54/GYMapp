@@ -11,7 +11,7 @@ import {
   IoCalendarOutline,
   IoChevronBack
 } from 'react-icons/io5';
-import { Card, ProgressRing, ProgressBar } from '@/components/ui';
+import { Card, ProgressRing, ProgressBar, Modal, Button } from '@/components/ui';
 import { useAuthStore, useUserStore, useWaterStore, useNutritionStore, useWorkoutStore } from '@/stores';
 
 export default function Dashboard() {
@@ -20,6 +20,8 @@ export default function Dashboard() {
   const { getTodayProgress } = useWaterStore();
   const { getTodaySummary } = useNutritionStore();
   const { getRecentSessions, sessions, deleteSession } = useWorkoutStore();
+  const [selectedSession, setSelectedSession] = useState(null);
+  const [sessionToDelete, setSessionToDelete] = useState(null);
   const stats = getStats();
   const userId = user?.uid;
 
@@ -211,7 +213,11 @@ export default function Dashboard() {
             <p className="text-center py-6 text-slate-400 dark:text-slate-500 text-sm font-medium">Aún no hay entrenamientos registrados.</p>
           ) : (
             recentSessions.map((session) => (
-              <Card key={session.id} className="p-4 border-slate-200/60 dark:border-slate-700/60 shadow-md shadow-slate-200/50 dark:shadow-black/20 active-scale-98 transition-all">
+              <Card
+                key={session.id}
+                className="p-4 border-slate-200/60 dark:border-slate-700/60 shadow-md shadow-slate-200/50 dark:shadow-black/20 active-scale-98 transition-all cursor-pointer hover:border-blue-500/50"
+                onClick={() => setSelectedSession(session)}
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center border border-blue-100 dark:border-blue-800/50">
@@ -225,7 +231,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                   <button
-                    onClick={() => deleteSession(session.id, userId)}
+                    onClick={(e) => { e.stopPropagation(); setSessionToDelete(session.id); }}
                     className="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-900/20 text-rose-500 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/40 transition-colors"
                   >
                     <IoTrashOutline className="w-5 h-5" />
@@ -236,6 +242,77 @@ export default function Dashboard() {
           )}
         </div>
       </section>
+
+      {/* Session Details Modal */}
+      {selectedSession && (
+        <Modal
+          isOpen={!!selectedSession}
+          onClose={() => setSelectedSession(null)}
+          title="Detalles de Sesión"
+          size="lg"
+        >
+          <div className="space-y-6">
+            <header className="text-center mb-8">
+              <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-2">{selectedSession.routineName}</h2>
+              <div className="flex items-center justify-center gap-3 text-xs font-bold uppercase tracking-widest text-slate-500">
+                <span>{new Date(selectedSession.startTime).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}</span>
+                <span>•</span>
+                <span>{selectedSession.duration} min</span>
+              </div>
+            </header>
+
+            <div className="space-y-4">
+              {selectedSession.exercises?.map((exercise, idx) => (
+                <div key={idx} className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700/50">
+                  <h3 className="font-black text-slate-800 dark:text-white mb-3 flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs">
+                      {idx + 1}
+                    </span>
+                    {exercise.name}
+                  </h3>
+
+                  <div className="space-y-2">
+                    {exercise.sets?.map((set, setIdx) => (
+                      <div key={setIdx} className={`flex items-center justify-between p-2 rounded-xl text-sm font-bold ${set.completed ? 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300' : 'bg-transparent text-slate-400 opacity-50'}`}>
+                        <div className="flex gap-4">
+                          <span className="uppercase tracking-widest text-[10px] text-slate-400 w-12 text-right">Set {setIdx + 1}</span>
+                          <span>{set.reps || 0} reps</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span>{set.weight || 0} {set.unit}</span>
+                          {set.completed && <IoCheckmarkCircle className="w-4 h-4 text-emerald-500" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={!!sessionToDelete}
+        onClose={() => setSessionToDelete(null)}
+        title="Eliminar Historial"
+        size="sm"
+      >
+        <div className="space-y-4 text-center">
+          <div className="w-16 h-16 bg-rose-100 dark:bg-rose-900/30 rounded-full flex items-center justify-center mx-auto mb-2">
+            <IoTrashOutline className="w-8 h-8 text-rose-500" />
+          </div>
+          <p className="text-slate-600 dark:text-slate-400 font-medium">¿Estás seguro de que deseas eliminar este entrenamiento del historial? Esta acción no se puede deshacer.</p>
+          <div className="flex gap-3 pt-4">
+            <Button variant="outline" className="flex-1" onClick={() => setSessionToDelete(null)}>Cancelar</Button>
+            <Button variant="danger" className="flex-1" onClick={() => {
+              deleteSession(sessionToDelete, userId);
+              setSessionToDelete(null);
+            }}>Eliminar</Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
@@ -384,14 +461,14 @@ function ActivityCalendar({ sessions }) {
           <div
             key={idx}
             className={`aspect-square rounded-xl flex items-center justify-center relative group transition-all ${day === null
-                ? ''
-                : day.isToday
-                  ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30'
-                  : day.hasWorkout
-                    ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'
-                    : day.isFuture
-                      ? 'bg-slate-50 dark:bg-slate-900/20 text-slate-300 dark:text-slate-700'
-                      : 'bg-slate-100 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+              ? ''
+              : day.isToday
+                ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30'
+                : day.hasWorkout
+                  ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'
+                  : day.isFuture
+                    ? 'bg-slate-50 dark:bg-slate-900/20 text-slate-300 dark:text-slate-700'
+                    : 'bg-slate-100 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
               }`}
           >
             {day && (
