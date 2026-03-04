@@ -14,8 +14,9 @@ export const useWorkoutStore = create(
       folders: [],
       routines: [],
       sessions: [],
-      activeSession: null,
       exerciseLibrary: [],
+      exerciseStats: {}, // Maps exercise names to their highest weight achieved { maxWeight: 0, unit: 'kg' }
+      activeSession: null,
 
       // Helper to clean data for Firebase (removes undefined)
       _clean: (obj) => {
@@ -26,12 +27,13 @@ export const useWorkoutStore = create(
       // Sync Global Config (Folders, Routines, Library)
       saveGlobalToFirebase: async (userId) => {
         if (!userId) return;
-        const { folders, routines, exerciseLibrary } = get();
+        const { folders, routines, exerciseLibrary, exerciseStats } = get();
         try {
           await setDoc(doc(db, 'users', userId, 'data', 'workout_config'), get()._clean({
             folders,
             routines,
             exerciseLibrary: exerciseLibrary || [],
+            exerciseStats: exerciseStats || {},
             lastSynced: new Date().toISOString()
           }));
         } catch (e) {
@@ -65,12 +67,13 @@ export const useWorkoutStore = create(
           set({
             folders: data.folders || [],
             routines: data.routines || [],
-            exerciseLibrary: data.exerciseLibrary || []
+            exerciseLibrary: data.exerciseLibrary || [],
+            exerciseStats: data.exerciseStats || {},
           });
 
           // Load Active Session (from sessions subcollection where status is active)
           const sessionsRef = collection(db, 'users', userId, 'sessions');
-          const activeQuery = query(sessionsRef, where('status', '==', 'active'));
+          const activeQuery = query(sessionsRef, where('status', '==', 'in_progress'));
           const activeSnap = await getDocs(activeQuery);
 
           if (!activeSnap.empty) {
@@ -146,53 +149,52 @@ export const useWorkoutStore = create(
       },
 
       completeSession: async (userId, feedback = {}) => {
-        const { activeSession } = get();
+        const { activeSession, routines, exerciseStats } = get();
         if (!activeSession) return null;
 
         const endTime = new Date().toISOString();
-        const startTime = new Date(activeSession.startTime);
-        const duration = Math.round((new Date(endTime) - startTime) / 1000 / 60);
-
         const completedSession = {
           ...activeSession,
           endTime,
-          duration,
           status: 'completed',
-          ...feedback,
+          feedback,
         };
 
-        set((state) => {
-          let updatedRoutines = state.routines;
+        // Update lastPerformed for the routine
+        const updatedRoutines = routines.map((r) =>
+          r.id === activeSession.routineId ? { ...r, lastPerformed: endTime } : r
+        );
 
-          if (feedback.updateBaseRoutine) {
-            updatedRoutines = updatedRoutines.map((r) => {
-              if (r.id === activeSession.routineId) {
-                return {
-                  ...r,
-                  lastPerformed: endTime,
-                  exercises: completedSession.exercises.map(ex => ({
-                    ...ex,
-                    sets: ex.sets.length,
-                    reps: ex.sets[0]?.reps || 10,
-                  }))
-                };
-              }
-              return r;
-            });
-          } else {
-            updatedRoutines = updatedRoutines.map((r) =>
-              r.id === activeSession.routineId
-                ? { ...r, lastPerformed: endTime }
-                : r
-            );
+        // Update exerciseStats
+        const updatedStats = { ...exerciseStats };
+        completedSession.exercises.forEach((ex) => {
+          const currentMaxWeight = updatedStats[ex.name]?.maxWeight || 0;
+          let sessionMaxWeight = 0;
+          let sessionUnit = ex.unit || 'kg';
+
+          ex.sets.forEach((set) => {
+            const weight = parseFloat(set.weight);
+            if (!isNaN(weight) && weight > sessionMaxWeight) {
+              sessionMaxWeight = weight;
+              sessionUnit = set.unit || ex.unit || 'kg';
+            }
+          });
+
+          if (sessionMaxWeight > currentMaxWeight) {
+            updatedStats[ex.name] = {
+              maxWeight: sessionMaxWeight,
+              unit: sessionUnit,
+              lastAchieved: endTime,
+            };
           }
-
-          return {
-            sessions: [...state.sessions, completedSession],
-            activeSession: null,
-            routines: updatedRoutines,
-          };
         });
+
+        set((state) => ({
+          sessions: [...state.sessions, completedSession],
+          activeSession: null,
+          routines: updatedRoutines,
+          exerciseStats: updatedStats,
+        }));
 
         if (userId) {
           await get().saveSessionToFirebase(userId, completedSession);
@@ -278,21 +280,23 @@ export const useWorkoutStore = create(
         const startTime = new Date().toISOString();
         const newSession = {
           id: Date.now().toString(),
-          routineId,
+          routineId: routine.id,
           routineName: routine.name,
-          startTime,
-          endTime: null,
-          status: 'active',
-          exercises: routine.exercises.map((ex) => ({
-            ...ex,
-            restSeconds: ex.restSeconds || 60,
-            sets: Array(ex.sets).fill().map(() => ({
-              reps: '',
-              weight: '',
-              unit: ex.unit || 'kg',
-              completed: false,
-            })),
-          })),
+          startTime: new Date().toISOString(),
+          status: 'in_progress',
+          exercises: routine.exercises.map((ex) => {
+            const historyStat = get().exerciseStats[ex.name];
+            return {
+              ...ex,
+              restSeconds: ex.restSeconds || 60,
+              sets: Array(ex.sets).fill().map(() => ({
+                reps: '',
+                weight: historyStat ? historyStat.maxWeight : '',
+                unit: historyStat ? historyStat.unit : (ex.unit || 'kg'),
+                completed: false,
+              })),
+            };
+          }),
         };
 
         set({ activeSession: newSession });
@@ -318,14 +322,15 @@ export const useWorkoutStore = create(
         const { activeSession } = get();
         if (!activeSession) return;
 
+        const historyStat = get().exerciseStats[exercise.name];
         const updatedSession = { ...activeSession };
         const newEx = {
           ...exercise,
           restSeconds: exercise.restSeconds || 60,
           sets: Array(exercise.sets || 3).fill().map(() => ({
             reps: '',
-            weight: '',
-            unit: exercise.unit || 'kg',
+            weight: historyStat ? historyStat.maxWeight : '',
+            unit: historyStat ? historyStat.unit : (exercise.unit || 'kg'),
             completed: false,
           })),
         };
@@ -355,14 +360,15 @@ export const useWorkoutStore = create(
         const { activeSession } = get();
         if (!activeSession) return;
 
+        const historyStat = get().exerciseStats[newExercise.name];
         const updatedSession = { ...activeSession };
         updatedSession.exercises[exerciseIndex] = {
           ...newExercise,
           restSeconds: newExercise.restSeconds || 60,
           sets: Array(newExercise.sets || 3).fill().map(() => ({
             reps: '',
-            weight: '',
-            unit: newExercise.unit || 'kg',
+            weight: historyStat ? historyStat.maxWeight : '',
+            unit: historyStat ? historyStat.unit : (newExercise.unit || 'kg'),
             completed: false,
           })),
         };

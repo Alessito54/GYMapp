@@ -1486,13 +1486,21 @@ function ActiveSessionView({ session, userId, onUpdateExercise, onComplete, onCa
             <div className="grid grid-cols-2 gap-4">
               <Button
                 variant="outline"
-                onClick={() => setRestTimeLeft(prev => prev + 30)}
+                onClick={() => {
+                  const currentEnd = parseInt(localStorage.getItem('restEndTime') || Date.now().toString());
+                  localStorage.setItem('restEndTime', (currentEnd + 30000).toString());
+                  setRestTimeLeft(prev => prev + 30);
+                }}
                 className="h-14 border-slate-700 text-slate-300"
               >
                 +30s
               </Button>
               <Button
-                onClick={() => setShowRestTimer(false)}
+                onClick={() => {
+                  localStorage.removeItem('restEndTime');
+                  setRestTimeLeft(0);
+                  setShowRestTimer(false);
+                }}
                 className="h-14 bg-blue-600 hover:bg-blue-500"
               >
                 Omitir
